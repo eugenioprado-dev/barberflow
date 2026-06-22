@@ -1,10 +1,13 @@
-export const theme = {
-  colors: {
-    background: "#0F0F0F",
-    primary: "#C9A227",
-    secondary: "#FFFFFF",
-    text: "#F5F5F5",
-    textMuted: "#A3A3A3",
-    border: "#2A2A2A",
-  },
-};
+import { Hero } from "./components/sections/Hero";
+import { Navbar } from "./components/layout/Navbar";
+
+function App() {
+  return (
+    <main className="min-h-screen bg-zinc-950 text-white">
+      <Navbar />
+      <Hero />
+    </main>
+  );
+}
+
+export default App;
