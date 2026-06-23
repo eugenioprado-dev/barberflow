@@ -1,25 +1,23 @@
 export const services = [
     {
         id: 1,
+        icon: "cut",
         title: "Barbearia",
-        icon: "💈",
         description:
-            "Cortes modernos, barba, pigmentação e acabamento profissional.",
+            "Cortes modernos, barba, acabamento e cuidados para valorizar o seu estilo.",
     },
-
     {
         id: 2,
+        icon: "hand",
         title: "Manicure & Pedicure",
-        icon: "💅",
         description:
-            "Cuidados completos para unhas, mãos e pés.",
+            "Cuidados completos para unhas, com qualidade, higiene e acabamento impecável.",
     },
-
     {
         id: 3,
+        icon: "spa",
         title: "Depilação",
-        icon: "✨",
         description:
-            "Depilação facial e corporal com atendimento especializado.",
+            "Depilação facial e corporal com conforto e atendimento personalizado.",
     },
 ];

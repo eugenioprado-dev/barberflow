@@ -2,7 +2,7 @@ import type { SiteConfig } from "../types/site";
 
 export const site: SiteConfig = {
     business: {
-        name: "André Dias",
+        name: "André Dias Studio",
 
         subtitle: "Barbearia • Estética • Bem-estar",
 
@@ -19,7 +19,7 @@ export const site: SiteConfig = {
 
         email: "contato@andredias.com.br",
 
-        address: "Embu das Artes - SP",
+        address: "Taboão da Serra - SP",
     },
 
     menu: [

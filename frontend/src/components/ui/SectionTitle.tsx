@@ -1,34 +1,30 @@
 interface SectionTitleProps {
-    overline: string;
     title: string;
-    description?: string;
-    center?: boolean;
+    highlight: string;
+    subtitle: string;
 }
 
 export function SectionTitle({
-    overline,
     title,
-    description,
-    center = true,
+    highlight,
+    subtitle,
 }: SectionTitleProps) {
     return (
-        <div className={center ? "text-center" : ""}>
-            <span className="text-sm font-semibold uppercase tracking-[0.35em] text-amber-500">
-                {overline}
-            </span>
-
+        <div className="mx-auto max-w-3xl text-center">
             <h2
-                className="mt-4 text-4xl font-bold text-white lg:text-5xl"
+                className="text-5xl font-bold text-white"
                 style={{ fontFamily: "Playfair Display" }}
             >
                 {title}
+
+                <span className="mt-2 block text-amber-500">
+                    {highlight}
+                </span>
             </h2>
 
-            {description && (
-                <p className="mx-auto mt-5 max-w-2xl text-zinc-400">
-                    {description}
-                </p>
-            )}
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-zinc-400">
+                {subtitle}
+            </p>
         </div>
     );
 }
