@@ -5,6 +5,8 @@ import { Services } from "./components/sections/Services";
 import { Team } from "./components/sections/Team";
 import { Gallery } from "./components/sections/Gallery";
 import { Testimonials } from "./components/sections/Testimonial";
+import { Contact } from "./components/sections/Contact";
+import { Footer } from "./components/sections/Footer";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
       <Team />
       <Gallery />
       <Testimonials />
+      <Contact />
+      <Footer />
     </main>
   );
 }

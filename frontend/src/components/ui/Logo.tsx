@@ -8,9 +8,9 @@ export function Logo() {
                 className="text-3xl font-bold leading-none"
                 style={{ fontFamily: theme.fonts.title }}
             >
-                {site.business.name.split(" ")[0]}{" "}
+                André Dias{" "}
                 <span style={{ color: theme.colors.primary }}>
-                    {site.business.name.split(" ")[1]}
+                    Studio
                 </span>
             </h1>
 
