@@ -14,19 +14,19 @@ export function ServiceCard({
     return (
         <div
             className="
-        rounded-3xl
-        border
-        border-zinc-800
-        bg-gradient-to-b
-        from-zinc-900
-        to-zinc-950
-        p-8
-        shadow-xl
-        transition-all
-        duration-300
-        hover:-translate-y-2
-        hover:border-amber-400
-        hover:shadow-amber-500/20"
+            rounded-3xl
+            border
+            border-zinc-800
+            bg-gradient-to-b
+            from-zinc-900
+            to-zinc-950
+            p-8
+            shadow-xl
+            transition-all
+            duration-300
+            hover:scale-[1.03]
+            hover:border-amber-400
+            hover:shadow-[0_25px_60px_rgba(245,158,11,0.25)]"
         >
             <div className="text-5xl text-amber-500">
                 {icon}
@@ -49,9 +49,9 @@ export function ServiceCard({
             font-semibold
             text-amber-500
             transition-all
+            duration-300
             hover:translate-x-2
-            hover:text-amber-400
-        "
+            hover:text-amber-400"
             >
                 Saiba mais →
             </button>

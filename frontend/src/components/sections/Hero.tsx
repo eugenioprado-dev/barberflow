@@ -12,7 +12,7 @@ export function Hero() {
     return (
         <section
             id="home"
-            className="relative overflow-hidden bg-zinc-950 pt-44 pb-24"
+            className="relative bg-zinc-950 pt-44 pb-24"
         >
             {/* Luzes de fundo */}
             <div className="absolute left-1/2 top-0 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[180px]" />

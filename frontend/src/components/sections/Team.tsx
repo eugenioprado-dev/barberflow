@@ -2,6 +2,7 @@ import { Container } from "../layout/container";
 import { TeamCard } from "../ui/TeamCard";
 import { team } from "../../constants/team";
 import { SectionTitle } from "../ui/SectionTitle";
+import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
 export function Team() {
     return (
@@ -20,16 +21,18 @@ export function Team() {
                     />
 
                     {/* Cards */}
-                    <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        {team.map((member) => (
-                            <TeamCard
-                                key={member.id}
-                                name={member.name}
-                                role={member.role}
-                                image={member.image}
-                                instagram={member.instagram}
-                            />
-                        ))}
+                    <div className="mt-16">
+                        <ResponsiveCarousel>
+                            {team.map((member) => (
+                                <TeamCard
+                                    key={member.id}
+                                    name={member.name}
+                                    role={member.role}
+                                    image={member.image}
+                                    instagram={member.instagram}
+                                />
+                            ))}
+                        </ResponsiveCarousel>
                     </div>
                 </div>
             </Container>
