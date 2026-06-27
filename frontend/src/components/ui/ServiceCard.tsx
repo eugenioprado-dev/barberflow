@@ -1,60 +1,104 @@
+import { useState } from "react";
 import type { ReactNode } from "react";
+
+import { ServiceModal } from "../modals/ServiceModal";
+
+import { services } from "../../data/services";
+import { professionals } from "../../data/professionals";
 
 interface ServiceCardProps {
     icon: ReactNode;
     title: string;
     description: string;
+    category: string;
 }
 
 export function ServiceCard({
     icon,
     title,
     description,
+    category,
 }: ServiceCardProps) {
+    const [open, setOpen] = useState(false);
+
+    const categoryServices = services.filter(
+        (service) => service.category === category
+    );
+
+    const modalServices = categoryServices.map((service) => {
+        const professional = professionals.find(
+            (p) => p.id === service.professionalId
+        );
+
+        return {
+            name: service.name,
+            description: service.description,
+            price: service.price,
+            duration: service.duration,
+            professional: professional?.name ?? "Profissional",
+            whatsapp: professional?.whatsapp ?? "",
+        };
+    });
+
     return (
-        <div
-            className="
-            rounded-3xl
-            border
-            border-zinc-800
-            bg-gradient-to-b
-            from-zinc-900
-            to-zinc-950
-            p-8
-            shadow-xl
-            transition-all
-            duration-300
-            hover:scale-[1.03]
-            hover:border-amber-400
-            hover:shadow-[0_25px_60px_rgba(245,158,11,0.25)]"
-        >
-            <div className="text-5xl text-amber-500">
-                {icon}
+        <>
+            <div
+                className="
+                    flex
+                    h-full
+                    flex-col
+                    rounded-3xl
+                    border
+                    border-zinc-800
+                    bg-gradient-to-b
+                    from-zinc-900
+                    to-zinc-950
+                    p-8
+                    shadow-xl
+                    transition-all
+                    duration-300
+                    hover:scale-[1.03]
+                    hover:border-amber-400
+                    hover:shadow-[0_25px_60px_rgba(245,158,11,0.25)]
+                "
+            >
+                <div className="text-5xl text-amber-500">
+                    {icon}
+                </div>
+
+                <h3 className="mt-6 text-2xl font-semibold text-white">
+                    {title}
+                </h3>
+
+                <p className="mt-4 flex-1 leading-7 text-zinc-400">
+                    {description}
+                </p>
+
+                <button
+                    onClick={() => setOpen(true)}
+                    className="
+                        mt-8
+                        rounded-xl
+                        bg-amber-500
+                        py-3
+                        font-semibold
+                        text-black
+                        transition-all
+                        duration-300
+                        hover:bg-amber-400
+                    "
+                >
+                    Ver Serviços
+                </button>
             </div>
 
-            <h3 className="mt-6 text-2xl font-semibold text-white">
-                {title}
-            </h3>
-
-            <p className="mt-4 leading-7 text-zinc-400">
-                {description}
-            </p>
-
-            <button
-                className="
-            mt-8
-            flex
-            items-center
-            gap-2
-            font-semibold
-            text-amber-500
-            transition-all
-            duration-300
-            hover:translate-x-2
-            hover:text-amber-400"
-            >
-                Saiba mais →
-            </button>
-        </div>
+            <ServiceModal
+                open={open}
+                onClose={() => setOpen(false)}
+                title={title}
+                icon=""
+                services={modalServices}
+            />
+        </>
     );
 }

@@ -12,14 +12,61 @@ export function Hero() {
     return (
         <section
             id="home"
-            className="relative bg-zinc-950 pt-44 pb-24"
+            className="relative overflow-hidden bg-zinc-950 pt-44 pb-24"
         >
-            {/* Luzes de fundo */}
-            <div className="absolute left-1/2 top-0 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[180px]" />
+            {/* Glow central */}
+            <div
+                className="
+                    absolute
+                    left-1/2
+                    top-0
+                    h-[420px]
+                    w-[420px]
+                    -translate-x-1/2
+                    rounded-full
+                    bg-amber-500/10
+                    blur-[120px]
+                    lg:h-[700px]
+                    lg:w-[700px]
+                    lg:blur-[180px]
+                "
+            />
 
-            <div className="absolute -left-32 top-40 h-96 w-96 rounded-full bg-amber-500/10 blur-[140px]" />
+            {/* Glow esquerdo */}
+            <div
+                className="
+                    absolute
+                    -left-20
+                    top-40
+                    h-64
+                    w-64
+                    rounded-full
+                    bg-amber-500/10
+                    blur-[90px]
+                    lg:-left-32
+                    lg:h-96
+                    lg:w-96
+                    lg:blur-[140px]
+                "
+            />
 
-            <div className="absolute -right-32 bottom-20 h-96 w-96 rounded-full bg-yellow-400/10 blur-[140px]" />
+            {/* Glow direito */}
+            <div
+                className="
+                    absolute
+                    -right-20
+                    bottom-20
+                    h-64
+                    w-64
+                    rounded-full
+                    bg-yellow-400/10
+                    blur-[90px]
+                    lg:-right-32
+                    lg:h-96
+                    lg:w-96
+                    lg:blur-[140px]
+                "
+            />
 
             <Container className="relative z-10 grid items-center gap-16 lg:grid-cols-2">
 
@@ -38,7 +85,7 @@ export function Hero() {
 
                     <motion.h1
                         variants={fadeUp}
-                        className="mt-8 text-6xl font-bold leading-tight lg:text-7xl"
+                        className="mt-8 text-5xl font-bold leading-tight lg:text-7xl"
                         style={{ fontFamily: "Playfair Display" }}
                     >
                         Muito mais que
@@ -89,7 +136,7 @@ export function Hero() {
                         </div>
 
                         <div className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500">
-                            ✨ Depilação
+                            ✨ Depilação & Massagem
                         </div>
                     </motion.div>
                 </motion.div>
@@ -101,10 +148,25 @@ export function Hero() {
                     animate="visible"
                     className="relative flex justify-center"
                 >
-                    {/* Glow Premium */}
-                    <div className="absolute h-[450px] w-[450px] rounded-full bg-gradient-to-r from-amber-500/30 via-yellow-400/20 to-amber-500/30 blur-[140px]" />
+                    {/* Glow da foto */}
+                    <div
+                        className="
+                            absolute
+                            h-[320px]
+                            w-[320px]
+                            rounded-full
+                            bg-gradient-to-r
+                            from-amber-500/30
+                            via-yellow-400/20
+                            to-amber-500/30
+                            blur-[100px]
+                            lg:h-[450px]
+                            lg:w-[450px]
+                            lg:blur-[140px]
+                        "
+                    />
 
-                    {/* Card Principal */}
+                    {/* Card */}
                     <motion.div
                         variants={floating}
                         animate="animate"
@@ -125,20 +187,16 @@ export function Hero() {
                             shadow-[0_25px_90px_rgba(245,158,11,0.22)]
                         "
                     >
-                        {/* Reflexo */}
                         <div className="absolute inset-0 z-10 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
 
-                        {/* Foto */}
                         <img
                             src={andreImage}
                             alt="André Dias Studio"
                             className="relative h-full w-full object-cover transition duration-700 hover:scale-105"
                         />
 
-                        {/* Gradiente */}
                         <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-                        {/* Badge */}
                         <div
                             className="
                                 absolute
@@ -159,7 +217,6 @@ export function Hero() {
                             </p>
                         </div>
                     </motion.div>
-
                 </motion.div>
 
             </Container>
@@ -176,7 +233,6 @@ export function Hero() {
                     <h3 className="text-4xl font-bold text-amber-500">
                         +500
                     </h3>
-
                     <p className="mt-2 text-zinc-400">
                         Clientes atendidos
                     </p>
@@ -186,7 +242,6 @@ export function Hero() {
                     <h3 className="text-4xl font-bold text-amber-500">
                         3
                     </h3>
-
                     <p className="mt-2 text-zinc-400">
                         Profissionais
                     </p>
@@ -196,7 +251,6 @@ export function Hero() {
                     <h3 className="text-4xl font-bold text-amber-500">
                         100%
                     </h3>
-
                     <p className="mt-2 text-zinc-400">
                         Atendimento personalizado
                     </p>
@@ -206,7 +260,6 @@ export function Hero() {
                     <h3 className="text-4xl font-bold text-amber-500">
                         ⭐ 5.0
                     </h3>
-
                     <p className="mt-2 text-zinc-400">
                         Avaliação dos clientes
                     </p>

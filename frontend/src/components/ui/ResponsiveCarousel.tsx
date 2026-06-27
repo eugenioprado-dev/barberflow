@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 interface ResponsiveCarouselProps {
@@ -24,27 +23,30 @@ export function ResponsiveCarousel({
         <>
             {/* Desktop */}
             <div
-                className={`hidden lg:grid gap-8 ${desktopColumns === 4
+                className={`hidden lg:grid gap-8 ${
+                    desktopColumns === 4
                         ? "lg:grid-cols-4"
                         : desktopColumns === 2
-                            ? "lg:grid-cols-2"
-                            : "lg:grid-cols-3"
-                    }`}
+                        ? "lg:grid-cols-2"
+                        : "lg:grid-cols-3"
+                }`}
             >
                 {children}
             </div>
 
-            {/* Mobile e Tablet */}
-            <div className="overflow-visible px-2 py-3 lg:hidden">
+            {/* Mobile */}
+            <div className="overflow-hidden lg:hidden">
                 <Swiper
-                    modules={[Navigation, Pagination, Autoplay]}
-                    navigation
-                    pagination={{ clickable: true }}
-                    loop={true}
-                    grabCursor={true}
-                    watchOverflow={false}
+                    modules={[Pagination, Autoplay]}
+                    loop={children.length > 1}
+                    grabCursor
                     spaceBetween={20}
                     slidesPerView={1}
+                    centeredSlides={false}
+                    watchOverflow
+                    pagination={{
+                        clickable: true,
+                    }}
                     breakpoints={{
                         768: {
                             slidesPerView: 2,
@@ -56,12 +58,15 @@ export function ResponsiveCarousel({
                                 delay,
                                 disableOnInteraction: false,
                                 pauseOnMouseEnter: true,
-                            }
+                                }
                             : false
                     }
                 >
                     {children.map((child, index) => (
-                        <SwiperSlide key={index}>
+                        <SwiperSlide
+                            key={index}
+                            className="h-auto"
+                        >
                             {child}
                         </SwiperSlide>
                     ))}

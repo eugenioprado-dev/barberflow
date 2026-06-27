@@ -6,7 +6,7 @@ import { SectionTitle } from "../ui/SectionTitle";
 import { Reveal } from "../ui/Reveal";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
-import { services } from "../../constants/services";
+import { serviceCategories } from "../../data/serviceCategories";
 
 const icons = {
     cut: <FaCut />,
@@ -18,7 +18,7 @@ export function Services() {
     return (
         <section
             id="services"
-            className="relative  bg-zinc-950 py-24"
+            className="relative bg-zinc-950 py-24"
         >
             {/* Glow */}
             <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
@@ -34,16 +34,17 @@ export function Services() {
 
                     <div className="mt-16">
                         <ResponsiveCarousel desktopColumns={3}>
-                            {services.map((service) => (
-                                <Reveal key={service.id}>
+                            {serviceCategories.map((category) => (
+                                <Reveal key={category.id}>
                                     <ServiceCard
                                         icon={
                                             icons[
-                                                service.icon as keyof typeof icons
+                                                category.icon as keyof typeof icons
                                             ]
                                         }
-                                        title={service.title}
-                                        description={service.description}
+                                        title={category.title}
+                                        description={category.description}
+                                        category={category.title}
                                     />
                                 </Reveal>
                             ))}
