@@ -6,7 +6,7 @@ import { SectionTitle } from "../ui/SectionTitle";
 import { Reveal } from "../ui/Reveal";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
-import { serviceCategories } from "../../data/serviceCategories";
+import { serviceCategories } from "../../data/categories";
 
 const icons = {
     cut: <FaCut />,

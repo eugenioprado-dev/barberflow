@@ -1,5 +1,5 @@
 import { Container } from "../layout/container";
-import { stats } from "../../constants/stats";
+import { stats } from "../../data";
 
 export function Stats() {
     return (

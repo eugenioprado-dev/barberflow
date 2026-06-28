@@ -1,7 +1,7 @@
 import { Container } from "../layout/container";
 import { SectionTitle } from "../ui/SectionTitle";
 import { TestimonialCard } from "../ui/TestimonialCard";
-import { testimonials } from "../../constants/testimonials";
+import { testimonials } from "../../data";
 
 export function Testimonials() {
     return (

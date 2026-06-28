@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 
-import { ServiceModal } from "../modals/ServiceModal";
+import { ServiceModal } from "../../modals/ServiceModal";
 
 import { services } from "../../data/services";
 import { professionals } from "../../data/professionals";

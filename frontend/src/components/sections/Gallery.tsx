@@ -1,7 +1,7 @@
 import { Container } from "../layout/container";
 import { SectionTitle } from "../ui/SectionTitle";
 import { GalleryCard } from "../ui/GalleryCard";
-import { gallery } from "../../constants/gallery";
+import { gallery } from "../../data";
 
 export function Gallery() {
     return (

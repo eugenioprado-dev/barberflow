@@ -1,5 +1,5 @@
 import { theme } from "../../styles/theme";
-import { site } from "../../constants/site";
+import { site } from "../../data";
 
 export function Logo() {
     return (

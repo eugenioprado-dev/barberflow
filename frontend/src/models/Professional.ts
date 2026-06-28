@@ -5,11 +5,11 @@ export interface Professional {
 
     role: string;
 
-    photo: string;
-
-    instagram: string;
+    image: string;
 
     whatsapp: string;
 
     active: boolean;
+
+    instagram?: string;
 }
