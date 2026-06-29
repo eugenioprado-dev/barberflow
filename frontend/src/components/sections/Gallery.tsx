@@ -1,11 +1,14 @@
 import { Container } from "../layout/container";
 import { SectionTitle } from "../ui/SectionTitle";
 import { GalleryCard } from "../ui/GalleryCard";
+import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
+import { Button } from "../ui/Button";
+
 import { gallery } from "../../data";
 
 export function Gallery() {
     return (
-        <section className="relative overflow-hidden bg-zinc-950 py-24">
+        <section id="gallery" className="relative overflow-hidden bg-zinc-950 py-24">
             {/* Efeitos de fundo */}
             <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
@@ -18,37 +21,26 @@ export function Gallery() {
                         subtitle="Conheça um pouco do nosso ambiente, dos nossos serviços e da experiência que oferecemos aos nossos clientes."
                     />
 
-                    <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
-                        {gallery.map((item) => (
-                            <GalleryCard
-                                key={item.id}
-                                title={item.title}
-                                image={item.image}
-                            />
-                        ))}
+                    <div>
+                        <ResponsiveCarousel
+                            desktopColumns={4}
+                            mobileSlidesPerView={1}
+                            tabletSlidesPerView={2}
+                        >
+                            {gallery.map((item) => (
+                                <GalleryCard
+                                    key={item.id}
+                                    title={item.title}
+                                    image={item.image}
+                                />
+                            ))}
+                        </ResponsiveCarousel>
                     </div>
 
-                    {/* Botão */}
                     <div className="mt-16 flex justify-center">
-                        <button
-                            className="
-                                rounded-full
-                                border
-                                border-amber-500
-                                px-8
-                                py-4
-                                font-semibold
-                                text-amber-500
-                                transition-all
-                                duration-300
-                                hover:bg-amber-500
-                                hover:text-black
-                                hover:shadow-lg
-                                hover:shadow-amber-500/30
-                            "
-                        >
+                        <Button variant="secondary">
                             Ver todos os trabalhos
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </Container>

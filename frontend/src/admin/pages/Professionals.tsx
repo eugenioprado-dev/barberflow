@@ -1,22 +1,35 @@
 import { useState } from "react";
 
-import {
-    FaPlus,
-    FaEdit,
-    FaTrash,
-    FaWhatsapp,
-    FaSearch,
-} from "react-icons/fa";
-
-import { professionals } from "../../data";
+import { AdminDrawer } from "../components/AdminDrawer";
+import { ProfessionalForm } from "../components/ProfessionalForm";
+import { ConfirmDialog } from "../components/ConfirmDialog";
+import { PageHeader } from "../components/PageHeader";
+import { DataTable } from "../components/table/DataTable";
+import { StatusBadge } from "../components/table/StatusBadge";
+import { TableActions } from "../components/table/TableActions";
+import { TableSearch } from "../components/table/TableSearch";
+import { useProfessionals } from "../hooks/useProfessionals";
+import type { Professional } from "../../models/Professional";
+import { FaPlus, FaWhatsapp } from "react-icons/fa";
+import { PageActionButton } from "../components/PageActionButton";
 
 export function Professionals() {
     const [search, setSearch] = useState("");
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [professionalToDelete, setProfessionalToDelete] =
+        useState<number | null>(null);
+    const [selectedProfessional, setSelectedProfessional] =
+        useState<Professional | undefined>();
+
+    const {
+        professionals,
+        createProfessional,
+        updateProfessional,
+        deleteProfessional,
+    } = useProfessionals();
 
     const filteredProfessionals = professionals.filter((professional) =>
-        professional.name
-            .toLowerCase()
-            .includes(search.toLowerCase())
+        professional.name.toLowerCase().includes(search.toLowerCase())
     );
 
     const activeProfessionals = professionals.filter(
@@ -25,54 +38,39 @@ export function Professionals() {
 
     return (
         <div>
-            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                <div>
-                    <h1 className="text-3xl font-bold">
-                        Profissionais
-                    </h1>
+            <PageHeader
+                title="Profissionais"
+                description={`${activeProfessionals} profissionais ativos no site.`}
+                action={
+                    <PageActionButton
+                        icon={<FaPlus />}
+                        label="Novo Profissional"
+                        onClick={() => {
+                            setSelectedProfessional(undefined);
+                            setDrawerOpen(true);
+                        }}
+                    />
+                }
+            />
 
-                    <p className="mt-2 text-zinc-400">
-                        {activeProfessionals} profissionais ativos no site.
-                    </p>
-                </div>
+            <TableSearch
+                value={search}
+                placeholder="Buscar profissional..."
+                onChange={setSearch}
+            />
 
-                <button className="flex items-center gap-2 rounded-xl bg-amber-500 px-5 py-3 font-semibold text-black transition hover:bg-amber-400">
-                    <FaPlus />
-                    Novo Profissional
-                </button>
-            </div>
-
-            <div className="mt-8 flex items-center gap-3 rounded-2xl border border-white/10 bg-zinc-900/70 px-4 py-3">
-                <FaSearch className="text-zinc-500" />
-
-                <input
-                    type="text"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Buscar profissional..."
-                    className="w-full bg-transparent text-white outline-none placeholder:text-zinc-500"
-                />
-            </div>
-
-            <div className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/70">
-                <div className="hidden grid-cols-12 border-b border-white/10 px-6 py-4 text-sm font-semibold uppercase tracking-wide text-zinc-500 lg:grid">
-                    <div className="col-span-5">
-                        Profissional
-                    </div>
-
-                    <div className="col-span-3">
-                        Especialidade
-                    </div>
-
-                    <div className="col-span-2">
-                        Status
-                    </div>
-
-                    <div className="col-span-2 text-right">
-                        Ações
-                    </div>
-                </div>
-
+            <DataTable
+                isEmpty={filteredProfessionals.length === 0}
+                emptyMessage="Nenhum profissional encontrado."
+                headers={
+                    <>
+                        <div className="col-span-5">Profissional</div>
+                        <div className="col-span-3">Especialidade</div>
+                        <div className="col-span-2">Status</div>
+                        <div className="col-span-2 text-right">Ações</div>
+                    </>
+                }
+            >
                 {filteredProfessionals.map((professional) => (
                     <div
                         key={professional.id}
@@ -102,43 +100,71 @@ export function Professionals() {
                         </div>
 
                         <div className="lg:col-span-2">
-                            <span
-                                className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                                    professional.active
-                                        ? "bg-green-500/10 text-green-400"
-                                        : "bg-red-500/10 text-red-400"
-                                }`}
-                            >
-                                {professional.active ? "Ativo" : "Inativo"}
-                            </span>
+                            <StatusBadge active={professional.active} />
                         </div>
 
-                        <div className="flex gap-2 lg:col-span-2 lg:justify-end">
-                            <button
-                                type="button"
-                                aria-label={`Editar ${professional.name}`}
-                                className="rounded-xl border border-white/10 p-3 text-zinc-400 transition hover:border-amber-500/40 hover:text-amber-400"
-                            >
-                                <FaEdit />
-                            </button>
-
-                            <button
-                                type="button"
-                                aria-label={`Excluir ${professional.name}`}
-                                className="rounded-xl border border-white/10 p-3 text-zinc-400 transition hover:border-red-500/40 hover:text-red-400"
-                            >
-                                <FaTrash />
-                            </button>
+                        <div className="lg:col-span-2">
+                            <TableActions
+                                editLabel={`Editar ${professional.name}`}
+                                deleteLabel={`Excluir ${professional.name}`}
+                                onEdit={() => {
+                                    setSelectedProfessional(professional);
+                                    setDrawerOpen(true);
+                                }}
+                                onDelete={() =>
+                                    setProfessionalToDelete(professional.id)
+                                }
+                            />
                         </div>
                     </div>
                 ))}
+            </DataTable>
 
-                {filteredProfessionals.length === 0 && (
-                    <div className="px-6 py-10 text-center text-zinc-500">
-                        Nenhum profissional encontrado.
-                    </div>
-                )}
-            </div>
+            <AdminDrawer
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                title={
+                    selectedProfessional
+                        ? "Editar Profissional"
+                        : "Novo Profissional"
+                }
+                description={
+                    selectedProfessional
+                        ? "Atualize os dados do profissional selecionado."
+                        : "Cadastre um novo profissional para exibição no site."
+                }
+            >
+                <ProfessionalForm
+                    key={selectedProfessional?.id ?? "new"}
+                    professional={selectedProfessional}
+                    onCancel={() => setDrawerOpen(false)}
+                    onSave={(data) => {
+                        if (selectedProfessional) {
+                            updateProfessional(selectedProfessional.id, data);
+                        } else {
+                            createProfessional(data);
+                        }
+
+                        setDrawerOpen(false);
+                    }}
+                />
+            </AdminDrawer>
+
+            <ConfirmDialog
+                open={professionalToDelete !== null}
+                title="Excluir profissional"
+                description="Tem certeza que deseja excluir este profissional? Esta ação não poderá ser desfeita."
+                confirmLabel="Excluir"
+                cancelLabel="Cancelar"
+                onCancel={() => setProfessionalToDelete(null)}
+                onConfirm={() => {
+                    if (professionalToDelete !== null) {
+                        deleteProfessional(professionalToDelete);
+                    }
+
+                    setProfessionalToDelete(null);
+                }}
+            />
         </div>
     );
 }

@@ -6,7 +6,31 @@
     font-family: "Inter", sans-serif;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 110px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
+    margin: 0;
+    overflow-x: hidden;
     background: #09090B;
     color: #FAFAFA;
+
+    /* Melhora a renderização das fontes */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+button {
+    cursor: pointer;
 }

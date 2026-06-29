@@ -10,9 +10,9 @@ export function SectionTitle({
     subtitle,
 }: SectionTitleProps) {
     return (
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto mb-20 max-w-3xl text-center md:mb-24">
             <h2
-                className="text-5xl font-bold text-white"
+                className="text-4xl font-bold leading-tight text-white md:text-5xl"
                 style={{ fontFamily: "Playfair Display" }}
             >
                 {title}
@@ -22,7 +22,7 @@ export function SectionTitle({
                 </span>
             </h2>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-zinc-400">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-zinc-400 md:text-lg">
                 {subtitle}
             </p>
         </div>

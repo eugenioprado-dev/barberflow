@@ -9,68 +9,22 @@ import { Button } from "../ui/Button";
 import { Container } from "../layout/container";
 
 export function Hero() {
+    function scrollToSection(id: string) {
+        document.getElementById(id)?.scrollIntoView({
+            behavior: "smooth",
+        });
+    }
+
     return (
         <section
             id="home"
             className="relative overflow-hidden bg-zinc-950 pt-44 pb-24"
         >
-            {/* Glow central */}
-            <div
-                className="
-                    absolute
-                    left-1/2
-                    top-0
-                    h-[420px]
-                    w-[420px]
-                    -translate-x-1/2
-                    rounded-full
-                    bg-amber-500/10
-                    blur-[120px]
-                    lg:h-[700px]
-                    lg:w-[700px]
-                    lg:blur-[180px]
-                "
-            />
-
-            {/* Glow esquerdo */}
-            <div
-                className="
-                    absolute
-                    -left-20
-                    top-40
-                    h-64
-                    w-64
-                    rounded-full
-                    bg-amber-500/10
-                    blur-[90px]
-                    lg:-left-32
-                    lg:h-96
-                    lg:w-96
-                    lg:blur-[140px]
-                "
-            />
-
-            {/* Glow direito */}
-            <div
-                className="
-                    absolute
-                    -right-20
-                    bottom-20
-                    h-64
-                    w-64
-                    rounded-full
-                    bg-yellow-400/10
-                    blur-[90px]
-                    lg:-right-32
-                    lg:h-96
-                    lg:w-96
-                    lg:blur-[140px]
-                "
-            />
+            <div className="absolute left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[120px] lg:h-[700px] lg:w-[700px] lg:blur-[180px]" />
+            <div className="absolute -left-20 top-40 h-64 w-64 rounded-full bg-amber-500/10 blur-[90px] lg:-left-32 lg:h-96 lg:w-96 lg:blur-[140px]" />
+            <div className="absolute -right-20 bottom-20 h-64 w-64 rounded-full bg-yellow-400/10 blur-[90px] lg:-right-32 lg:h-96 lg:w-96 lg:blur-[140px]" />
 
             <Container className="relative z-10 grid items-center gap-16 lg:grid-cols-2">
-
-                {/* Texto */}
                 <motion.div
                     variants={staggerContainer}
                     initial="hidden"
@@ -114,11 +68,18 @@ export function Hero() {
                         variants={fadeUp}
                         className="mt-10 flex flex-wrap gap-4"
                     >
-                        <Button>
+                        <Button
+                            type="button"
+                            onClick={() => scrollToSection("contact")}
+                        >
                             Agendar Horário
                         </Button>
 
-                        <Button variant="secondary">
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => scrollToSection("services")}
+                        >
                             Conhecer Serviços
                         </Button>
                     </motion.div>
@@ -127,65 +88,44 @@ export function Hero() {
                         variants={fadeUp}
                         className="mt-10 flex flex-wrap gap-3"
                     >
-                        <div className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500">
+                        <button
+                            type="button"
+                            onClick={() => scrollToSection("services")}
+                            className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500"
+                        >
                             💈 Barbearia
-                        </div>
+                        </button>
 
-                        <div className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500">
+                        <button
+                            type="button"
+                            onClick={() => scrollToSection("services")}
+                            className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500"
+                        >
                             💅 Manicure
-                        </div>
+                        </button>
 
-                        <div className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500">
+                        <button
+                            type="button"
+                            onClick={() => scrollToSection("services")}
+                            className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500"
+                        >
                             ✨ Depilação & Massagem
-                        </div>
+                        </button>
                     </motion.div>
                 </motion.div>
 
-                {/* Foto */}
                 <motion.div
                     variants={fadeUp}
                     initial="hidden"
                     animate="visible"
                     className="relative flex justify-center"
                 >
-                    {/* Glow da foto */}
-                    <div
-                        className="
-                            absolute
-                            h-[320px]
-                            w-[320px]
-                            rounded-full
-                            bg-gradient-to-r
-                            from-amber-500/30
-                            via-yellow-400/20
-                            to-amber-500/30
-                            blur-[100px]
-                            lg:h-[450px]
-                            lg:w-[450px]
-                            lg:blur-[140px]
-                        "
-                    />
+                    <div className="absolute h-[320px] w-[320px] rounded-full bg-gradient-to-r from-amber-500/30 via-yellow-400/20 to-amber-500/30 blur-[100px] lg:h-[450px] lg:w-[450px] lg:blur-[140px]" />
 
-                    {/* Card */}
                     <motion.div
                         variants={floating}
                         animate="animate"
-                        className="
-                            relative
-                            h-[560px]
-                            w-full
-                            max-w-md
-                            overflow-hidden
-                            rounded-[32px]
-                            border
-                            border-white/10
-                            bg-gradient-to-br
-                            from-zinc-900
-                            via-zinc-950
-                            to-black
-                            backdrop-blur-xl
-                            shadow-[0_25px_90px_rgba(245,158,11,0.22)]
-                        "
+                        className="relative h-[560px] w-full max-w-md overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black backdrop-blur-xl shadow-[0_25px_90px_rgba(245,158,11,0.22)]"
                     >
                         <div className="absolute inset-0 z-10 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
 
@@ -197,31 +137,15 @@ export function Hero() {
 
                         <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-                        <div
-                            className="
-                                absolute
-                                bottom-6
-                                left-6
-                                z-20
-                                rounded-full
-                                border
-                                border-white/10
-                                bg-black/60
-                                px-5
-                                py-2
-                                backdrop-blur-md
-                            "
-                        >
+                        <div className="absolute bottom-6 left-6 z-20 rounded-full border border-white/10 bg-black/60 px-5 py-2 backdrop-blur-md">
                             <p className="text-sm font-medium text-white">
                                 ✂️ Especialista em Cortes Unissex
                             </p>
                         </div>
                     </motion.div>
                 </motion.div>
-
             </Container>
 
-            {/* Estatísticas */}
             <motion.div
                 variants={staggerContainer}
                 initial="hidden"
@@ -233,18 +157,14 @@ export function Hero() {
                     <h3 className="text-4xl font-bold text-amber-500">
                         +500
                     </h3>
-                    <p className="mt-2 text-zinc-400">
-                        Clientes atendidos
-                    </p>
+                    <p className="mt-2 text-zinc-400">Clientes atendidos</p>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="text-center">
                     <h3 className="text-4xl font-bold text-amber-500">
                         3
                     </h3>
-                    <p className="mt-2 text-zinc-400">
-                        Profissionais
-                    </p>
+                    <p className="mt-2 text-zinc-400">Profissionais</p>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="text-center">

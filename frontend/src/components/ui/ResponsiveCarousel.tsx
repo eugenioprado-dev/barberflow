@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Children, type ReactNode } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
@@ -7,10 +7,12 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 interface ResponsiveCarouselProps {
-    children: ReactNode[];
+    children: ReactNode;
     autoplay?: boolean;
     delay?: number;
-    desktopColumns?: number;
+    desktopColumns?: 2 | 3 | 4;
+    mobileSlidesPerView?: number;
+    tabletSlidesPerView?: number;
 }
 
 export function ResponsiveCarousel({
@@ -18,38 +20,40 @@ export function ResponsiveCarousel({
     autoplay = false,
     delay = 5000,
     desktopColumns = 3,
+    mobileSlidesPerView = 1,
+    tabletSlidesPerView = 2,
 }: ResponsiveCarouselProps) {
+    const items = Children.toArray(children);
+
+    const desktopGrid = {
+        2: "lg:grid-cols-2",
+        3: "lg:grid-cols-3",
+        4: "lg:grid-cols-4",
+    };
+
     return (
         <>
             {/* Desktop */}
             <div
-                className={`hidden lg:grid gap-8 ${
-                    desktopColumns === 4
-                        ? "lg:grid-cols-4"
-                        : desktopColumns === 2
-                        ? "lg:grid-cols-2"
-                        : "lg:grid-cols-3"
-                }`}
+                className={`hidden gap-8 lg:grid ${desktopGrid[desktopColumns]}`}
             >
-                {children}
+                {items}
             </div>
 
-            {/* Mobile */}
-            <div className="overflow-hidden lg:hidden">
+            {/* Mobile e Tablet */}
+            <div className="overflow-hidden py-3 lg:hidden">
                 <Swiper
+                    className="!overflow-hidden pb-10"
                     modules={[Pagination, Autoplay]}
-                    loop={children.length > 1}
+                    pagination={{ clickable: true }}
+                    loop={items.length > 1}
                     grabCursor
-                    spaceBetween={20}
-                    slidesPerView={1}
                     centeredSlides={false}
-                    watchOverflow
-                    pagination={{
-                        clickable: true,
-                    }}
+                    spaceBetween={16}
+                    slidesPerView={mobileSlidesPerView}
                     breakpoints={{
-                        768: {
-                            slidesPerView: 2,
+                        640: {
+                            slidesPerView: tabletSlidesPerView,
                         },
                     }}
                     autoplay={
@@ -58,16 +62,18 @@ export function ResponsiveCarousel({
                                 delay,
                                 disableOnInteraction: false,
                                 pauseOnMouseEnter: true,
-                                }
+                            }
                             : false
                     }
                 >
-                    {children.map((child, index) => (
+                    {items.map((child, index) => (
                         <SwiperSlide
                             key={index}
                             className="h-auto"
                         >
-                            {child}
+                            <div className="h-full w-full">
+                                {child}
+                            </div>
                         </SwiperSlide>
                     ))}
                 </Swiper>

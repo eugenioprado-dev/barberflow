@@ -6,7 +6,7 @@ import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
 export function Team() {
     return (
-        <section className="relative overflow-hidden bg-zinc-950 py-24">
+        <section id="team" className="relative overflow-hidden bg-zinc-950 py-24">
             <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
 

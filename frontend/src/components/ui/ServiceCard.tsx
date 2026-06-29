@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 
 import { ServiceModal } from "../../modals/ServiceModal";
+import { Button } from "./Button";
 
 import { services } from "../../data/services";
 import { professionals } from "../../data/professionals";
@@ -46,6 +47,7 @@ export function ServiceCard({
                 className="
                     flex
                     h-full
+                    w-full
                     flex-col
                     rounded-3xl
                     border
@@ -57,9 +59,9 @@ export function ServiceCard({
                     shadow-xl
                     transition-all
                     duration-300
-                    hover:scale-[1.03]
                     hover:border-amber-400
                     hover:shadow-[0_25px_60px_rgba(245,158,11,0.25)]
+                    lg:hover:scale-[1.03]
                 "
             >
                 <div className="text-5xl text-amber-500">
@@ -74,22 +76,13 @@ export function ServiceCard({
                     {description}
                 </p>
 
-                <button
+                <Button
+                    type="button"
                     onClick={() => setOpen(true)}
-                    className="
-                        mt-8
-                        rounded-xl
-                        bg-amber-500
-                        py-3
-                        font-semibold
-                        text-black
-                        transition-all
-                        duration-300
-                        hover:bg-amber-400
-                    "
+                    className="mt-8 w-full"
                 >
                     Ver Serviços
-                </button>
+                </Button>
             </div>
 
             <ServiceModal
