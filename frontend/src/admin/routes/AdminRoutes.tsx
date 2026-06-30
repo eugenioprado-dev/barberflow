@@ -5,6 +5,7 @@ import { AdminLayout } from "../layouts/AdminLayout";
 import { Dashboard } from "../pages/Dashboard";
 import { Professionals } from "../pages/Professionals";
 import { Services } from "../pages/Services";
+import { Categories } from "../pages/Categories";
 import { Gallery } from "../pages/Gallery";
 import { Testimonials } from "../pages/Testimonials";
 import { Settings } from "../pages/Settings";
@@ -31,6 +32,11 @@ export function AdminRoutes() {
                 <Route
                     path="servicos"
                     element={<Services />}
+                />
+
+                <Route
+                    path="categorias"
+                    element={<Categories />}
                 />
 
                 <Route

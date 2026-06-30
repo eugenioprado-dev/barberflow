@@ -1,79 +1,128 @@
-import { useState } from "react";
-import { FaImage, FaTrash } from "react-icons/fa";
-import { Field } from "./Field";
+import { useRef, useState } from "react";
+
+import { FaCloudUploadAlt, FaImage, FaTrash } from "react-icons/fa";
 
 interface ImageUploadProps {
     label: string;
     error?: string;
-    onChange?: (file: File | null) => void;
+    initialPreview?: string;
+    onChange: (file: File | null) => void;
 }
 
 export function ImageUpload({
     label,
     error,
+    initialPreview,
     onChange,
 }: ImageUploadProps) {
-    const [preview, setPreview] = useState<string | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [preview, setPreview] = useState<string | null>(
+        initialPreview ?? null
+    );
 
-    function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const file = event.target.files?.[0];
+    function handleSelect(file: File | null) {
+        onChange(file);
 
         if (!file) {
+            setPreview(null);
+
+            if (inputRef.current) {
+                inputRef.current.value = "";
+            }
+
             return;
         }
 
-        const imageUrl = URL.createObjectURL(file);
+        const reader = new FileReader();
 
-        setPreview(imageUrl);
-        onChange?.(file);
-    }
+        reader.onload = () => {
+            setPreview(reader.result as string);
+        };
 
-    function handleRemoveImage() {
-        setPreview(null);
-        onChange?.(null);
+        reader.readAsDataURL(file);
     }
 
     return (
-        <Field label={label} error={error}>
-            {preview ? (
-                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/30">
-                    <img
-                        src={preview}
-                        alt="Prévia da imagem selecionada"
-                        className="h-56 w-full object-cover"
-                    />
+        <div className="space-y-3">
+            <label className="block text-sm font-medium text-zinc-300">
+                {label}
+            </label>
 
-                    <button
-                        type="button"
-                        aria-label="Remover imagem"
-                        onClick={handleRemoveImage}
-                        className="absolute right-3 top-3 rounded-xl bg-black/70 p-3 text-red-400 backdrop-blur transition hover:bg-red-500 hover:text-white"
-                    >
-                        <FaTrash />
-                    </button>
-                </div>
-            ) : (
-                <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-black/30 px-6 py-10 text-center transition hover:border-amber-500/60">
-                    <span className="text-4xl text-amber-400">
-                        <FaImage />
-                    </span>
+            <div
+                onClick={() => inputRef.current?.click()}
+                className={`
+                    cursor-pointer
+                    rounded-2xl
+                    border-2
+                    border-dashed
+                    bg-zinc-900
+                    p-6
+                    transition
+                    ${
+                        error
+                            ? "border-red-500/50"
+                            : "border-white/10 hover:border-amber-500/40"
+                    }
+                `}
+            >
+                {preview ? (
+                    <div className="space-y-4">
+                        <img
+                            src={preview}
+                            alt="Preview"
+                            className="h-56 w-full rounded-xl object-cover"
+                        />
 
-                    <span className="mt-4 font-semibold text-white">
-                        Clique para selecionar uma imagem
-                    </span>
+                        <button
+                            type="button"
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                handleSelect(null);
+                            }}
+                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/20 py-3 text-red-400 transition hover:bg-red-500/10"
+                        >
+                            <FaTrash />
+                            Remover imagem
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center gap-4 py-10 text-zinc-500">
+                        <span className="text-5xl text-amber-400">
+                            <FaCloudUploadAlt />
+                        </span>
 
-                    <span className="mt-2 text-sm text-zinc-500">
-                        PNG, JPG, JPEG ou WEBP
-                    </span>
+                        <div className="text-center">
+                            <p className="font-semibold text-white">
+                                Clique para selecionar uma imagem
+                            </p>
 
-                    <input
-                        type="file"
-                        accept="image/png,image/jpeg,image/jpg,image/webp"
-                        onChange={handleImageChange}
-                        className="hidden"
-                    />
-                </label>
+                            <p className="mt-2 text-sm">
+                                JPG, PNG ou WEBP
+                            </p>
+                        </div>
+
+                        <span className="text-3xl">
+                            <FaImage />
+                        </span>
+                    </div>
+                )}
+
+                <input
+                    ref={inputRef}
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) =>
+                        handleSelect(event.target.files?.[0] ?? null)
+                    }
+                />
+            </div>
+
+            {error && (
+                <p className="text-sm text-red-400">
+                    {error}
+                </p>
             )}
-        </Field>
+        </div>
     );
 }

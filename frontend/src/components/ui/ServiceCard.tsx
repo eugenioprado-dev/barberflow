@@ -4,9 +4,6 @@ import type { ReactNode } from "react";
 import { ServiceModal } from "../../modals/ServiceModal";
 import { Button } from "./Button";
 
-import { services } from "../../data/services";
-import { professionals } from "../../data/professionals";
-
 interface ServiceCardProps {
     icon: ReactNode;
     title: string;
@@ -21,25 +18,6 @@ export function ServiceCard({
     category,
 }: ServiceCardProps) {
     const [open, setOpen] = useState(false);
-
-    const categoryServices = services.filter(
-        (service) => service.category === category
-    );
-
-    const modalServices = categoryServices.map((service) => {
-        const professional = professionals.find(
-            (p) => p.id === service.professionalId
-        );
-
-        return {
-            name: service.name,
-            description: service.description,
-            price: service.price,
-            duration: service.duration,
-            professional: professional?.name ?? "Profissional",
-            whatsapp: professional?.whatsapp ?? "",
-        };
-    });
 
     return (
         <>
@@ -90,7 +68,7 @@ export function ServiceCard({
                 onClose={() => setOpen(false)}
                 title={title}
                 icon=""
-                services={modalServices}
+                category={category}
             />
         </>
     );

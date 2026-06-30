@@ -5,7 +5,15 @@ export interface Gallery {
 
     description: string;
 
+    /**
+     * Imagem de capa
+     */
     image: string;
+
+    /**
+     * Todas as imagens do trabalho
+     */
+    images: string[];
 
     professionalId: number;
 

@@ -6,15 +6,45 @@ import {
     FaStar,
     FaCog,
     FaTimes,
+    FaTags,
 } from "react-icons/fa";
 
 const menuItems = [
-    { label: "Dashboard", href: "/admin/dashboard", icon: <FaChartLine /> },
-    { label: "Profissionais", href: "/admin/profissionais", icon: <FaUsers /> },
-    { label: "Serviços", href: "/admin/servicos", icon: <FaCut /> },
-    { label: "Galeria", href: "/admin/galeria", icon: <FaImages /> },
-    { label: "Depoimentos", href: "/admin/depoimentos", icon: <FaStar /> },
-    { label: "Configurações", href: "/admin/configuracoes", icon: <FaCog /> },
+    {
+        label: "Dashboard",
+        href: "/admin/dashboard",
+        icon: <FaChartLine />,
+    },
+    {
+        label: "Profissionais",
+        href: "/admin/profissionais",
+        icon: <FaUsers />,
+    },
+    {
+        label: "Serviços",
+        href: "/admin/servicos",
+        icon: <FaCut />,
+    },
+    {
+        label: "Categorias",
+        href: "/admin/categorias",
+        icon: <FaTags />,
+    },
+    {
+        label: "Galeria",
+        href: "/admin/galeria",
+        icon: <FaImages />,
+    },
+    {
+        label: "Depoimentos",
+        href: "/admin/depoimentos",
+        icon: <FaStar />,
+    },
+    {
+        label: "Configurações",
+        href: "/admin/configuracoes",
+        icon: <FaCog />,
+    },
 ];
 
 interface AdminSidebarProps {
@@ -22,7 +52,10 @@ interface AdminSidebarProps {
     onClose: () => void;
 }
 
-export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
+export function AdminSidebar({
+    open,
+    onClose,
+}: AdminSidebarProps) {
     return (
         <>
             {open && (
@@ -86,7 +119,7 @@ export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
                             className="flex items-center gap-3 rounded-xl px-4 py-3 text-zinc-400 transition hover:bg-amber-500/10 hover:text-amber-400"
                         >
                             <span>{item.icon}</span>
-                            {item.label}
+                            <span>{item.label}</span>
                         </a>
                     ))}
                 </nav>

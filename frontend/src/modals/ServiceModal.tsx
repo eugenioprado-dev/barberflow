@@ -1,20 +1,21 @@
-import { FaClock, FaUser, FaWhatsapp } from "react-icons/fa";
+import {
+    FaClock,
+    FaUser,
+    FaWhatsapp,
+    FaCheckCircle,
+} from "react-icons/fa";
+
 import { Modal } from "./Modal";
 
-interface Service {
-    name: string;
-    price: number;
-    duration: number;
-    professional: string;
-    whatsapp: string;
-}
+import { servicesStore } from "../store/servicesStore";
+import { professionalsStore } from "../store/professionalsStore";
 
 interface ServiceModalProps {
     open: boolean;
     onClose: () => void;
     title: string;
     icon: string;
-    services: Service[];
+    category: string;
 }
 
 export function ServiceModal({
@@ -22,24 +23,32 @@ export function ServiceModal({
     onClose,
     title,
     icon,
-    services,
+    category,
 }: ServiceModalProps) {
-    function handleWhatsApp(service: Service) {
+    const services = servicesStore.getByCategory(category);
+
+    function handleWhatsApp(
+        serviceName: string,
+        price: number,
+        duration: number,
+        professionalName: string,
+        whatsapp: string
+    ) {
         const message = encodeURIComponent(
-`Olá, ${service.professional}!
+`Olá, ${professionalName}!
 
 Gostaria de agendar o serviço:
 
-${service.name}
+${serviceName}
 
-Valor: R$ ${service.price.toFixed(2)}
-Tempo estimado: ${service.duration} minutos.
+Valor: R$ ${price.toFixed(2)}
+Tempo estimado: ${duration} minutos.
 
 Obrigado!`
         );
 
         window.open(
-            `https://wa.me/${service.whatsapp}?text=${message}`,
+            `https://wa.me/${whatsapp}?text=${message}`,
             "_blank"
         );
     }
@@ -55,100 +64,114 @@ Obrigado!`
                     Nenhum serviço cadastrado.
                 </div>
             ) : (
-                <div className="overflow-hidden rounded-2xl border border-zinc-800">
-
-                    {/* Cabeçalho */}
-                    <div className="grid grid-cols-12 bg-zinc-900 px-6 py-4 text-sm font-semibold uppercase tracking-wide text-zinc-400">
-
-                        <div className="col-span-5">
-                            Serviço
-                        </div>
-
-                        <div className="col-span-2 text-center">
-                            Valor
-                        </div>
-
-                        <div className="col-span-2 text-center">
-                            Tempo
-                        </div>
-
-                        <div className="col-span-3 text-center">
-                            Agendar
-                        </div>
-
+                <div className="space-y-5">
+                    <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
+                        <p className="text-sm leading-7 text-zinc-300">
+                            Escolha um serviço abaixo e agende diretamente pelo WhatsApp.
+                        </p>
                     </div>
 
-                    {services.map((service, index) => (
+                    <div className="grid gap-4">
+                        {services.map((service) => {
+                            const professional =
+                                professionalsStore.getById(
+                                    service.professionalId
+                                );
 
-                        <div
-                            key={index}
-                            className="
-                                grid
-                                grid-cols-12
-                                items-center
-                                border-t
-                                border-zinc-800
-                                px-6
-                                py-5
-                                transition
-                                hover:bg-zinc-900/70
-                            "
-                        >
+                            if (!professional) {
+                                return null;
+                            }
 
-                            <div className="col-span-5">
-
-                                <p className="font-semibold text-white">
-                                    {service.name}
-                                </p>
-
-                                <div className="mt-2 flex items-center gap-2 text-sm text-zinc-500">
-                                    <FaUser size={12} />
-                                    {service.professional}
-                                </div>
-
-                            </div>
-
-                            <div className="col-span-2 text-center font-bold text-amber-400">
-                                R$ {service.price.toFixed(2)}
-                            </div>
-
-                            <div className="col-span-2">
-
-                                <div className="flex items-center justify-center gap-2 text-zinc-300">
-                                    <FaClock />
-                                    {service.duration} min
-                                </div>
-
-                            </div>
-
-                            <div className="col-span-3 flex justify-center">
-
-                                <button
-                                    onClick={() => handleWhatsApp(service)}
+                            return (
+                                <div
+                                    key={service.id}
                                     className="
-                                        flex
-                                        items-center
-                                        gap-2
-                                        rounded-xl
-                                        bg-green-600
-                                        px-4
-                                        py-2
-                                        font-medium
-                                        text-white
+                                        rounded-2xl
+                                        border
+                                        border-white/10
+                                        bg-zinc-900/80
+                                        p-5
                                         transition
-                                        hover:bg-green-500
+                                        hover:border-amber-500/40
+                                        hover:bg-zinc-900
                                     "
                                 >
-                                    <FaWhatsapp />
-                                    WhatsApp
-                                </button>
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                                        <div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-amber-400">
+                                                    <FaCheckCircle />
+                                                </span>
 
-                            </div>
+                                                <h3 className="text-lg font-bold text-white">
+                                                    {service.name}
+                                                </h3>
+                                            </div>
 
-                        </div>
+                                            {service.description && (
+                                                <p className="mt-3 max-w-xl leading-7 text-zinc-400">
+                                                    {service.description}
+                                                </p>
+                                            )}
+                                        </div>
 
-                    ))}
+                                        <div className="rounded-xl bg-amber-500/10 px-4 py-2 text-lg font-bold text-amber-400">
+                                            R$ {service.price.toFixed(2)}
+                                        </div>
+                                    </div>
 
+                                    <div className="mt-5 flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="flex flex-wrap gap-3 text-sm text-zinc-400">
+                                            <span className="flex items-center gap-2">
+                                                <span className="text-amber-400">
+                                                    <FaClock />
+                                                </span>
+                                                {service.duration} min
+                                            </span>
+
+                                            <span className="flex items-center gap-2">
+                                                <span className="text-amber-400">
+                                                    <FaUser />
+                                                </span>
+                                                {professional.name}
+                                            </span>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                handleWhatsApp(
+                                                    service.name,
+                                                    service.price,
+                                                    service.duration,
+                                                    professional.name,
+                                                    professional.whatsapp
+                                                )
+                                            }
+                                            className="
+                                                flex
+                                                items-center
+                                                justify-center
+                                                gap-2
+                                                rounded-xl
+                                                bg-green-600
+                                                px-5
+                                                py-3
+                                                font-semibold
+                                                text-white
+                                                transition
+                                                hover:bg-green-500
+                                                active:scale-95
+                                            "
+                                        >
+                                            <FaWhatsapp />
+                                            Agendar
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             )}
         </Modal>

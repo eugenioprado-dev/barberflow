@@ -1,14 +1,20 @@
 interface GalleryCardProps {
     title: string;
     image: string;
+    imagesCount?: number;
+    onClick?: () => void;
 }
 
 export function GalleryCard({
     title,
     image,
+    imagesCount = 0,
+    onClick,
 }: GalleryCardProps) {
     return (
-        <div
+        <button
+            type="button"
+            onClick={onClick}
             className="
                 group
                 relative
@@ -19,6 +25,7 @@ export function GalleryCard({
                 border
                 border-zinc-800
                 bg-zinc-900
+                text-left
                 shadow-xl
                 transition-all
                 duration-500
@@ -45,6 +52,12 @@ export function GalleryCard({
                 </div>
             )}
 
+            {imagesCount > 0 && (
+                <div className="absolute right-4 top-4 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">
+                    📸 {imagesCount} {imagesCount === 1 ? "foto" : "fotos"}
+                </div>
+            )}
+
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent transition-all duration-500 group-hover:from-black" />
 
             <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -52,8 +65,7 @@ export function GalleryCard({
                     {title}
                 </h3>
 
-                <button
-                    type="button"
+                <span
                     className="
                         mt-4
                         flex
@@ -69,8 +81,8 @@ export function GalleryCard({
                         lg:group-hover:opacity-100
                     "
                 >
-                    Ver mais →
-                </button>
+                    Ver trabalho →
+                </span>
             </div>
 
             <div
@@ -92,6 +104,6 @@ export function GalleryCard({
                     group-hover:opacity-100
                 "
             />
-        </div>
+        </button>
     );
 }
