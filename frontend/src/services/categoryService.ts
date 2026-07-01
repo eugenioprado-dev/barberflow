@@ -1,13 +1,7 @@
-import { serviceCategories } from "../data";
+import type { Category } from "../models/Category";
 
-export function getCategories() {
-    return serviceCategories.filter(
-        category => category.active
-    );
-}
+import { BaseCrudService } from "./BaseCrudService";
 
-export function getCategoryById(id: number) {
-    return serviceCategories.find(
-        category => category.id === id
-    );
-}
+export const categoryService = new BaseCrudService<Category>(
+    "categories"
+);

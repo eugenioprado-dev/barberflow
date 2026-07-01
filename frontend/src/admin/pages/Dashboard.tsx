@@ -5,41 +5,28 @@ import {
     FaStar,
     FaPlus,
     FaArrowRight,
+    FaTags,
+    FaCamera,
 } from "react-icons/fa";
 
 import type { IconType } from "react-icons";
 import { Link } from "react-router-dom";
 
 import { StatCard } from "../components/StatCard";
+import { AdminSection } from "../components/AdminSection";
 
-import {
-    professionals,
-    services,
-    gallery,
-    testimonials,
-} from "../../data";
+import { professionalsStore } from "../../store/professionalsStore";
+import { servicesStore } from "../../store/servicesStore";
+import { categoriesStore } from "../../store/categoriesStore";
+import { galleryStore } from "../../store/galleryStore";
+import { testimonialsStore } from "../../store/testimonialsStore";
 
 const quickActions = [
-    {
-        label: "Novo Profissional",
-        href: "/admin/profissionais",
-        Icon: FaUsers,
-    },
-    {
-        label: "Novo Serviço",
-        href: "/admin/servicos",
-        Icon: FaCut,
-    },
-    {
-        label: "Nova Foto",
-        href: "/admin/galeria",
-        Icon: FaImages,
-    },
-    {
-        label: "Novo Depoimento",
-        href: "/admin/depoimentos",
-        Icon: FaStar,
-    },
+    { label: "Novo Profissional", href: "/admin/profissionais", Icon: FaUsers },
+    { label: "Novo Serviço", href: "/admin/servicos", Icon: FaCut },
+    { label: "Nova Categoria", href: "/admin/categorias", Icon: FaTags },
+    { label: "Novo Trabalho", href: "/admin/galeria", Icon: FaImages },
+    { label: "Novo Depoimento", href: "/admin/depoimentos", Icon: FaStar },
 ] satisfies {
     label: string;
     href: string;
@@ -47,10 +34,21 @@ const quickActions = [
 }[];
 
 export function Dashboard() {
-    const activeProfessionals = professionals.filter((item) => item.active).length;
-    const activeServices = services.filter((item) => item.active).length;
-    const activeGallery = gallery.filter((item) => item.active).length;
-    const activeTestimonials = testimonials.filter((item) => item.active).length;
+    const activeProfessionals = professionalsStore.getActive().length;
+    const activeServices = servicesStore.getActive().length;
+    const activeCategories = categoriesStore.getActive().length;
+    const activeGallery = galleryStore.getActive().length;
+    const totalGalleryImages = galleryStore.getTotalImages();
+    const activeTestimonials = testimonialsStore.getActive().length;
+
+    const contentStatus = [
+        `${activeProfessionals} profissionais ativos`,
+        `${activeServices} serviços disponíveis`,
+        `${activeCategories} categorias cadastradas`,
+        `${activeGallery} trabalhos publicados`,
+        `${totalGalleryImages} fotos adicionadas`,
+        `${activeTestimonials} depoimentos exibidos`,
+    ];
 
     return (
         <div>
@@ -64,53 +62,27 @@ export function Dashboard() {
                 </h1>
 
                 <p className="mt-3 max-w-2xl text-zinc-400">
-                    Bem-vindo ao painel administrativo. Aqui você poderá gerenciar
-                    profissionais, serviços, galeria, depoimentos e configurações
-                    do site.
+                    Bem-vindo ao painel administrativo. Aqui você acompanha os
+                    principais dados do site e gerencia conteúdos exibidos para
+                    os clientes.
                 </p>
             </div>
 
-            <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                <StatCard
-                    icon={<FaUsers />}
-                    title="Profissionais"
-                    value={activeProfessionals}
-                    description="Profissionais ativos no site."
-                />
-
-                <StatCard
-                    icon={<FaCut />}
-                    title="Serviços"
-                    value={activeServices}
-                    description="Serviços disponíveis."
-                />
-
-                <StatCard
-                    icon={<FaImages />}
-                    title="Galeria"
-                    value={activeGallery}
-                    description="Imagens publicadas."
-                />
-
-                <StatCard
-                    icon={<FaStar />}
-                    title="Depoimentos"
-                    value={activeTestimonials}
-                    description="Avaliações exibidas."
-                />
+            <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-6">
+                <StatCard icon={<FaUsers />} title="Profissionais" value={activeProfessionals} description="Ativos no site." />
+                <StatCard icon={<FaCut />} title="Serviços" value={activeServices} description="Disponíveis." />
+                <StatCard icon={<FaTags />} title="Categorias" value={activeCategories} description="Ativas." />
+                <StatCard icon={<FaImages />} title="Trabalhos" value={activeGallery} description="Publicados." />
+                <StatCard icon={<FaCamera />} title="Fotos" value={totalGalleryImages} description="Na galeria." />
+                <StatCard icon={<FaStar />} title="Depoimentos" value={activeTestimonials} description="Exibidos." />
             </div>
 
             <div className="mt-10 grid gap-8 lg:grid-cols-2">
-                <section className="rounded-3xl border border-white/10 bg-zinc-900/70 p-6">
-                    <h2 className="text-xl font-semibold">
-                        Ações rápidas
-                    </h2>
-
-                    <p className="mt-2 text-sm text-zinc-500">
-                        Acesse rapidamente as principais áreas do painel.
-                    </p>
-
-                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <AdminSection
+                    title="Ações rápidas"
+                    description="Acesse rapidamente as principais áreas do painel."
+                >
+                    <div className="grid gap-4 sm:grid-cols-2">
                         {quickActions.map(({ label, href, Icon }) => (
                             <Link
                                 key={label}
@@ -129,36 +101,27 @@ export function Dashboard() {
                             </Link>
                         ))}
                     </div>
-                </section>
+                </AdminSection>
 
-                <section className="rounded-3xl border border-white/10 bg-zinc-900/70 p-6">
-                    <h2 className="text-xl font-semibold">
-                        Próximos módulos
-                    </h2>
-
-                    <p className="mt-2 text-sm text-zinc-500">
-                        Funcionalidades que serão ativadas nas próximas etapas.
-                    </p>
-
-                    <div className="mt-6 space-y-4">
-                        {[
-                            "Cadastro e edição de profissionais",
-                            "Gerenciamento de serviços e valores",
-                            "Upload e organização da galeria",
-                            "Configurações de WhatsApp e horários",
-                        ].map((item) => (
+                <AdminSection
+                    title="Status do conteúdo"
+                    description="Visão geral dos conteúdos publicados no site."
+                >
+                    <div className="space-y-4">
+                        {contentStatus.map((item) => (
                             <div
                                 key={item}
                                 className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-4 text-zinc-300"
                             >
                                 <span>{item}</span>
+
                                 <span className="text-amber-400">
                                     <FaArrowRight />
                                 </span>
                             </div>
                         ))}
                     </div>
-                </section>
+                </AdminSection>
             </div>
         </div>
     );

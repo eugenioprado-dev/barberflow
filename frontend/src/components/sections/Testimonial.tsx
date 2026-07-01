@@ -3,12 +3,13 @@ import { SectionTitle } from "../ui/SectionTitle";
 import { TestimonialCard } from "../ui/TestimonialCard";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
-import { testimonials } from "../../data";
+import { testimonialsStore } from "../../store/testimonialsStore";
 
 export function Testimonials() {
+    const testimonials = testimonialsStore.getActive();
+
     return (
         <section className="relative overflow-hidden bg-black py-24">
-            {/* Efeitos de fundo */}
             <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
 
@@ -20,24 +21,24 @@ export function Testimonials() {
                         subtitle="A satisfação dos nossos clientes é o reflexo da dedicação e qualidade que entregamos todos os dias."
                     />
 
-                    <div>
-                        <ResponsiveCarousel
-                            desktopColumns={3}
-                            mobileSlidesPerView={1}
-                            tabletSlidesPerView={2}
-                            autoplay
-                            delay={5000}
-                        >
-                            {testimonials.map((testimonial) => (
-                                <TestimonialCard
-                                    key={testimonial.id}
-                                    name={testimonial.name}
-                                    text={testimonial.text}
-                                    rating={testimonial.rating}
-                                />
-                            ))}
-                        </ResponsiveCarousel>
-                    </div>
+                    <ResponsiveCarousel
+                        desktopColumns={3}
+                        mobileSlidesPerView={1}
+                        tabletSlidesPerView={2}
+                        autoplay
+                        delay={5000}
+                    >
+                        {testimonials.map((testimonial) => (
+                            <TestimonialCard
+                                key={testimonial.id}
+                                name={testimonial.name}
+                                role={testimonial.role}
+                                image={testimonial.image}
+                                content={testimonial.content}
+                                rating={testimonial.rating}
+                            />
+                        ))}
+                    </ResponsiveCarousel>
                 </div>
             </Container>
         </section>

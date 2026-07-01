@@ -1,4 +1,4 @@
-import type { SiteConfig } from "../types/site";
+import type { SiteConfig } from "../models/Site";
 
 export const site: SiteConfig = {
     business: {

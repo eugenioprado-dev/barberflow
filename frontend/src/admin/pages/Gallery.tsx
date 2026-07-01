@@ -9,13 +9,14 @@ import { GalleryForm } from "../components/GalleryForm";
 
 import { useGallery } from "../hooks/useGallery";
 
-import { professionals } from "../../data/professionals";
+import { professionalsStore } from "../../store/professionalsStore";
 
 import type { Gallery } from "../../models/Gallery";
 
 import { FaPlus } from "react-icons/fa";
 
 export function Gallery() {
+    const professionals = professionalsStore.getAll();
     const [search, setSearch] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedGallery, setSelectedGallery] =

@@ -1,21 +1,21 @@
 import type { Category } from "../models/Category";
 
-import { categories } from "../data/categories";
+import { categoryService } from "../services/categoryService";
 
 export const categoriesStore = {
     getAll(): Category[] {
-        return categories;
+        return categoryService.getAll();
     },
 
     getActive(): Category[] {
-        return categories.filter((category) => category.active);
+        return categoryService.getActive();
     },
 
     getById(id: number): Category | undefined {
-        return categories.find((category) => category.id === id);
+        return categoryService.getById(id);
     },
 
     getByName(name: string): Category | undefined {
-        return categories.find((category) => category.name === name);
+        return categoryService.getByName(name);
     },
 };

@@ -14,7 +14,7 @@ interface ServiceModalProps {
     open: boolean;
     onClose: () => void;
     title: string;
-    icon: string;
+    icon?: string;
     category: string;
 }
 
@@ -22,7 +22,7 @@ export function ServiceModal({
     open,
     onClose,
     title,
-    icon,
+    icon = "",
     category,
 }: ServiceModalProps) {
     const services = servicesStore.getByCategory(category);
@@ -57,7 +57,7 @@ Obrigado!`
         <Modal
             open={open}
             onClose={onClose}
-            title={`${icon} ${title}`}
+            title={`${icon ? `${icon} ` : ""}${title}`}
         >
             {services.length === 0 ? (
                 <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 text-center text-zinc-400">
@@ -85,16 +85,7 @@ Obrigado!`
                             return (
                                 <div
                                     key={service.id}
-                                    className="
-                                        rounded-2xl
-                                        border
-                                        border-white/10
-                                        bg-zinc-900/80
-                                        p-5
-                                        transition
-                                        hover:border-amber-500/40
-                                        hover:bg-zinc-900
-                                    "
+                                    className="rounded-2xl border border-white/10 bg-zinc-900/80 p-5 transition hover:border-amber-500/40 hover:bg-zinc-900"
                                 >
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                                         <div>
@@ -148,21 +139,7 @@ Obrigado!`
                                                     professional.whatsapp
                                                 )
                                             }
-                                            className="
-                                                flex
-                                                items-center
-                                                justify-center
-                                                gap-2
-                                                rounded-xl
-                                                bg-green-600
-                                                px-5
-                                                py-3
-                                                font-semibold
-                                                text-white
-                                                transition
-                                                hover:bg-green-500
-                                                active:scale-95
-                                            "
+                                            className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 font-semibold text-white transition hover:bg-green-500 active:scale-95"
                                         >
                                             <FaWhatsapp />
                                             Agendar

@@ -1,25 +1,41 @@
-import { services } from "../data";
+import type { Service } from "../models/Service";
 
-export function getServices() {
-    return services.filter(service => service.active);
-}
+import { services } from "../data/services";
 
-export function getServiceById(id: number) {
-    return services.find(service => service.id === id);
-}
+export const serviceService = {
+    getAll(): Service[] {
+        return services;
+    },
 
-export function getServicesByCategory(category: string) {
-    return services.filter(
-        service =>
-            service.active &&
-            service.category === category
-    );
-}
+    getActive(): Service[] {
+        return services.filter((service) => service.active);
+    },
 
-export function getServicesByProfessional(id: number) {
-    return services.filter(
-        service =>
-            service.active &&
-            service.professionalId === id
-    );
-}
+    getById(id: number): Service | undefined {
+        return services.find((service) => service.id === id);
+    },
+
+    getByCategory(category: string): Service[] {
+        return services.filter(
+            (service) =>
+                service.active && service.category === category
+        );
+    },
+
+    getByProfessional(id: number): Service[] {
+        return services.filter(
+            (service) =>
+                service.active && service.professionalId === id
+        );
+    },
+
+    getCategories(): string[] {
+        return Array.from(
+            new Set(
+                services
+                    .filter((service) => service.active)
+                    .map((service) => service.category)
+            )
+        );
+    },
+};

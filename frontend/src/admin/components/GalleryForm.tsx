@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { Gallery } from "../../models/Gallery";
 import type { GalleryFormData } from "../models/GalleryFormData";
 
-import { professionals } from "../../data/professionals";
+import { professionalsStore } from "../../store/professionalsStore";
 
 import { TextField } from "../../components/ui/form/TextField";
 import { TextArea } from "../../components/ui/form/TextArea";
@@ -25,10 +25,12 @@ interface GalleryFormProps {
 }
 
 export function GalleryForm({
+    
     galleryItem,
     onCancel,
     onSave,
 }: GalleryFormProps) {
+    const professionals = professionalsStore.getActive();
     const [form, setForm] = useState<GalleryFormData>({
         title: galleryItem?.title ?? "",
         description: galleryItem?.description ?? "",

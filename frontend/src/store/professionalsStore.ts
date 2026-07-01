@@ -1,21 +1,17 @@
 import type { Professional } from "../models/Professional";
 
-import { professionals } from "../data/professionals";
+import { professionalService } from "../services/professionalService";
 
 export const professionalsStore = {
     getAll(): Professional[] {
-        return professionals;
+        return professionalService.getAll();
     },
 
     getActive(): Professional[] {
-        return professionals.filter(
-            (professional) => professional.active
-        );
+        return professionalService.getActive();
     },
 
     getById(id: number): Professional | undefined {
-        return professionals.find(
-            (professional) => professional.id === id
-        );
+        return professionalService.getById(id);
     },
 };

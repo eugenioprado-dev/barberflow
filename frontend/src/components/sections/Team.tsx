@@ -1,12 +1,18 @@
 import { Container } from "../layout/container";
 import { TeamCard } from "../ui/TeamCard";
-import { professionals } from "../../data";
 import { SectionTitle } from "../ui/SectionTitle";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
+import { professionalsStore } from "../../store/professionalsStore";
+
 export function Team() {
+    const professionals = professionalsStore.getActive();
+
     return (
-        <section id="team" className="relative overflow-hidden bg-zinc-950 py-24">
+        <section
+            id="team"
+            className="relative overflow-hidden bg-zinc-950 py-24"
+        >
             <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
 

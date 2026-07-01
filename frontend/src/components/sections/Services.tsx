@@ -1,4 +1,5 @@
-import { Container } from "../layout/container";
+import type { ReactNode } from "react";
+
 import {
     FaCut,
     FaHandSparkles,
@@ -6,16 +7,14 @@ import {
     FaStar,
 } from "react-icons/fa";
 
-import type { ReactNode } from "react";
-import type { Category } from "../../models/Category";
-
-import { ServiceCard } from "../ui/ServiceCard";
+import { Container } from "../layout/container";
 import { SectionTitle } from "../ui/SectionTitle";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
+import { ServiceCard } from "../ui/ServiceCard";
 
 import { categoriesStore } from "../../store/categoriesStore";
 
-const icons: Record<string, ReactNode> = {
+const categoryIcons: Record<string, ReactNode> = {
     cut: <FaCut />,
     hand: <FaHandSparkles />,
     foot: <FaHandSparkles />,
@@ -26,7 +25,10 @@ export function Services() {
     const categories = categoriesStore.getActive();
 
     return (
-        <section id="services" className="relative bg-zinc-950 py-24">
+        <section
+            id="services"
+            className="relative bg-zinc-950 py-24"
+        >
             <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
 
@@ -43,10 +45,13 @@ export function Services() {
                         mobileSlidesPerView={1}
                         tabletSlidesPerView={2}
                     >
-                        {categories.map((category: Category) => (
+                        {categories.map((category) => (
                             <ServiceCard
                                 key={category.id}
-                                icon={icons[category.icon] ?? <FaStar />}
+                                icon={
+                                    categoryIcons[category.icon] ??
+                                    <FaStar />
+                                }
                                 title={category.name}
                                 description={category.description}
                                 category={category.name}

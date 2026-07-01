@@ -1,11 +1,9 @@
-export interface Testimonial {
-    id: number;
-
+export interface TestimonialFormData {
     name: string;
 
     role: string;
 
-    image: string;
+    image: File | null;
 
     content: string;
 

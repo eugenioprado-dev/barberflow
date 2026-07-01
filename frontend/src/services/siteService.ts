@@ -1,39 +1,76 @@
-import type { SiteConfig } from "../types/site";
+import type { SiteConfig } from "../models/Site";
 
-export const site: SiteConfig = {
-    business: {
-        name: "André Dias Studio",
+import { site } from "../data/site";
+import { supabase } from "../lib/supabase";
 
-        subtitle: "Barbearia • Estética • Bem-estar",
+interface SiteConfigRow {
+    id: number;
+    business_name: string;
+    subtitle: string | null;
+    slogan: string | null;
+    description: string | null;
+    phone: string | null;
+    whatsapp: string | null;
+    instagram: string | null;
+    email: string | null;
+    address: string | null;
+}
 
-        slogan: "Muito mais que um corte. Uma experiência.",
+function mapRowToSiteConfig(row: SiteConfigRow): SiteConfig {
+    return {
+        business: {
+            name: row.business_name,
+            subtitle: row.subtitle ?? "",
+            slogan: row.slogan ?? "",
+            description: row.description ?? "",
+            phone: row.phone ?? "",
+            whatsapp: row.whatsapp ?? "",
+            instagram: row.instagram ?? "",
+            email: row.email ?? "",
+            address: row.address ?? "",
+        },
+        menu: site.menu,
+        services: site.services,
+    };
+}
 
-        description:
-            "Barbearia, manicure, pedicure e depilação com atendimento profissional e agendamento online.",
-
-        phone: "5511999999999",
-
-        whatsapp: "5511999999999",
-
-        instagram: "@andredias",
-
-        email: "contato@andredias.com.br",
-
-        address: "Taboão da Serra - SP",
+export const siteService = {
+    get(): SiteConfig {
+        return site;
     },
 
-    menu: [
-        "Início",
-        "Serviços",
-        "Equipe",
-        "Galeria",
-        "Contato",
-    ],
+    async getFromSupabase(): Promise<SiteConfig> {
+        const { data, error } = await supabase
+            .from("site_config")
+            .select("*")
+            .single();
 
-    services: [
-        "Barbearia",
-        "Manicure",
-        "Pedicure",
-        "Depilação",
-    ],
+        if (error) {
+            console.error("Erro ao buscar configurações:", error);
+            return site;
+        }
+
+        return mapRowToSiteConfig(data);
+    },
+
+    async updateToSupabase(data: SiteConfig): Promise<void> {
+        const { error } = await supabase
+            .from("site_config")
+            .update({
+                business_name: data.business.name,
+                subtitle: data.business.subtitle,
+                slogan: data.business.slogan,
+                description: data.business.description,
+                phone: data.business.phone,
+                whatsapp: data.business.whatsapp,
+                instagram: data.business.instagram,
+                email: data.business.email,
+                address: data.business.address,
+            })
+            .eq("id", 1);
+
+        if (error) {
+            throw error;
+        }
+    },
 };

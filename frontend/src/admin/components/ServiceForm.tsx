@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import type { Service } from "../../models/Service";
 import type { ServiceFormData } from "../models/ServiceFormData";
-
-import { professionals } from "../../data/professionals";
+import { categoriesStore } from "../../store/categoriesStore";
+import { professionalsStore } from "../../store/professionalsStore";
 
 import { TextField } from "../../components/ui/form/TextField";
 import { TextArea } from "../../components/ui/form/TextArea";
@@ -27,9 +27,11 @@ export function ServiceForm({
     onCancel,
     onSave,
 }: ServiceFormProps) {
+    const professionals = professionalsStore.getActive();
+    const categories = categoriesStore.getActive();
     const [form, setForm] = useState<ServiceFormData>({
         name: service?.name ?? "",
-        category: service?.category ?? "Barbearia",
+        category: service?.category ?? categories[0]?.name ?? "",
         professionalId: service?.professionalId ?? 1,
         description: service?.description ?? "",
         price: service?.price ?? 0,
@@ -84,13 +86,10 @@ export function ServiceForm({
                 onChange={(event) =>
                     updateField("category", event.target.value)
                 }
-                options={[
-                    { label: "Barbearia", value: "Barbearia" },
-                    { label: "Manicure", value: "Manicure" },
-                    { label: "Pedicure", value: "Pedicure" },
-                    { label: "Depilação", value: "Depilação" },
-                    { label: "Massagem", value: "Massagem" },
-                ]}
+                options={categories.map((category) => ({
+                    label: category.name,
+                    value: category.name,
+                }))}
             />
 
             <SelectField
