@@ -3,10 +3,18 @@ import { TeamCard } from "../ui/TeamCard";
 import { SectionTitle } from "../ui/SectionTitle";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
-import { professionalsStore } from "../../store/professionalsStore";
+import { useProfessionals } from "../../hooks/useProfessionals";
 
 export function Team() {
-    const professionals = professionalsStore.getActive();
+    const { professionals, loading } = useProfessionals();
+
+    const activeProfessionals = professionals.filter(
+        (professional) => professional.active
+    );
+
+    if (loading) {
+        return null;
+    }
 
     return (
         <section
@@ -26,7 +34,7 @@ export function Team() {
 
                     <div className="mt-16">
                         <ResponsiveCarousel>
-                            {professionals.map((member) => (
+                            {activeProfessionals.map((member) => (
                                 <TeamCard
                                     key={member.id}
                                     name={member.name}

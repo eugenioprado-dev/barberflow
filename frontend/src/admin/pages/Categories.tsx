@@ -13,7 +13,7 @@ import { TableActions } from "../components/table/TableActions";
 import { TableSearch } from "../components/table/TableSearch";
 import { IconBadge } from "../../components/ui/IconBadge";
 
-import { useCategories } from "../hooks/useCategories";
+import { useCategories } from "../../hooks/useCategories";
 
 import type { Category } from "../../models/Category";
 
@@ -31,6 +31,7 @@ export function Categories() {
 
     const {
         categories,
+        loading,
         createCategory,
         updateCategory,
         deleteCategory,
@@ -50,7 +51,11 @@ export function Categories() {
         <>
             <PageHeader
                 title="Categorias"
-                description={`${activeCategories} categorias ativas.`}
+                description={
+                    loading
+                        ? "Carregando categorias..."
+                        : `${activeCategories} categorias ativas.`
+                }
                 action={
                     <PageActionButton
                         icon={<FaPlus />}
@@ -70,29 +75,15 @@ export function Categories() {
             />
 
             <DataTable
-                isEmpty={filteredCategories.length === 0}
+                isEmpty={!loading && filteredCategories.length === 0}
                 emptyMessage="Nenhuma categoria encontrada."
                 headers={
                     <>
-                        <div className="col-span-3">
-                            Categoria
-                        </div>
-
-                        <div className="col-span-2">
-                            Ícone
-                        </div>
-
-                        <div className="col-span-5">
-                            Descrição
-                        </div>
-
-                        <div className="col-span-1">
-                            Status
-                        </div>
-
-                        <div className="col-span-1 text-right">
-                            Ações
-                        </div>
+                        <div className="col-span-3">Categoria</div>
+                        <div className="col-span-2">Ícone</div>
+                        <div className="col-span-5">Descrição</div>
+                        <div className="col-span-1">Status</div>
+                        <div className="col-span-1 text-right">Ações</div>
                     </>
                 }
             >
@@ -116,9 +107,7 @@ export function Categories() {
                         </div>
 
                         <div className="lg:col-span-1">
-                            <StatusBadge
-                                active={category.active}
-                            />
+                            <StatusBadge active={category.active} />
                         </div>
 
                         <div className="lg:col-span-1">
@@ -156,14 +145,14 @@ export function Categories() {
                     key={selectedCategory?.id ?? "new"}
                     category={selectedCategory}
                     onCancel={() => setDrawerOpen(false)}
-                    onSave={(data) => {
+                    onSave={async (data) => {
                         if (selectedCategory) {
-                            updateCategory(
+                            await updateCategory(
                                 selectedCategory.id,
                                 data
                             );
                         } else {
-                            createCategory(data);
+                            await createCategory(data);
                         }
 
                         setDrawerOpen(false);
@@ -177,12 +166,10 @@ export function Categories() {
                 description="Tem certeza que deseja excluir esta categoria?"
                 confirmLabel="Excluir"
                 cancelLabel="Cancelar"
-                onCancel={() =>
-                    setCategoryToDelete(null)
-                }
-                onConfirm={() => {
+                onCancel={() => setCategoryToDelete(null)}
+                onConfirm={async () => {
                     if (categoryToDelete !== null) {
-                        deleteCategory(categoryToDelete);
+                        await deleteCategory(categoryToDelete);
                     }
 
                     setCategoryToDelete(null);

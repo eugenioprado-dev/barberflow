@@ -1,12 +1,19 @@
-import { SiteProvider } from "./context/SiteContext";
 import { AppRoutes } from "./routes/AppRoutes";
+import { SiteProvider } from "./context/SiteContext";
+import { CategoryProvider } from "./context/CategoryContext";
+import { ProfessionalProvider } from "./context/ProfessionalContext";
+import { ServiceProvider } from "./context/ServiceContext";
 
 function App() {
     return (
         <SiteProvider>
-            <main className="min-h-screen bg-zinc-950 text-white">
-                <AppRoutes />
-            </main>
+            <CategoryProvider>
+                <ProfessionalProvider>
+                    <ServiceProvider>
+                        <AppRoutes />
+                    </ServiceProvider>
+                </ProfessionalProvider>
+            </CategoryProvider>
         </SiteProvider>
     );
 }

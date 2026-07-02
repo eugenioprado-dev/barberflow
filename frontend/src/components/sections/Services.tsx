@@ -12,7 +12,7 @@ import { SectionTitle } from "../ui/SectionTitle";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 import { ServiceCard } from "../ui/ServiceCard";
 
-import { categoriesStore } from "../../store/categoriesStore";
+import { useCategories } from "../../hooks/useCategories";
 
 const categoryIcons: Record<string, ReactNode> = {
     cut: <FaCut />,
@@ -22,7 +22,15 @@ const categoryIcons: Record<string, ReactNode> = {
 };
 
 export function Services() {
-    const categories = categoriesStore.getActive();
+    const { categories, loading } = useCategories();
+
+    const activeCategories = categories.filter(
+        (category) => category.active
+    );
+
+    if (loading) {
+        return null;
+    }
 
     return (
         <section
@@ -45,7 +53,7 @@ export function Services() {
                         mobileSlidesPerView={1}
                         tabletSlidesPerView={2}
                     >
-                        {categories.map((category) => (
+                        {activeCategories.map((category) => (
                             <ServiceCard
                                 key={category.id}
                                 icon={

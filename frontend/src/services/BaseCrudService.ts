@@ -1,16 +1,27 @@
 import { supabase } from "../lib/supabase";
 
-export class BaseCrudService<T extends { id: number }> {
-    constructor(private readonly table: string) {}
+type CreatePayload<T> = Omit<T, "id">;
+type UpdatePayload<T> = Partial<Omit<T, "id">>;
+
+export abstract class BaseCrudService<T extends { id: number }> {
+    protected readonly table: string;
+
+    constructor(table: string) {
+        this.table = table;
+    }
+
+    protected handleError(error: unknown): void {
+        if (error) {
+            throw error;
+        }
+    }
 
     async getAll(): Promise<T[]> {
         const { data, error } = await supabase
             .from(this.table)
             .select("*");
 
-        if (error) {
-            throw error;
-        }
+        this.handleError(error);
 
         return (data ?? []) as T[];
     }
@@ -29,34 +40,30 @@ export class BaseCrudService<T extends { id: number }> {
         return data as T;
     }
 
-    async create(item: Omit<T, "id">): Promise<T> {
+    async create(item: CreatePayload<T>): Promise<T> {
         const { data, error } = await supabase
             .from(this.table)
-            .insert(item)
+            .insert(item as never)
             .select()
             .single();
 
-        if (error) {
-            throw error;
-        }
+        this.handleError(error);
 
         return data as T;
     }
 
     async update(
         id: number,
-        item: Partial<Omit<T, "id">>
+        item: UpdatePayload<T>
     ): Promise<T> {
         const { data, error } = await supabase
             .from(this.table)
-            .update(item)
+            .update(item as never)
             .eq("id", id)
             .select()
             .single();
 
-        if (error) {
-            throw error;
-        }
+        this.handleError(error);
 
         return data as T;
     }
@@ -67,8 +74,6 @@ export class BaseCrudService<T extends { id: number }> {
             .delete()
             .eq("id", id);
 
-        if (error) {
-            throw error;
-        }
+        this.handleError(error);
     }
 }

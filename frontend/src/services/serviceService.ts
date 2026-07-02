@@ -1,41 +1,50 @@
 import type { Service } from "../models/Service";
 
-import { services } from "../data/services";
+import { supabase } from "../lib/supabase";
+import { BaseCrudService } from "./BaseCrudService";
 
-export const serviceService = {
-    getAll(): Service[] {
-        return services;
-    },
+class ServiceService extends BaseCrudService<Service> {
+    constructor() {
+        super("services");
+    }
 
-    getActive(): Service[] {
-        return services.filter((service) => service.active);
-    },
+    async getActive(): Promise<Service[]> {
+        const { data, error } = await supabase
+            .from(this.table)
+            .select("*")
+            .eq("active", true)
+            .order("name");
 
-    getById(id: number): Service | undefined {
-        return services.find((service) => service.id === id);
-    },
+        this.handleError(error);
 
-    getByCategory(category: string): Service[] {
-        return services.filter(
-            (service) =>
-                service.active && service.category === category
-        );
-    },
+        return (data ?? []) as Service[];
+    }
 
-    getByProfessional(id: number): Service[] {
-        return services.filter(
-            (service) =>
-                service.active && service.professionalId === id
-        );
-    },
+    async getByCategory(categoryId: number): Promise<Service[]> {
+        const { data, error } = await supabase
+            .from(this.table)
+            .select("*")
+            .eq("active", true)
+            .eq("category_id", categoryId)
+            .order("name");
 
-    getCategories(): string[] {
-        return Array.from(
-            new Set(
-                services
-                    .filter((service) => service.active)
-                    .map((service) => service.category)
-            )
-        );
-    },
-};
+        this.handleError(error);
+
+        return (data ?? []) as Service[];
+    }
+
+    async getByProfessional(professionalId: number): Promise<Service[]> {
+        const { data, error } = await supabase
+            .from(this.table)
+            .select("*")
+            .eq("active", true)
+            .eq("professional_id", professionalId)
+            .order("name");
+
+        this.handleError(error);
+
+        return (data ?? []) as Service[];
+    }
+}
+
+export const serviceService = new ServiceService();

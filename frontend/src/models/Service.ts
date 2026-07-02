@@ -1,7 +1,8 @@
 export interface Service {
     id: number;
-    professionalId: number;
-    category: string;
+
+    categoryId: number;
+    professionalId: number | null;
 
     name: string;
     description: string;

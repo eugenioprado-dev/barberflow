@@ -1,5 +1,15 @@
-import { useSiteContext } from "../context/SiteContext";
+import { useContext } from "react";
+
+import { SiteContext } from "../context/SiteContext";
 
 export function useSite() {
-    return useSiteContext();
+    const context = useContext(SiteContext);
+
+    if (!context) {
+        throw new Error(
+            "useSite deve ser usado dentro de SiteProvider."
+        );
+    }
+
+    return context;
 }

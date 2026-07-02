@@ -1,21 +1,24 @@
 import type { Professional } from "../models/Professional";
 
-import { professionals } from "../data/professionals";
+import { supabase } from "../lib/supabase";
+import { BaseCrudService } from "./BaseCrudService";
 
-export const professionalService = {
-    getAll(): Professional[] {
-        return professionals;
-    },
+class ProfessionalService extends BaseCrudService<Professional> {
+    constructor() {
+        super("professionals");
+    }
 
-    getActive(): Professional[] {
-        return professionals.filter(
-            (professional) => professional.active
-        );
-    },
+    async getActive(): Promise<Professional[]> {
+        const { data, error } = await supabase
+            .from(this.table)
+            .select("*")
+            .eq("active", true)
+            .order("name");
 
-    getById(id: number): Professional | undefined {
-        return professionals.find(
-            (professional) => professional.id === id
-        );
-    },
-};
+        this.handleError(error);
+
+        return (data ?? []) as Professional[];
+    }
+}
+
+export const professionalService = new ProfessionalService();

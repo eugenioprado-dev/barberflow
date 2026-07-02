@@ -1,8 +1,9 @@
 import {
     createContext,
-    useContext,
+    useCallback,
     useEffect,
     useState,
+    type ReactNode,
 } from "react";
 
 import type { SiteConfig } from "../models/Site";
@@ -15,31 +16,31 @@ interface SiteContextData {
     reload: () => Promise<void>;
 }
 
-const SiteContext = createContext<SiteContextData | null>(null);
+export const SiteContext =
+    createContext<SiteContextData | null>(null);
 
-export function SiteProvider({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+interface Props {
+    children: ReactNode;
+}
+
+export function SiteProvider({ children }: Props) {
     const [site, setSite] = useState<SiteConfig | null>(null);
     const [loading, setLoading] = useState(true);
 
-    async function reload() {
+    const reload = useCallback(async () => {
         setLoading(true);
 
         try {
             const config = await siteService.getFromSupabase();
-
             setSite(config);
         } finally {
             setLoading(false);
         }
-    }
+    }, []);
 
     useEffect(() => {
-        reload();
-    }, []);
+        void reload();
+    }, [reload]);
 
     return (
         <SiteContext.Provider
@@ -52,16 +53,4 @@ export function SiteProvider({
             {children}
         </SiteContext.Provider>
     );
-}
-
-export function useSiteContext() {
-    const context = useContext(SiteContext);
-
-    if (!context) {
-        throw new Error(
-            "useSiteContext deve ser usado dentro de SiteProvider."
-        );
-    }
-
-    return context;
 }
