@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
 
@@ -9,70 +10,40 @@ interface ModalProps {
     children: ReactNode;
 }
 
-export function Modal({
-    open,
-    onClose,
-    title,
-    children,
-}: ModalProps) {
-    return (
+export function Modal({ open, onClose, title, children }: ModalProps) {
+    return createPortal(
         <AnimatePresence>
             {open && (
-                <>
-                    {/* Fundo */}
+                <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black px-4 py-6">
                     <motion.div
-                        className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={onClose}
-                    />
-
-                    {/* Modal */}
-                    <motion.div
-                        className="fixed left-1/2 top-1/2 z-[1000] w-[92%] max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl"
-                        initial={{
-                            opacity: 0,
-                            scale: 0.9,
-                            y: 30,
-                        }}
-                        animate={{
-                            opacity: 1,
-                            scale: 1,
-                            y: 0,
-                        }}
-                        exit={{
-                            opacity: 0,
-                            scale: 0.9,
-                            y: 30,
-                        }}
-                        transition={{
-                            duration: 0.25,
-                        }}
+                        className="flex max-h-[92dvh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl"
+                        initial={{ opacity: 0, scale: 0.96 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.96 }}
+                        transition={{ duration: 0.2 }}
                     >
-                        {/* Cabeçalho */}
-                        <div className="flex items-center justify-between border-b border-zinc-800 p-6">
-                            <h2 className="text-2xl font-bold text-white">
+                        <div className="flex shrink-0 items-center justify-between border-b border-zinc-800 px-5 py-4">
+                            <h2 className="text-xl font-bold text-white md:text-2xl">
                                 {title}
                             </h2>
 
                             <button
+                                type="button"
                                 onClick={onClose}
-                                title="Fechar"
-                                aria-label="Fechar modal"
                                 className="rounded-full p-2 text-zinc-400 transition hover:bg-zinc-800 hover:text-white"
+                                aria-label="Fechar modal"
                             >
                                 <FaTimes />
                             </button>
                         </div>
 
-                        {/* Conteúdo */}
-                        <div className="max-h-[70vh] overflow-y-auto p-6">
+                        <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
                             {children}
                         </div>
                     </motion.div>
-                </>
+                </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

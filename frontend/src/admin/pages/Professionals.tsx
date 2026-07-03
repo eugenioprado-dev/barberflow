@@ -8,16 +8,23 @@ import { DataTable } from "../components/table/DataTable";
 import { StatusBadge } from "../components/table/StatusBadge";
 import { TableActions } from "../components/table/TableActions";
 import { TableSearch } from "../components/table/TableSearch";
-import { useProfessionals } from "../hooks/useProfessionals";
-import type { Professional } from "../../models/Professional";
-import { FaPlus, FaWhatsapp } from "react-icons/fa";
 import { PageActionButton } from "../components/PageActionButton";
+
+import { useProfessionals } from "../../hooks/useProfessionals";
+import { storageService } from "../../services/storageService";
+
+import type { Professional } from "../../models/Professional";
+
+import { FaPlus, FaWhatsapp, FaUser } from "react-icons/fa";
 
 export function Professionals() {
     const [search, setSearch] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [saving, setSaving] = useState(false);
+
     const [professionalToDelete, setProfessionalToDelete] =
         useState<number | null>(null);
+
     const [selectedProfessional, setSelectedProfessional] =
         useState<Professional | undefined>();
 
@@ -77,11 +84,17 @@ export function Professionals() {
                         className="grid gap-5 border-b border-white/10 px-6 py-5 last:border-b-0 lg:grid-cols-12 lg:items-center"
                     >
                         <div className="flex items-center gap-4 lg:col-span-5">
-                            <img
-                                src={professional.image}
-                                alt={professional.name}
-                                className="h-14 w-14 rounded-2xl object-cover"
-                            />
+                            {professional.image ? (
+                                <img
+                                    src={professional.image}
+                                    alt={professional.name}
+                                    className="h-14 w-14 rounded-2xl object-cover"
+                                />
+                            ) : (
+                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-800 text-zinc-400">
+                                    <FaUser />
+                                </div>
+                            )}
 
                             <div>
                                 <p className="font-semibold text-white">
@@ -138,14 +151,42 @@ export function Professionals() {
                     key={selectedProfessional?.id ?? "new"}
                     professional={selectedProfessional}
                     onCancel={() => setDrawerOpen(false)}
-                    onSave={(data) => {
-                        if (selectedProfessional) {
-                            updateProfessional(selectedProfessional.id, data);
-                        } else {
-                            createProfessional(data);
-                        }
+                    onSave={async (data) => {
+                        try {
+                            setSaving(true);
 
-                        setDrawerOpen(false);
+                            let imageUrl =
+                                selectedProfessional?.image ?? "";
+
+                            if (data.image) {
+                                imageUrl = await storageService.upload(
+                                    data.image,
+                                    "professionals"
+                                );
+                            }
+
+                            const payload = {
+                                name: data.name,
+                                role: data.role,
+                                whatsapp: data.whatsapp,
+                                instagram: data.instagram,
+                                image: imageUrl,
+                                active: data.active,
+                            };
+
+                            if (selectedProfessional) {
+                                await updateProfessional(
+                                    selectedProfessional.id,
+                                    payload
+                                );
+                            } else {
+                                await createProfessional(payload);
+                            }
+
+                            setDrawerOpen(false);
+                        } finally {
+                            setSaving(false);
+                        }
                     }}
                 />
             </AdminDrawer>
@@ -157,9 +198,9 @@ export function Professionals() {
                 confirmLabel="Excluir"
                 cancelLabel="Cancelar"
                 onCancel={() => setProfessionalToDelete(null)}
-                onConfirm={() => {
+                onConfirm={async () => {
                     if (professionalToDelete !== null) {
-                        deleteProfessional(professionalToDelete);
+                        await deleteProfessional(professionalToDelete);
                     }
 
                     setProfessionalToDelete(null);

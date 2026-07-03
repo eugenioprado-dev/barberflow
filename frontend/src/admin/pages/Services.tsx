@@ -11,7 +11,8 @@ import { StatusBadge } from "../components/table/StatusBadge";
 import { TableActions } from "../components/table/TableActions";
 import { TableSearch } from "../components/table/TableSearch";
 
-import { useServices } from "../hooks/useServices";
+import { useServices } from "../../hooks/useServices";
+import { useCategories } from "../../hooks/useCategories";
 
 import type { Service } from "../../models/Service";
 
@@ -27,10 +28,13 @@ export function Services() {
 
     const {
         services,
+        loading,
         createService,
         updateService,
         deleteService,
     } = useServices();
+
+    const { categories } = useCategories();
 
     const filteredServices = services.filter((service) =>
         service.name.toLowerCase().includes(search.toLowerCase())
@@ -40,11 +44,22 @@ export function Services() {
         (service) => service.active
     ).length;
 
+    function getCategoryName(categoryId: number) {
+        return (
+            categories.find((category) => category.id === categoryId)
+                ?.name ?? "Categoria"
+        );
+    }
+
     return (
         <div>
             <PageHeader
                 title="Serviços"
-                description={`${activeServices} serviços ativos no site.`}
+                description={
+                    loading
+                        ? "Carregando serviços..."
+                        : `${activeServices} serviços ativos no site.`
+                }
                 action={
                     <PageActionButton
                         icon={<FaPlus />}
@@ -64,7 +79,7 @@ export function Services() {
             />
 
             <DataTable
-                isEmpty={filteredServices.length === 0}
+                isEmpty={!loading && filteredServices.length === 0}
                 emptyMessage="Nenhum serviço encontrado."
                 headers={
                     <>
@@ -93,7 +108,7 @@ export function Services() {
                         </div>
 
                         <div className="text-zinc-300 lg:col-span-2">
-                            {service.category}
+                            {getCategoryName(service.categoryId)}
                         </div>
 
                         <div className="text-zinc-300 lg:col-span-2">
@@ -143,11 +158,14 @@ export function Services() {
                     key={selectedService?.id ?? "new"}
                     service={selectedService}
                     onCancel={() => setDrawerOpen(false)}
-                    onSave={(data) => {
+                    onSave={async (data) => {
                         if (selectedService) {
-                            updateService(selectedService.id, data);
+                            await updateService(
+                                selectedService.id,
+                                data
+                            );
                         } else {
-                            createService(data);
+                            await createService(data);
                         }
 
                         setDrawerOpen(false);
@@ -162,9 +180,9 @@ export function Services() {
                 confirmLabel="Excluir"
                 cancelLabel="Cancelar"
                 onCancel={() => setServiceToDelete(null)}
-                onConfirm={() => {
+                onConfirm={async () => {
                     if (serviceToDelete !== null) {
-                        deleteService(serviceToDelete);
+                        await deleteService(serviceToDelete);
                     }
 
                     setServiceToDelete(null);

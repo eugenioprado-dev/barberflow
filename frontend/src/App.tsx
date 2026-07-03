@@ -3,6 +3,7 @@ import { SiteProvider } from "./context/SiteContext";
 import { CategoryProvider } from "./context/CategoryContext";
 import { ProfessionalProvider } from "./context/ProfessionalContext";
 import { ServiceProvider } from "./context/ServiceContext";
+import { GalleryProvider } from "./context/GalleryContext";
 
 function App() {
     return (
@@ -10,7 +11,9 @@ function App() {
             <CategoryProvider>
                 <ProfessionalProvider>
                     <ServiceProvider>
-                        <AppRoutes />
+                        <GalleryProvider>
+                            <AppRoutes />
+                        </GalleryProvider>
                     </ServiceProvider>
                 </ProfessionalProvider>
             </CategoryProvider>

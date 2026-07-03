@@ -2,7 +2,7 @@ import type { ServiceFormData } from "../models/ServiceFormData";
 
 export interface ServiceFormErrors {
     name?: string;
-    category?: string;
+    categoryId?: string;
     professionalId?: string;
     description?: string;
     price?: string;
@@ -18,8 +18,8 @@ export function validateServiceForm(
         errors.name = "Informe o nome do serviço.";
     }
 
-    if (!form.category.trim()) {
-        errors.category = "Informe a categoria.";
+    if (!form.categoryId) {
+        errors.categoryId = "Selecione uma categoria.";
     }
 
     if (!form.professionalId) {
@@ -35,8 +35,7 @@ export function validateServiceForm(
     }
 
     if (form.duration <= 0) {
-        errors.duration =
-            "A duração deve ser maior que zero.";
+        errors.duration = "A duração deve ser maior que zero.";
     }
 
     return errors;

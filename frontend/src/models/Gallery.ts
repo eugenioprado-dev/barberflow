@@ -2,7 +2,6 @@ export interface Gallery {
     id: number;
 
     title: string;
-
     description: string;
 
     /**
@@ -15,7 +14,7 @@ export interface Gallery {
      */
     images: string[];
 
-    professionalId: number;
+    professionalId: number | null;
 
     active: boolean;
 }

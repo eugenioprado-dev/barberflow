@@ -2,8 +2,9 @@ import { useState } from "react";
 
 import type { Service } from "../../models/Service";
 import type { ServiceFormData } from "../models/ServiceFormData";
-import { categoriesStore } from "../../store/categoriesStore";
-import { professionalsStore } from "../../store/professionalsStore";
+
+import { useCategories } from "../../hooks/useCategories";
+import { useProfessionals } from "../../hooks/useProfessionals";
 
 import { TextField } from "../../components/ui/form/TextField";
 import { TextArea } from "../../components/ui/form/TextArea";
@@ -19,7 +20,7 @@ import {
 interface ServiceFormProps {
     service?: Service;
     onCancel: () => void;
-    onSave: (data: ServiceFormData) => void;
+    onSave: (data: ServiceFormData) => void | Promise<void>;
 }
 
 export function ServiceForm({
@@ -27,12 +28,22 @@ export function ServiceForm({
     onCancel,
     onSave,
 }: ServiceFormProps) {
-    const professionals = professionalsStore.getActive();
-    const categories = categoriesStore.getActive();
+    const { categories } = useCategories();
+    const { professionals } = useProfessionals();
+
+    const activeCategories = categories.filter(
+        (category) => category.active
+    );
+
+    const activeProfessionals = professionals.filter(
+        (professional) => professional.active
+    );
+
     const [form, setForm] = useState<ServiceFormData>({
         name: service?.name ?? "",
-        category: service?.category ?? categories[0]?.name ?? "",
-        professionalId: service?.professionalId ?? 1,
+        categoryId: service?.categoryId ?? activeCategories[0]?.id ?? 0,
+        professionalId:
+            service?.professionalId ?? activeProfessionals[0]?.id ?? 0,
         description: service?.description ?? "",
         price: service?.price ?? 0,
         duration: service?.duration ?? 30,
@@ -56,7 +67,7 @@ export function ServiceForm({
         }));
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         const validationErrors = validateServiceForm(form);
 
         if (Object.keys(validationErrors).length > 0) {
@@ -64,7 +75,7 @@ export function ServiceForm({
             return;
         }
 
-        onSave(form);
+        await onSave(form);
     }
 
     return (
@@ -81,14 +92,17 @@ export function ServiceForm({
 
             <SelectField
                 label="Categoria"
-                value={form.category}
-                error={errors.category}
+                value={String(form.categoryId)}
+                error={errors.categoryId}
                 onChange={(event) =>
-                    updateField("category", event.target.value)
+                    updateField(
+                        "categoryId",
+                        Number(event.target.value)
+                    )
                 }
-                options={categories.map((category) => ({
+                options={activeCategories.map((category) => ({
                     label: category.name,
-                    value: category.name,
+                    value: String(category.id),
                 }))}
             />
 
@@ -102,7 +116,7 @@ export function ServiceForm({
                         Number(event.target.value)
                     )
                 }
-                options={professionals.map((professional) => ({
+                options={activeProfessionals.map((professional) => ({
                     label: professional.name,
                     value: String(professional.id),
                 }))}

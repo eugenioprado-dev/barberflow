@@ -2,7 +2,7 @@ export interface Service {
     id: number;
 
     categoryId: number;
-    professionalId: number | null;
+    professionalId: number;
 
     name: string;
     description: string;

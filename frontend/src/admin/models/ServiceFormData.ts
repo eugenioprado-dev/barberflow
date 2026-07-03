@@ -1,9 +1,9 @@
 export interface ServiceFormData {
-    categoryId: number;
-    professionalId: number | null;
-
     name: string;
     description: string;
+
+    categoryId: number;
+    professionalId: number;
 
     price: number;
     duration: number;
