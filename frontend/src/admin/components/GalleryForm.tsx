@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { Gallery } from "../../models/Gallery";
 import type { GalleryFormData } from "../models/GalleryFormData";
 
-import { professionalsStore } from "../../store/professionalsStore";
+import { useProfessionals } from "../../hooks/useProfessionals";
 
 import { TextField } from "../../components/ui/form/TextField";
 import { TextArea } from "../../components/ui/form/TextArea";
@@ -21,22 +21,29 @@ import {
 interface GalleryFormProps {
     galleryItem?: Gallery;
     onCancel: () => void;
-    onSave: (data: GalleryFormData) => void;
+    onSave: (data: GalleryFormData) => void | Promise<void>;
 }
 
 export function GalleryForm({
-    
     galleryItem,
     onCancel,
     onSave,
 }: GalleryFormProps) {
-    const professionals = professionalsStore.getActive();
+    const { professionals } = useProfessionals();
+
+    const activeProfessionals = professionals.filter(
+        (professional) => professional.active
+    );
+
     const [form, setForm] = useState<GalleryFormData>({
         title: galleryItem?.title ?? "",
         description: galleryItem?.description ?? "",
         image: null,
         images: [],
-        professionalId: galleryItem?.professionalId ?? 1,
+        professionalId:
+            galleryItem?.professionalId ??
+            activeProfessionals[0]?.id ??
+            0,
         active: galleryItem?.active ?? true,
     });
 
@@ -57,7 +64,7 @@ export function GalleryForm({
         }));
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         const validationErrors = validateGalleryForm(form);
 
         if (Object.keys(validationErrors).length > 0) {
@@ -65,14 +72,14 @@ export function GalleryForm({
             return;
         }
 
-        onSave(form);
+        await onSave(form);
     }
 
     return (
         <div className="space-y-5">
             <TextField
                 label="Título"
-                placeholder="Ex: Corte Clássico"
+                placeholder="Ex: Morena iluminada"
                 value={form.title}
                 error={errors.title}
                 onChange={(event) =>
@@ -82,7 +89,7 @@ export function GalleryForm({
 
             <TextArea
                 label="Descrição"
-                placeholder="Descreva a imagem..."
+                placeholder="Descreva o trabalho..."
                 value={form.description}
                 error={errors.description}
                 onChange={(event) =>
@@ -100,14 +107,14 @@ export function GalleryForm({
                         Number(event.target.value)
                     )
                 }
-                options={professionals.map((professional) => ({
+                options={activeProfessionals.map((professional) => ({
                     label: professional.name,
                     value: String(professional.id),
                 }))}
             />
 
             <ImageUpload
-                label="Imagem da galeria"
+                label="Imagem de capa"
                 initialPreview={galleryItem?.image}
                 error={errors.image}
                 onChange={(file) => updateField("image", file)}
@@ -119,8 +126,8 @@ export function GalleryForm({
             />
 
             <SwitchField
-                label="Imagem ativa"
-                description="Exibir esta imagem no site."
+                label="Trabalho ativo"
+                description="Exibir este trabalho no site."
                 checked={form.active}
                 onChange={(checked) => updateField("active", checked)}
             />
