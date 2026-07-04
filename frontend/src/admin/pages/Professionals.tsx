@@ -20,7 +20,6 @@ import { FaPlus, FaWhatsapp, FaUser } from "react-icons/fa";
 export function Professionals() {
     const [search, setSearch] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [saving, setSaving] = useState(false);
 
     const [professionalToDelete, setProfessionalToDelete] =
         useState<number | null>(null);
@@ -152,41 +151,34 @@ export function Professionals() {
                     professional={selectedProfessional}
                     onCancel={() => setDrawerOpen(false)}
                     onSave={async (data) => {
-                        try {
-                            setSaving(true);
+                        let imageUrl = selectedProfessional?.image ?? "";
 
-                            let imageUrl =
-                                selectedProfessional?.image ?? "";
-
-                            if (data.image) {
-                                imageUrl = await storageService.upload(
-                                    data.image,
-                                    "professionals"
-                                );
-                            }
-
-                            const payload = {
-                                name: data.name,
-                                role: data.role,
-                                whatsapp: data.whatsapp,
-                                instagram: data.instagram,
-                                image: imageUrl,
-                                active: data.active,
-                            };
-
-                            if (selectedProfessional) {
-                                await updateProfessional(
-                                    selectedProfessional.id,
-                                    payload
-                                );
-                            } else {
-                                await createProfessional(payload);
-                            }
-
-                            setDrawerOpen(false);
-                        } finally {
-                            setSaving(false);
+                        if (data.image) {
+                            imageUrl = await storageService.upload(
+                                data.image,
+                                "professionals"
+                            );
                         }
+
+                        const payload = {
+                            name: data.name,
+                            role: data.role,
+                            whatsapp: data.whatsapp,
+                            instagram: data.instagram,
+                            image: imageUrl,
+                            active: data.active,
+                        };
+
+                        if (selectedProfessional) {
+                            await updateProfessional(
+                                selectedProfessional.id,
+                                payload
+                            );
+                        } else {
+                            await createProfessional(payload);
+                        }
+
+                        setDrawerOpen(false);
                     }}
                 />
             </AdminDrawer>

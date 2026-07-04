@@ -15,11 +15,10 @@ import { Link } from "react-router-dom";
 import { StatCard } from "../components/StatCard";
 import { AdminSection } from "../components/AdminSection";
 
-import { professionalsStore } from "../../store/professionalsStore";
-import { servicesStore } from "../../store/servicesStore";
-import { categoriesStore } from "../../store/categoriesStore";
-import { galleryStore } from "../../store/galleryStore";
-import { testimonialsStore } from "../../store/testimonialsStore";
+import { useProfessionals } from "../../hooks/useProfessionals";
+import { useServices } from "../../hooks/useServices";
+import { useCategories } from "../../hooks/useCategories";
+import { useGallery } from "../../hooks/useGallery";
 
 const quickActions = [
     { label: "Novo Profissional", href: "/admin/profissionais", Icon: FaUsers },
@@ -34,12 +33,22 @@ const quickActions = [
 }[];
 
 export function Dashboard() {
-    const activeProfessionals = professionalsStore.getActive().length;
-    const activeServices = servicesStore.getActive().length;
-    const activeCategories = categoriesStore.getActive().length;
-    const activeGallery = galleryStore.getActive().length;
-    const totalGalleryImages = galleryStore.getTotalImages();
-    const activeTestimonials = testimonialsStore.getActive().length;
+    const { professionals } = useProfessionals();
+    const { services } = useServices();
+    const { categories } = useCategories();
+    const { gallery } = useGallery();
+
+    const activeProfessionals = professionals.filter((item) => item.active).length;
+    const activeServices = services.filter((item) => item.active).length;
+    const activeCategories = categories.filter((item) => item.active).length;
+    const activeGallery = gallery.filter((item) => item.active).length;
+
+    const totalGalleryImages = gallery.reduce(
+        (total, item) => total + item.images.length,
+        0
+    );
+
+    const activeTestimonials = 0;
 
     const contentStatus = [
         `${activeProfessionals} profissionais ativos`,
