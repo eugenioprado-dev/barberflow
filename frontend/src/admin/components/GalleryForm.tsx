@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { Gallery } from "../../models/Gallery";
 import type { GalleryFormData } from "../models/GalleryFormData";
@@ -48,6 +48,15 @@ export function GalleryForm({
     });
 
     const [errors, setErrors] = useState<GalleryFormErrors>({});
+
+    useEffect(() => {
+        if (form.professionalId === 0 && activeProfessionals.length > 0) {
+            setForm((current) => ({
+                ...current,
+                professionalId: activeProfessionals[0].id,
+            }));
+        }
+    }, [activeProfessionals, form.professionalId]);
 
     function updateField<K extends keyof GalleryFormData>(
         field: K,
