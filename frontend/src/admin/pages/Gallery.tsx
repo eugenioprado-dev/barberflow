@@ -7,29 +7,31 @@ import { ConfirmDialog } from "../components/ConfirmDialog";
 import { AdminGalleryCard } from "../components/gallery/AdminGalleryCard";
 import { GalleryForm } from "../components/GalleryForm";
 
-import { useGallery } from "../hooks/useGallery";
+import { useGallery } from "../../hooks/useGallery";
+import { useProfessionals } from "../../hooks/useProfessionals";
 
-import { professionalsStore } from "../../store/professionalsStore";
+import { storageService } from "../../services/storageService";
 
-import type { Gallery } from "../../models/Gallery";
+import type { Gallery as GalleryModel } from "../../models/Gallery";
 
 import { FaPlus } from "react-icons/fa";
 
 export function Gallery() {
-    const professionals = professionalsStore.getAll();
     const [search, setSearch] = useState("");
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedGallery, setSelectedGallery] =
-        useState<Gallery>();
+        useState<GalleryModel>();
     const [galleryToDelete, setGalleryToDelete] =
         useState<number | null>(null);
 
     const {
         gallery,
-        createGalleryItem,
-        updateGalleryItem,
-        deleteGalleryItem,
+        createGallery,
+        updateGallery,
+        deleteGallery,
     } = useGallery();
+
+    const { professionals } = useProfessionals();
 
     const filteredGallery = gallery.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
@@ -41,7 +43,7 @@ export function Gallery() {
         <>
             <PageHeader
                 title="Galeria"
-                description={`${activeImages} imagens ativas.`}
+                description={`${activeImages} trabalhos ativos.`}
                 action={
                     <button
                         type="button"
@@ -52,14 +54,14 @@ export function Gallery() {
                         className="flex items-center gap-2 rounded-xl bg-amber-500 px-5 py-3 font-semibold text-black transition hover:bg-amber-400"
                     >
                         <FaPlus />
-                        Nova Imagem
+                        Novo Trabalho
                     </button>
                 }
             />
 
             <TableSearch
                 value={search}
-                placeholder="Buscar imagem..."
+                placeholder="Buscar trabalho..."
                 onChange={setSearch}
             />
 
@@ -96,22 +98,59 @@ export function Gallery() {
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
                 title={
-                    selectedGallery ? "Editar Imagem" : "Nova Imagem"
+                    selectedGallery
+                        ? "Editar Trabalho"
+                        : "Novo Trabalho"
                 }
                 description={
                     selectedGallery
-                        ? "Atualize os dados da imagem."
-                        : "Cadastre uma nova imagem."
+                        ? "Atualize os dados do trabalho."
+                        : "Cadastre um novo trabalho para a galeria."
                 }
             >
                 <GalleryForm
                     galleryItem={selectedGallery}
                     onCancel={() => setDrawerOpen(false)}
-                    onSave={(data) => {
+                    onSave={async (data) => {
+                        let coverUrl = selectedGallery?.image ?? "";
+
+                        if (data.image) {
+                            coverUrl = await storageService.upload(
+                                data.image,
+                                "gallery"
+                            );
+                        }
+
+                        let imagesUrls =
+                            selectedGallery?.images ?? [];
+
+                        if (data.images.length > 0) {
+                            imagesUrls = await Promise.all(
+                                data.images.map((file) =>
+                                    storageService.upload(
+                                        file,
+                                        "gallery"
+                                    )
+                                )
+                            );
+                        }
+
+                        const payload = {
+                            title: data.title,
+                            description: data.description,
+                            image: coverUrl,
+                            images: imagesUrls,
+                            professionalId: data.professionalId,
+                            active: data.active,
+                        };
+
                         if (selectedGallery) {
-                            updateGalleryItem(selectedGallery.id, data);
+                            await updateGallery(
+                                selectedGallery.id,
+                                payload
+                            );
                         } else {
-                            createGalleryItem(data);
+                            await createGallery(payload);
                         }
 
                         setDrawerOpen(false);
@@ -121,14 +160,14 @@ export function Gallery() {
 
             <ConfirmDialog
                 open={galleryToDelete !== null}
-                title="Excluir imagem"
-                description="Tem certeza que deseja excluir esta imagem?"
+                title="Excluir trabalho"
+                description="Tem certeza que deseja excluir este trabalho?"
                 confirmLabel="Excluir"
                 cancelLabel="Cancelar"
                 onCancel={() => setGalleryToDelete(null)}
-                onConfirm={() => {
+                onConfirm={async () => {
                     if (galleryToDelete !== null) {
-                        deleteGalleryItem(galleryToDelete);
+                        await deleteGallery(galleryToDelete);
                     }
 
                     setGalleryToDelete(null);

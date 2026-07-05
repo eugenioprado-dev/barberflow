@@ -3,10 +3,18 @@ import { SectionTitle } from "../ui/SectionTitle";
 import { TestimonialCard } from "../ui/TestimonialCard";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
-import { testimonialsStore } from "../../store/testimonialsStore";
+import { useTestimonials } from "../../hooks/useTestimonials";
 
 export function Testimonials() {
-    const testimonials = testimonialsStore.getActive();
+    const { testimonials, loading } = useTestimonials();
+
+    const activeTestimonials = testimonials.filter(
+        (testimonial) => testimonial.active
+    );
+
+    if (loading) {
+        return null;
+    }
 
     return (
         <section className="relative overflow-hidden bg-black py-24">
@@ -28,7 +36,7 @@ export function Testimonials() {
                         autoplay
                         delay={5000}
                     >
-                        {testimonials.map((testimonial) => (
+                        {activeTestimonials.map((testimonial) => (
                             <TestimonialCard
                                 key={testimonial.id}
                                 name={testimonial.name}

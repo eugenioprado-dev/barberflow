@@ -1,21 +1,25 @@
 import type { Testimonial } from "../models/Testimonial";
 
-import { testimonials } from "../data/testimonials";
+import { supabase } from "../lib/supabase";
+import { BaseCrudService } from "./BaseCrudService";
 
-export const testimonialService = {
-    getAll(): Testimonial[] {
-        return testimonials;
-    },
+class TestimonialService extends BaseCrudService<Testimonial> {
+    constructor() {
+        super("testimonials");
+    }
 
-    getActive(): Testimonial[] {
-        return testimonials.filter(
-            (testimonial) => testimonial.active
-        );
-    },
+    async getActive(): Promise<Testimonial[]> {
+        const { data, error } = await supabase
+            .from(this.table)
+            .select("*")
+            .eq("active", true)
+            .order("id");
 
-    getById(id: number): Testimonial | undefined {
-        return testimonials.find(
-            (testimonial) => testimonial.id === id
-        );
-    },
-};
+        this.handleError(error);
+
+        return (data ?? []) as Testimonial[];
+    }
+}
+
+export const testimonialService =
+    new TestimonialService();
