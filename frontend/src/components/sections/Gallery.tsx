@@ -9,6 +9,7 @@ import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 import { useGallery } from "../../hooks/useGallery";
 import { useProfessionals } from "../../hooks/useProfessionals";
 import { GalleryModal } from "../modals/GalleryModal";
+import { PortfolioModal } from "../modals/PortfolioModal";
 
 import type { Gallery as GalleryModel } from "../../models/Gallery";
 
@@ -16,7 +17,7 @@ export function Gallery() {
     const { gallery, loading } = useGallery();
     const { professionals } = useProfessionals();
 
-    const [expanded, setExpanded] = useState(false);
+    const [portfolioOpen, setPortfolioOpen] = useState(false);
     const [selectedItem, setSelectedItem] =
         useState<GalleryModel | null>(null);
 
@@ -24,9 +25,7 @@ export function Gallery() {
         .filter((item) => item.active)
         .sort((a, b) => b.id - a.id);
 
-    const desktopGallery = expanded
-        ? activeGallery
-        : activeGallery.slice(0, 3);
+    const featuredGallery = activeGallery.slice(0, 3);
 
     function getProfessionalName(id: number | null) {
         return (
@@ -68,9 +67,9 @@ export function Gallery() {
                                         mobileSlidesPerView={1}
                                         tabletSlidesPerView={1}
                                         autoplay
-                                        delay={2000}
+                                        delay={3000}
                                     >
-                                        {activeGallery.map((item) => (
+                                        {featuredGallery.map((item) => (
                                             <GalleryCard
                                                 key={item.id}
                                                 title={item.title}
@@ -89,7 +88,7 @@ export function Gallery() {
                                 </div>
 
                                 <div className="mt-16 hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-3">
-                                    {desktopGallery.map((item) => (
+                                    {featuredGallery.map((item) => (
                                         <GalleryCard
                                             key={item.id}
                                             title={item.title}
@@ -111,14 +110,10 @@ export function Gallery() {
                                         <Button
                                             variant="secondary"
                                             onClick={() =>
-                                                setExpanded(
-                                                    (current) => !current
-                                                )
+                                                setPortfolioOpen(true)
                                             }
                                         >
-                                            {expanded
-                                                ? "Ver menos"
-                                                : "Ver mais trabalhos"}
+                                            Ver portfólio completo
                                         </Button>
                                     </div>
                                 )}
@@ -127,6 +122,17 @@ export function Gallery() {
                     </div>
                 </Container>
             </section>
+
+            <PortfolioModal
+                open={portfolioOpen}
+                gallery={activeGallery}
+                professionals={professionals}
+                onClose={() => setPortfolioOpen(false)}
+                onSelect={(item) => {
+                    setPortfolioOpen(false);
+                    setSelectedItem(item);
+                }}
+            />
 
             <GalleryModal
                 item={selectedItem}
