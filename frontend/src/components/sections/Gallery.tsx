@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Container } from "../layout/container";
 import { SectionTitle } from "../ui/SectionTitle";
 import { Button } from "../ui/Button";
+import { GalleryCard } from "../ui/GalleryCard";
+import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
 import { useGallery } from "../../hooks/useGallery";
 import { useProfessionals } from "../../hooks/useProfessionals";
@@ -14,7 +16,7 @@ export function Gallery() {
     const { gallery, loading } = useGallery();
     const { professionals } = useProfessionals();
 
-    const [visibleItems, setVisibleItems] = useState(6);
+    const [expanded, setExpanded] = useState(false);
     const [selectedItem, setSelectedItem] =
         useState<GalleryModel | null>(null);
 
@@ -22,7 +24,9 @@ export function Gallery() {
         .filter((item) => item.active)
         .sort((a, b) => b.id - a.id);
 
-    const visibleGallery = activeGallery.slice(0, visibleItems);
+    const desktopGallery = expanded
+        ? activeGallery
+        : activeGallery.slice(0, 3);
 
     function getProfessionalName(id: number | null) {
         return (
@@ -58,64 +62,63 @@ export function Gallery() {
                             </div>
                         ) : (
                             <>
-                                <div className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                                    {visibleGallery.map((item) => (
-                                        <article
+                                <div className="mt-16 block md:hidden">
+                                    <ResponsiveCarousel
+                                        desktopColumns={2}
+                                        mobileSlidesPerView={1}
+                                        tabletSlidesPerView={1}
+                                        autoplay
+                                        delay={2000}
+                                    >
+                                        {activeGallery.map((item) => (
+                                            <GalleryCard
+                                                key={item.id}
+                                                title={item.title}
+                                                image={item.image}
+                                                imagesCount={item.images.length}
+                                                professionalName={getProfessionalName(
+                                                    item.professionalId
+                                                )}
+                                                description={item.description}
+                                                onClick={() =>
+                                                    setSelectedItem(item)
+                                                }
+                                            />
+                                        ))}
+                                    </ResponsiveCarousel>
+                                </div>
+
+                                <div className="mt-16 hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-3">
+                                    {desktopGallery.map((item) => (
+                                        <GalleryCard
                                             key={item.id}
-                                            className="group overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/70 shadow-xl transition hover:border-amber-500/50"
-                                        >
-                                            <div className="relative h-72 overflow-hidden">
-                                                <img
-                                                    src={item.image}
-                                                    alt={item.title}
-                                                    className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-                                                />
-
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-
-                                                <div className="absolute bottom-5 left-5 right-5">
-                                                    <p className="text-xs uppercase tracking-[0.25em] text-amber-400">
-                                                        {getProfessionalName(
-                                                            item.professionalId
-                                                        )}
-                                                    </p>
-
-                                                    <h3 className="mt-2 text-2xl font-bold text-white">
-                                                        {item.title}
-                                                    </h3>
-                                                </div>
-                                            </div>
-
-                                            <div className="p-6">
-                                                <p className="line-clamp-3 leading-7 text-zinc-400">
-                                                    {item.description}
-                                                </p>
-
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        setSelectedItem(item)
-                                                    }
-                                                    className="mt-6 rounded-xl border border-amber-500/40 px-5 py-3 font-semibold text-amber-400 transition hover:bg-amber-500 hover:text-black"
-                                                >
-                                                    Ver trabalho
-                                                </button>
-                                            </div>
-                                        </article>
+                                            title={item.title}
+                                            image={item.image}
+                                            imagesCount={item.images.length}
+                                            professionalName={getProfessionalName(
+                                                item.professionalId
+                                            )}
+                                            description={item.description}
+                                            onClick={() =>
+                                                setSelectedItem(item)
+                                            }
+                                        />
                                     ))}
                                 </div>
 
-                                {visibleItems < activeGallery.length && (
+                                {activeGallery.length > 3 && (
                                     <div className="mt-12 flex justify-center">
                                         <Button
                                             variant="secondary"
                                             onClick={() =>
-                                                setVisibleItems(
-                                                    (current) => current + 6
+                                                setExpanded(
+                                                    (current) => !current
                                                 )
                                             }
                                         >
-                                            Ver mais trabalhos
+                                            {expanded
+                                                ? "Ver menos"
+                                                : "Ver mais trabalhos"}
                                         </Button>
                                     </div>
                                 )}

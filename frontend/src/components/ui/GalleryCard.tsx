@@ -1,6 +1,8 @@
 interface GalleryCardProps {
     title: string;
     image: string;
+    description: string;
+    professionalName: string;
     imagesCount?: number;
     onClick?: () => void;
 }
@@ -8,6 +10,8 @@ interface GalleryCardProps {
 export function GalleryCard({
     title,
     image,
+    description,
+    professionalName,
     imagesCount = 0,
     onClick,
 }: GalleryCardProps) {
@@ -58,29 +62,20 @@ export function GalleryCard({
                 </div>
             )}
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent transition-all duration-500 group-hover:from-black" />
-
             <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold text-white">
+                <p className="text-xs uppercase tracking-[0.3em] text-amber-400">
+                    {professionalName}
+                </p>
+
+                <h3 className="mt-2 text-2xl font-bold text-white">
                     {title}
                 </h3>
 
-                <span
-                    className="
-                        mt-4
-                        flex
-                        items-center
-                        gap-2
-                        font-semibold
-                        text-amber-500
-                        opacity-100
-                        transition-all
-                        duration-500
-                        lg:opacity-0
-                        lg:group-hover:translate-x-2
-                        lg:group-hover:opacity-100
-                    "
-                >
+                <p className="mt-3 line-clamp-2 text-sm text-zinc-300">
+                    {description}
+                </p>
+
+                <span className="mt-5 inline-flex items-center gap-2 font-semibold text-amber-500">
                     Ver trabalho →
                 </span>
             </div>
