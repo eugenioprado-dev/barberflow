@@ -1,4 +1,5 @@
 import { AppRoutes } from "./routes/AppRoutes";
+import { Toaster } from "react-hot-toast";
 
 import { SiteProvider } from "./context/SiteContext";
 import { CategoryProvider } from "./context/CategoryContext";
@@ -16,6 +17,22 @@ function App() {
                         <GalleryProvider>
                             <TestimonialProvider>
                                 <AppRoutes />
+                                <Toaster
+                                    position="top-right"
+                                    toastOptions={{
+                                        style: {
+                                            background: "#18181b",
+                                            color: "#fff",
+                                            border: "1px solid rgba(255,255,255,0.1)",
+                                        },
+                                        success: {
+                                            iconTheme: {
+                                                primary: "#f59e0b",
+                                                secondary: "#000",
+                                            },
+                                        },
+                                    }}
+                                />
                             </TestimonialProvider>
                         </GalleryProvider>
                     </ServiceProvider>

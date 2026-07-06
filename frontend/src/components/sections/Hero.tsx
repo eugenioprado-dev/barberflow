@@ -25,6 +25,7 @@ export function Hero() {
             <div className="absolute -right-20 bottom-20 h-64 w-64 rounded-full bg-yellow-400/10 blur-[90px] lg:-right-32 lg:h-96 lg:w-96 lg:blur-[140px]" />
 
             <Container className="relative z-10 grid items-center gap-16 lg:grid-cols-2">
+                
                 <motion.div
                     variants={staggerContainer}
                     initial="hidden"
@@ -70,7 +71,7 @@ export function Hero() {
                     >
                         <Button
                             type="button"
-                            onClick={() => scrollToSection("contact")}
+                            onClick={() => scrollToSection("team")}
                         >
                             Agendar Horário
                         </Button>

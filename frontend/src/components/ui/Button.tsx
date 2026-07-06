@@ -26,9 +26,12 @@ export function Button({
         NonNullable<ButtonProps["variant"]>,
         string
     > = {
-        primary: "bg-amber-500 text-black hover:bg-amber-400",
-        secondary: "border border-zinc-700 text-white hover:border-amber-500",
-        danger: "bg-red-600 text-white hover:bg-red-500",
+        primary:
+            "bg-amber-500 text-black shadow-lg shadow-amber-500/20 hover:bg-amber-400 hover:shadow-amber-500/30",
+        secondary:
+            "border border-zinc-700 text-white hover:border-amber-500 hover:bg-amber-500/10",
+        danger:
+            "bg-red-600 text-white shadow-lg shadow-red-600/20 hover:bg-red-500",
     };
 
     return (
@@ -46,8 +49,17 @@ export function Button({
                 transition-all
                 duration-300
                 hover:-translate-y-1
+                active:translate-y-0
+                active:scale-[0.98]
+                focus:outline-none
+                focus:ring-2
+                focus:ring-amber-500/60
+                focus:ring-offset-2
+                focus:ring-offset-zinc-950
                 disabled:cursor-not-allowed
                 disabled:opacity-60
+                disabled:hover:translate-y-0
+                disabled:active:scale-100
                 ${variants[variant]}
                 ${className}
             `}

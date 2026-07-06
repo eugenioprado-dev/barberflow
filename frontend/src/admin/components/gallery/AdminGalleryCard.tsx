@@ -25,7 +25,7 @@ export function AdminGalleryCard({
 }: AdminGalleryCardProps) {
     return (
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/70 transition hover:border-amber-500/30">
-            <div className="relative flex h-48 items-center justify-center bg-zinc-900">
+            <div className="relative aspect-[4/4] overflow-hidden bg-zinc-900">
                 {image ? (
                     <img
                         src={image}

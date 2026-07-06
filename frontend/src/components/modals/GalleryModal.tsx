@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
     FaChevronLeft,
     FaChevronRight,
@@ -18,12 +18,32 @@ export function GalleryModal({
 }: GalleryModalProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    useEffect(() => {
-        setCurrentIndex(0);
+    const images = useMemo(() => {
+        if (!item) {
+            return [];
+        }
+
+        return [item.image, ...item.images].filter(Boolean);
     }, [item]);
 
+    const previous = useCallback(() => {
+        setCurrentIndex((current) =>
+            current === 0 ? images.length - 1 : current - 1
+        );
+    }, [images.length]);
+
+    const next = useCallback(() => {
+        setCurrentIndex((current) =>
+            current === images.length - 1 ? 0 : current + 1
+        );
+    }, [images.length]);
+
+
+
     useEffect(() => {
-        if (!item) return;
+        if (!item) {
+            return;
+        }
 
         document.body.style.overflow = "hidden";
 
@@ -45,42 +65,22 @@ export function GalleryModal({
 
         return () => {
             document.body.style.overflow = "";
-            window.removeEventListener(
-                "keydown",
-                handleKeyDown
-            );
+            window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [item, currentIndex]);
+    }, [item, onClose, previous, next]);
 
     if (!item) {
         return null;
     }
 
-    const images = [item.image, ...item.images].filter(Boolean);
-
-    function previous() {
-        setCurrentIndex((current) =>
-            current === 0
-                ? images.length - 1
-                : current - 1
-        );
-    }
-
-    function next() {
-        setCurrentIndex((current) =>
-            current === images.length - 1
-                ? 0
-                : current + 1
-        );
-    }
-
     return (
-        <div className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-md text-white">
+        <div className="fixed inset-0 z-[99999] bg-black/95 text-white backdrop-blur-md">
             <button
                 type="button"
                 onClick={onClose}
                 className="absolute right-6 top-6 z-30 rounded-full bg-white/10 p-3 transition hover:bg-white/20"
                 aria-label="Fechar galeria"
+                title="Fechar galeria"
             >
                 <FaTimes />
             </button>
@@ -93,6 +93,7 @@ export function GalleryModal({
                             onClick={previous}
                             className="absolute left-6 rounded-full bg-white/10 p-4 transition hover:bg-white/20"
                             aria-label="Imagem anterior"
+                            title="Imagem anterior"
                         >
                             <FaChevronLeft />
                         </button>
@@ -110,6 +111,7 @@ export function GalleryModal({
                             onClick={next}
                             className="absolute right-6 rounded-full bg-white/10 p-4 transition hover:bg-white/20"
                             aria-label="Próxima imagem"
+                            title="Próxima imagem"
                         >
                             <FaChevronRight />
                         </button>
@@ -135,14 +137,14 @@ export function GalleryModal({
                         <div className="mt-6 flex gap-3 overflow-x-auto pb-2">
                             {images.map((image, index) => (
                                 <button
-                                    key={index}
+                                    key={`${image}-${index}`}
                                     type="button"
-                                    onClick={() =>
-                                        setCurrentIndex(index)
-                                    }
+                                    aria-label={`Selecionar imagem ${index + 1}`}
+                                    title={`Selecionar imagem ${index + 1}`}
+                                    onClick={() => setCurrentIndex(index)}
                                     className={`overflow-hidden rounded-2xl border transition ${
                                         currentIndex === index
-                                            ? "border-amber-500 scale-105"
+                                            ? "scale-105 border-amber-500"
                                             : "border-white/10"
                                     }`}
                                 >

@@ -10,7 +10,7 @@ import { useGallery } from "../../hooks/useGallery";
 import { useProfessionals } from "../../hooks/useProfessionals";
 import { GalleryModal } from "../modals/GalleryModal";
 import { PortfolioModal } from "../modals/PortfolioModal";
-
+import { FadeIn } from "../../animations/FadeIn";
 import type { Gallery as GalleryModel } from "../../models/Gallery";
 
 export function Gallery() {
@@ -69,20 +69,24 @@ export function Gallery() {
                                         autoplay
                                         delay={3000}
                                     >
-                                        {featuredGallery.map((item) => (
-                                            <GalleryCard
+                                        {featuredGallery.map((item, index) => (
+                                            <FadeIn
                                                 key={item.id}
-                                                title={item.title}
-                                                image={item.image}
-                                                imagesCount={item.images.length}
-                                                professionalName={getProfessionalName(
-                                                    item.professionalId
-                                                )}
-                                                description={item.description}
-                                                onClick={() =>
-                                                    setSelectedItem(item)
-                                                }
-                                            />
+                                                delay={index * 0.08}
+                                            >
+                                                <GalleryCard
+                                                    title={item.title}
+                                                    image={item.image}
+                                                    imagesCount={item.images.length}
+                                                    professionalName={getProfessionalName(
+                                                        item.professionalId
+                                                    )}
+                                                    description={item.description}
+                                                    onClick={() =>
+                                                        setSelectedItem(item)
+                                                    }
+                                                />
+                                            </FadeIn>
                                         ))}
                                     </ResponsiveCarousel>
                                 </div>
@@ -135,6 +139,7 @@ export function Gallery() {
             />
 
             <GalleryModal
+                key={selectedItem?.id ?? "closed"}
                 item={selectedItem}
                 onClose={() => setSelectedItem(null)}
             />

@@ -9,21 +9,15 @@ import {
 import type { Gallery } from "../models/Gallery";
 import { galleryService } from "../services/galleryService";
 
-export interface GalleryContextData {
+interface GalleryContextData {
     gallery: Gallery[];
     loading: boolean;
-
     reload: () => Promise<void>;
-
-    createGallery: (
-        data: Omit<Gallery, "id">
-    ) => Promise<Gallery>;
-
+    createGallery: (data: Omit<Gallery, "id">) => Promise<Gallery>;
     updateGallery: (
         id: number,
         data: Partial<Omit<Gallery, "id">>
     ) => Promise<Gallery>;
-
     deleteGallery: (id: number) => Promise<void>;
 }
 
@@ -34,9 +28,7 @@ interface Props {
     children: ReactNode;
 }
 
-export function GalleryProvider({
-    children,
-}: Props) {
+export function GalleryProvider({ children }: Props) {
     const [gallery, setGallery] = useState<Gallery[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -45,21 +37,15 @@ export function GalleryProvider({
 
         try {
             const data = await galleryService.getAll();
-
             setGallery(data);
         } finally {
             setLoading(false);
         }
     }, []);
 
-    async function createGallery(
-        data: Omit<Gallery, "id">
-    ) {
-        const created =
-            await galleryService.create(data);
-
+    async function createGallery(data: Omit<Gallery, "id">) {
+        const created = await galleryService.create(data);
         await reload();
-
         return created;
     }
 
@@ -67,17 +53,13 @@ export function GalleryProvider({
         id: number,
         data: Partial<Omit<Gallery, "id">>
     ) {
-        const updated =
-            await galleryService.update(id, data);
-
+        const updated = await galleryService.update(id, data);
         await reload();
-
         return updated;
     }
 
     async function deleteGallery(id: number) {
         await galleryService.delete(id);
-
         await reload();
     }
 

@@ -4,6 +4,7 @@ import { TestimonialCard } from "../ui/TestimonialCard";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 
 import { useTestimonials } from "../../hooks/useTestimonials";
+import { FadeIn } from "../../animations/FadeIn";
 
 export function Testimonials() {
     const { testimonials, loading } = useTestimonials();
@@ -36,15 +37,19 @@ export function Testimonials() {
                         autoplay
                         delay={5000}
                     >
-                        {activeTestimonials.map((testimonial) => (
-                            <TestimonialCard
+                        {activeTestimonials.map((testimonial, index) => (
+                            <FadeIn
                                 key={testimonial.id}
-                                name={testimonial.name}
-                                role={testimonial.role}
-                                image={testimonial.image}
-                                content={testimonial.content}
-                                rating={testimonial.rating}
-                            />
+                                delay={index * 0.1}
+                            >
+                                <TestimonialCard
+                                    name={testimonial.name}
+                                    role={testimonial.role}
+                                    image={testimonial.image}
+                                    content={testimonial.content}
+                                    rating={testimonial.rating}
+                                />
+                            </FadeIn>
                         ))}
                     </ResponsiveCarousel>
                 </div>

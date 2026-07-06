@@ -42,6 +42,10 @@ export function ServiceModal({
         )
         .sort((a, b) => a.name.localeCompare(b.name));
 
+    function normalizeWhatsapp(value: string) {
+        return value.replace(/\D/g, "");
+    }
+
     function handleWhatsApp(
         serviceName: string,
         price: number,
@@ -49,8 +53,15 @@ export function ServiceModal({
         professionalName: string,
         whatsapp: string
     ) {
+        const whatsappNumber = normalizeWhatsapp(whatsapp);
+
+        if (!whatsappNumber) {
+            alert("WhatsApp do profissional não cadastrado.");
+            return;
+        }
+
         const message = encodeURIComponent(
-            `Olá, ${professionalName}!
+`Olá, ${professionalName}!
 
 Gostaria de agendar o serviço:
 
@@ -63,7 +74,7 @@ Obrigado!`
         );
 
         window.open(
-            `https://wa.me/${whatsapp}?text=${message}`,
+            `https://wa.me/${whatsappNumber}?text=${message}`,
             "_blank"
         );
     }

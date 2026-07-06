@@ -1,4 +1,4 @@
-import { FaInstagram } from "react-icons/fa";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { FiCalendar } from "react-icons/fi";
 
 interface TeamCardProps {
@@ -6,6 +6,7 @@ interface TeamCardProps {
     role: string;
     image: string;
     instagram: string;
+    whatsapp: string;
 }
 
 export function TeamCard({
@@ -13,38 +14,34 @@ export function TeamCard({
     role,
     image,
     instagram,
+    whatsapp,
 }: TeamCardProps) {
+    function handleSchedule() {
+        const whatsappNumber = whatsapp.replace(/\D/g, "");
+
+        if (!whatsappNumber) {
+            alert("WhatsApp do profissional não cadastrado.");
+            return;
+        }
+
+        const message = encodeURIComponent(
+            `Olá, ${name}! Gostaria de agendar um horário.`
+        );
+
+        window.open(
+            `https://wa.me/${whatsappNumber}?text=${message}`,
+            "_blank"
+        );
+    }
+
     return (
-        <div
-            className="
-                group
-                h-full
-                w-full
-                overflow-hidden
-                rounded-3xl
-                border
-                border-zinc-800
-                bg-zinc-900
-                shadow-2xl
-                transition-all
-                duration-500
-                hover:border-amber-500
-                lg:hover:-translate-y-3
-            "
-        >
+        <div className="group h-full w-full overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl transition-all duration-500 hover:border-amber-500 lg:hover:-translate-y-3">
             <div className="relative h-[420px] overflow-hidden">
                 {image ? (
                     <img
                         src={image}
                         alt={name}
-                        className="
-                            h-full
-                            w-full
-                            object-cover
-                            transition-transform
-                            duration-700
-                            group-hover:scale-110
-                        "
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                 ) : (
                     <div className="flex h-full w-full items-center justify-center bg-zinc-800">
@@ -67,23 +64,10 @@ export function TeamCard({
 
             <div className="flex gap-4 p-6">
                 <a
-                    href={instagram}
+                    href={instagram || "#"}
                     target="_blank"
                     rel="noreferrer"
-                    className="
-                        flex-1
-                        rounded-xl
-                        border
-                        border-zinc-700
-                        py-3
-                        text-center
-                        font-semibold
-                        text-white
-                        transition
-                        hover:border-amber-500
-                        hover:bg-amber-500
-                        hover:text-black
-                    "
+                    className="flex-1 rounded-xl border border-zinc-700 py-3 text-center font-semibold text-white transition hover:border-amber-500 hover:bg-amber-500 hover:text-black"
                 >
                     <span className="flex items-center justify-center gap-2">
                         <FaInstagram />
@@ -93,19 +77,12 @@ export function TeamCard({
 
                 <button
                     type="button"
-                    className="
-                        flex-1
-                        rounded-xl
-                        bg-amber-500
-                        py-3
-                        font-semibold
-                        text-black
-                        transition
-                        hover:bg-amber-400
-                    "
+                    onClick={handleSchedule}
+                    className="flex-1 rounded-xl bg-amber-500 py-3 font-semibold text-black transition hover:bg-amber-400"
                 >
                     <span className="flex items-center justify-center gap-2">
                         <FiCalendar />
+                        <FaWhatsapp />
                         Agendar
                     </span>
                 </button>

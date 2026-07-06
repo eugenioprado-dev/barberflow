@@ -2,8 +2,8 @@ import { Container } from "../layout/container";
 import { TeamCard } from "../ui/TeamCard";
 import { SectionTitle } from "../ui/SectionTitle";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
-
 import { useProfessionals } from "../../hooks/useProfessionals";
+import { FadeIn } from "../../animations/FadeIn";
 
 export function Team() {
     const { professionals, loading } = useProfessionals();
@@ -34,14 +34,19 @@ export function Team() {
 
                     <div className="mt-16">
                         <ResponsiveCarousel>
-                            {activeProfessionals.map((member) => (
-                                <TeamCard
+                            {activeProfessionals.map((member, index) => (
+                                <FadeIn
                                     key={member.id}
-                                    name={member.name}
-                                    role={member.role}
-                                    image={member.image}
-                                    instagram={member.instagram ?? "#"}
-                                />
+                                    delay={index * 0.1}
+                                >
+                                    <TeamCard
+                                        name={member.name}
+                                        role={member.role}
+                                        image={member.image}
+                                        instagram={member.instagram ?? "#"}
+                                        whatsapp={member.whatsapp}
+                                    />
+                                </FadeIn>
                             ))}
                         </ResponsiveCarousel>
                     </div>

@@ -5,9 +5,9 @@ import { PageHeader } from "../components/PageHeader";
 import { TextField } from "../../components/ui/form/TextField";
 import { TextArea } from "../../components/ui/form/TextArea";
 import { FormActions } from "../../components/ui/form/FormActions";
+import toast from "react-hot-toast";
 
 import type { SettingsFormData } from "../models/SettingsFormData";
-
 import { siteService } from "../../services/siteService";
 import { useSite } from "../../hooks/useSite";
 
@@ -80,10 +80,10 @@ export function Settings() {
             await siteService.updateToSupabase(updatedSite);
             await reload();
 
-            alert("Configurações salvas com sucesso.");
+            toast.success("Configurações salvas com sucesso.");
         } catch (error) {
             console.error("Erro ao salvar configurações:", error);
-            alert("Erro ao salvar configurações.");
+            toast.error("Erro ao salvar configurações.");
         }
     }
 

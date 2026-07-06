@@ -65,7 +65,7 @@ export function Gallery() {
                 onChange={setSearch}
             />
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-8 grid gap-8 sm:grid-cols-2 2xl:grid-cols-3">
                 {filteredGallery.map((item) => {
                     const professional = professionals.find(
                         (p) => p.id === item.professionalId

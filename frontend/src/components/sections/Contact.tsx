@@ -9,11 +9,22 @@ import {
     FaClock,
 } from "react-icons/fa";
 
-import { contact } from "../../constants/contact";
+import { useSite } from "../../hooks/useSite";
 
 export function Contact() {
+    const { site, loading } = useSite();
+
+    if (loading || !site) {
+        return null;
+    }
+
+    const whatsappNumber = site.business.whatsapp.replace(/\D/g, "");
+
     return (
-        <section id="contact" className="relative overflow-hidden bg-zinc-950 py-24">
+        <section
+            id="contact"
+            className="relative overflow-hidden bg-zinc-950 py-24"
+        >
             <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
 
@@ -22,52 +33,41 @@ export function Contact() {
                     <SectionTitle
                         title="Entre em"
                         highlight="Contato"
-                        subtitle="Agende seu horário e venha viver uma experiência única no André Dias Studio."
+                        subtitle={`Agende seu horário e venha viver uma experiência única no ${site.business.name}.`}
                     />
 
                     <div className="mt-16 grid gap-6 md:grid-cols-2">
                         <ContactInfoCard
                             icon={<FaMapMarkerAlt />}
                             title="Endereço"
-                            value={contact.address}
+                            value={site.business.address}
                         />
 
                         <ContactInfoCard
                             icon={<FaPhoneAlt />}
                             title="Telefone"
-                            value={contact.phone}
+                            value={site.business.phone}
                         />
 
                         <ContactInfoCard
                             icon={<FaInstagram />}
                             title="Instagram"
-                            value={contact.instagram}
+                            value={site.business.instagram}
                         />
 
                         <ContactInfoCard
                             icon={<FaClock />}
                             title="Horário"
-                            value={contact.openingHours.join("\n")}
+                            value="Segunda a Sexta • 09:00 às 20:00&#10;Sábado • 09:00 às 18:00&#10;Domingo • Fechado"
                         />
                     </div>
 
                     <div className="mt-16 flex justify-center">
                         <a
-                            href={`https://wa.me/${contact.whatsapp}`}
+                            href={`https://wa.me/${whatsappNumber}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="
-                rounded-full
-                bg-amber-500
-                px-10
-                py-4
-                font-semibold
-                text-black
-                transition-all
-                duration-300
-                hover:scale-105
-                hover:shadow-xl
-                hover:shadow-amber-500/30"
+                            className="rounded-full bg-amber-500 px-10 py-4 font-semibold text-black transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-amber-500/30"
                         >
                             Agendar pelo WhatsApp
                         </a>

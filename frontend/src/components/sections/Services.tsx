@@ -12,6 +12,8 @@ import { SectionTitle } from "../ui/SectionTitle";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
 import { ServiceCard } from "../ui/ServiceCard";
 
+import { FadeIn } from "../../animations/FadeIn";
+
 import { useCategories } from "../../hooks/useCategories";
 
 const categoryIcons: Record<string, ReactNode> = {
@@ -53,17 +55,21 @@ export function Services() {
                         mobileSlidesPerView={1}
                         tabletSlidesPerView={2}
                     >
-                        {activeCategories.map((category) => (
-                            <ServiceCard
+                        {activeCategories.map((category, index) => (
+                            <FadeIn
                                 key={category.id}
-                                icon={
-                                    categoryIcons[category.icon] ??
-                                    <FaStar />
-                                }
-                                title={category.name}
-                                description={category.description}
-                                category={category.name}
-                            />
+                                delay={index * 0.1}
+                            >
+                                <ServiceCard
+                                    icon={
+                                        categoryIcons[category.icon] ??
+                                        <FaStar />
+                                    }
+                                    title={category.name}
+                                    description={category.description}
+                                    category={category.name}
+                                />
+                            </FadeIn>
                         ))}
                     </ResponsiveCarousel>
                 </div>
