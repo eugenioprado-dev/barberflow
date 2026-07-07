@@ -9,6 +9,7 @@ export interface SiteConfig {
         instagram: string;
         email: string;
         address: string;
+        openingHours: string;
     };
 
     menu: string[];

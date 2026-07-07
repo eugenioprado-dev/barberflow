@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import { PageHeader } from "../components/PageHeader";
 
 import { TextField } from "../../components/ui/form/TextField";
 import { TextArea } from "../../components/ui/form/TextArea";
 import { FormActions } from "../../components/ui/form/FormActions";
-import toast from "react-hot-toast";
 
 import type { SettingsFormData } from "../models/SettingsFormData";
 import { siteService } from "../../services/siteService";
@@ -21,6 +21,7 @@ const emptyForm: SettingsFormData = {
     instagram: "",
     email: "",
     address: "",
+    openingHours: "",
 };
 
 export function Settings() {
@@ -28,9 +29,7 @@ export function Settings() {
     const [form, setForm] = useState<SettingsFormData>(emptyForm);
 
     useEffect(() => {
-        if (!site) {
-            return;
-        }
+        if (!site) return;
 
         setForm({
             name: site.business.name,
@@ -42,6 +41,7 @@ export function Settings() {
             instagram: site.business.instagram,
             email: site.business.email,
             address: site.business.address,
+            openingHours: site.business.openingHours,
         });
     }, [site]);
 
@@ -56,9 +56,7 @@ export function Settings() {
     }
 
     async function handleSave() {
-        if (!site) {
-            return;
-        }
+        if (!site) return;
 
         const updatedSite = {
             ...site,
@@ -73,6 +71,7 @@ export function Settings() {
                 instagram: form.instagram,
                 email: form.email,
                 address: form.address,
+                openingHours: form.openingHours,
             },
         };
 
@@ -85,6 +84,23 @@ export function Settings() {
             console.error("Erro ao salvar configurações:", error);
             toast.error("Erro ao salvar configurações.");
         }
+    }
+
+    function resetForm() {
+        if (!site) return;
+
+        setForm({
+            name: site.business.name,
+            subtitle: site.business.subtitle,
+            slogan: site.business.slogan,
+            description: site.business.description,
+            phone: site.business.phone,
+            whatsapp: site.business.whatsapp,
+            instagram: site.business.instagram,
+            email: site.business.email,
+            address: site.business.address,
+            openingHours: site.business.openingHours,
+        });
     }
 
     return (
@@ -101,10 +117,37 @@ export function Settings() {
                     </h2>
 
                     <div className="mt-6 space-y-5">
-                        <TextField label="Nome da empresa" value={form.name} onChange={(event) => updateField("name", event.target.value)} />
-                        <TextField label="Subtítulo" value={form.subtitle} onChange={(event) => updateField("subtitle", event.target.value)} />
-                        <TextField label="Slogan" value={form.slogan} onChange={(event) => updateField("slogan", event.target.value)} />
-                        <TextArea label="Descrição" value={form.description} onChange={(event) => updateField("description", event.target.value)} />
+                        <TextField
+                            label="Nome da empresa"
+                            value={form.name}
+                            onChange={(event) =>
+                                updateField("name", event.target.value)
+                            }
+                        />
+
+                        <TextField
+                            label="Subtítulo"
+                            value={form.subtitle}
+                            onChange={(event) =>
+                                updateField("subtitle", event.target.value)
+                            }
+                        />
+
+                        <TextField
+                            label="Slogan"
+                            value={form.slogan}
+                            onChange={(event) =>
+                                updateField("slogan", event.target.value)
+                            }
+                        />
+
+                        <TextArea
+                            label="Descrição"
+                            value={form.description}
+                            onChange={(event) =>
+                                updateField("description", event.target.value)
+                            }
+                        />
                     </div>
                 </section>
 
@@ -114,33 +157,65 @@ export function Settings() {
                     </h2>
 
                     <div className="mt-6 grid gap-5 md:grid-cols-2">
-                        <TextField label="Telefone" value={form.phone} onChange={(event) => updateField("phone", event.target.value)} />
-                        <TextField label="WhatsApp" value={form.whatsapp} onChange={(event) => updateField("whatsapp", event.target.value)} />
-                        <TextField label="Instagram" value={form.instagram} onChange={(event) => updateField("instagram", event.target.value)} />
-                        <TextField label="Email" value={form.email} onChange={(event) => updateField("email", event.target.value)} />
+                        <TextField
+                            label="Telefone"
+                            value={form.phone}
+                            onChange={(event) =>
+                                updateField("phone", event.target.value)
+                            }
+                        />
+
+                        <TextField
+                            label="WhatsApp"
+                            value={form.whatsapp}
+                            onChange={(event) =>
+                                updateField("whatsapp", event.target.value)
+                            }
+                        />
+
+                        <TextField
+                            label="Instagram"
+                            value={form.instagram}
+                            onChange={(event) =>
+                                updateField("instagram", event.target.value)
+                            }
+                        />
+
+                        <TextField
+                            label="Email"
+                            value={form.email}
+                            onChange={(event) =>
+                                updateField("email", event.target.value)
+                            }
+                        />
 
                         <div className="md:col-span-2">
-                            <TextField label="Endereço" value={form.address} onChange={(event) => updateField("address", event.target.value)} />
+                            <TextField
+                                label="Endereço"
+                                value={form.address}
+                                onChange={(event) =>
+                                    updateField("address", event.target.value)
+                                }
+                            />
+                        </div>
+
+                        <div className="md:col-span-2">
+                            <TextArea
+                                label="Horário de funcionamento"
+                                value={form.openingHours}
+                                onChange={(event) =>
+                                    updateField(
+                                        "openingHours",
+                                        event.target.value
+                                    )
+                                }
+                            />
                         </div>
                     </div>
                 </section>
 
                 <FormActions
-                    onCancel={() => {
-                        if (!site) return;
-
-                        setForm({
-                            name: site.business.name,
-                            subtitle: site.business.subtitle,
-                            slogan: site.business.slogan,
-                            description: site.business.description,
-                            phone: site.business.phone,
-                            whatsapp: site.business.whatsapp,
-                            instagram: site.business.instagram,
-                            email: site.business.email,
-                            address: site.business.address,
-                        });
-                    }}
+                    onCancel={resetForm}
                     onSubmit={handleSave}
                 />
             </div>

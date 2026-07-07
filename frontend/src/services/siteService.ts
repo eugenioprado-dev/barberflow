@@ -14,6 +14,7 @@ interface SiteConfigRow {
     instagram: string | null;
     email: string | null;
     address: string | null;
+    opening_hours: string | null;
 }
 
 function mapRowToSiteConfig(row: SiteConfigRow): SiteConfig {
@@ -28,6 +29,7 @@ function mapRowToSiteConfig(row: SiteConfigRow): SiteConfig {
             instagram: row.instagram ?? "",
             email: row.email ?? "",
             address: row.address ?? "",
+            openingHours: row.opening_hours ?? "",
         },
         menu: site.menu,
         services: site.services,
@@ -66,6 +68,7 @@ export const siteService = {
                 instagram: data.business.instagram,
                 email: data.business.email,
                 address: data.business.address,
+                opening_hours: data.business.openingHours,
             })
             .eq("id", 1);
 

@@ -20,6 +20,8 @@ export const site: SiteConfig = {
         email: "contato@andredias.com.br",
 
         address: "Taboão da Serra - SP",
+
+        openingHours: "Segunda a Sexta • 09:00 às 20:00\nSábado • 09:00 às 18:00\nDomingo • Fechado",
     },
 
     menu: [

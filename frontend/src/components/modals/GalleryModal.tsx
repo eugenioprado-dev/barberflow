@@ -99,11 +99,13 @@ export function GalleryModal({
                         </button>
                     )}
 
-                    <img
-                        src={images[currentIndex]}
-                        alt={item.title}
-                        className="max-h-[75vh] max-w-[90vw] rounded-3xl object-contain shadow-2xl"
-                    />
+                    <div className="flex h-[70dvh] w-full max-w-[90vw] items-center justify-center">
+    <img
+        src={images[currentIndex]}
+        alt={item.title}
+        className="max-h-full max-w-full rounded-3xl object-contain shadow-2xl"
+    />
+</div>
 
                     {images.length > 1 && (
                         <button

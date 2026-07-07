@@ -8,4 +8,5 @@ export interface SettingsFormData {
     instagram: string;
     email: string;
     address: string;
+    openingHours: string;
 }

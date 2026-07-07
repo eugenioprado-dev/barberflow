@@ -17,7 +17,7 @@ import { ImageUpload } from "../../components/ui/form/ImageUpload";
 interface TestimonialFormProps {
     testimonial?: Testimonial;
     onCancel: () => void;
-    onSave: (data: TestimonialFormData) => void;
+    onSave: (data: TestimonialFormData) => void | Promise<void>;
 }
 
 export function TestimonialForm({
@@ -34,7 +34,8 @@ export function TestimonialForm({
         active: testimonial?.active ?? true,
     });
 
-    const [errors, setErrors] = useState<TestimonialFormErrors>({});
+    const [errors, setErrors] =
+        useState<TestimonialFormErrors>({});
 
     function updateField<K extends keyof TestimonialFormData>(
         field: K,
@@ -51,7 +52,7 @@ export function TestimonialForm({
         }));
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         const validationErrors = validateTestimonialForm(form);
 
         if (Object.keys(validationErrors).length > 0) {
@@ -59,7 +60,7 @@ export function TestimonialForm({
             return;
         }
 
-        onSave(form);
+        await onSave(form);
     }
 
     return (
@@ -109,6 +110,7 @@ export function TestimonialForm({
             <ImageUpload
                 label="Foto do cliente"
                 initialPreview={testimonial?.image}
+                error={errors.image}
                 onChange={(file) => updateField("image", file)}
             />
 
@@ -116,7 +118,9 @@ export function TestimonialForm({
                 label="Depoimento ativo"
                 description="Exibir este depoimento no site."
                 checked={form.active}
-                onChange={(checked) => updateField("active", checked)}
+                onChange={(checked) =>
+                    updateField("active", checked)
+                }
             />
 
             <FormActions

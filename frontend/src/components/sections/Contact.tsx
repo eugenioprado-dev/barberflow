@@ -58,7 +58,7 @@ export function Contact() {
                         <ContactInfoCard
                             icon={<FaClock />}
                             title="Horário"
-                            value="Segunda a Sexta • 09:00 às 20:00&#10;Sábado • 09:00 às 18:00&#10;Domingo • Fechado"
+                            value={site.business.openingHours}
                         />
                     </div>
 

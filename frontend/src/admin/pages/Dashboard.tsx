@@ -7,6 +7,7 @@ import {
     FaArrowRight,
     FaTags,
     FaCamera,
+    FaCheckCircle,
 } from "react-icons/fa";
 
 import type { IconType } from "react-icons";
@@ -19,6 +20,8 @@ import { useProfessionals } from "../../hooks/useProfessionals";
 import { useServices } from "../../hooks/useServices";
 import { useCategories } from "../../hooks/useCategories";
 import { useGallery } from "../../hooks/useGallery";
+import { useTestimonials } from "../../hooks/useTestimonials";
+import { useSite } from "../../hooks/useSite";
 
 const quickActions = [
     { label: "Novo Profissional", href: "/admin/profissionais", Icon: FaUsers },
@@ -33,57 +36,118 @@ const quickActions = [
 }[];
 
 export function Dashboard() {
+    const { site } = useSite();
     const { professionals } = useProfessionals();
     const { services } = useServices();
     const { categories } = useCategories();
     const { gallery } = useGallery();
+    const { testimonials } = useTestimonials();
 
-    const activeProfessionals = professionals.filter((item) => item.active).length;
-    const activeServices = services.filter((item) => item.active).length;
-    const activeCategories = categories.filter((item) => item.active).length;
-    const activeGallery = gallery.filter((item) => item.active).length;
+    const activeProfessionals = professionals.filter(
+        (item) => item.active
+    ).length;
 
-    const totalGalleryImages = gallery.reduce(
-        (total, item) => total + item.images.length,
-        0
-    );
+    const activeServices = services.filter(
+        (item) => item.active
+    ).length;
 
-    const activeTestimonials = 0;
+    const activeCategories = categories.filter(
+        (item) => item.active
+    ).length;
+
+    const activeGallery = gallery.filter(
+        (item) => item.active
+    ).length;
+
+    const activeTestimonials = testimonials.filter(
+        (item) => item.active
+    ).length;
+
+    const totalGalleryImages = gallery
+        .filter((item) => item.active)
+        .reduce((total, item) => {
+            const coverImage = item.image ? 1 : 0;
+            const extraImages = item.images.length;
+
+            return total + coverImage + extraImages;
+        }, 0);
 
     const contentStatus = [
         `${activeProfessionals} profissionais ativos`,
         `${activeServices} serviços disponíveis`,
         `${activeCategories} categorias cadastradas`,
         `${activeGallery} trabalhos publicados`,
-        `${totalGalleryImages} fotos adicionadas`,
+        `${totalGalleryImages} fotos publicadas`,
         `${activeTestimonials} depoimentos exibidos`,
     ];
+
+    const businessName = site?.business.name ?? "André Dias Studio";
 
     return (
         <div>
             <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 to-zinc-950 p-8">
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
-                    André Dias Studio
+                    {businessName}
                 </p>
 
                 <h1 className="mt-4 text-4xl font-bold">
-                    Olá, André 👋
+                    Painel Administrativo 👋
                 </h1>
 
                 <p className="mt-3 max-w-2xl text-zinc-400">
-                    Bem-vindo ao painel administrativo. Aqui você acompanha os
-                    principais dados do site e gerencia conteúdos exibidos para
-                    os clientes.
+                    Acompanhe os principais dados do site e gerencie os
+                    conteúdos exibidos para os clientes.
                 </p>
             </div>
 
             <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-6">
-                <StatCard icon={<FaUsers />} title="Profissionais" value={activeProfessionals} description="Ativos no site." />
-                <StatCard icon={<FaCut />} title="Serviços" value={activeServices} description="Disponíveis." />
-                <StatCard icon={<FaTags />} title="Categorias" value={activeCategories} description="Ativas." />
-                <StatCard icon={<FaImages />} title="Trabalhos" value={activeGallery} description="Publicados." />
-                <StatCard icon={<FaCamera />} title="Fotos" value={totalGalleryImages} description="Na galeria." />
-                <StatCard icon={<FaStar />} title="Depoimentos" value={activeTestimonials} description="Exibidos." />
+                <StatCard
+                    icon={<FaUsers />}
+                    title="Profissionais"
+                    value={activeProfessionals}
+                    description="Ativos no site."
+                    badge="Equipe"
+                />
+
+                <StatCard
+                    icon={<FaCut />}
+                    title="Serviços"
+                    value={activeServices}
+                    description="Disponíveis para agendamento."
+                    badge="Serviços"
+                />
+
+                <StatCard
+                    icon={<FaTags />}
+                    title="Categorias"
+                    value={activeCategories}
+                    description="Organizando os serviços."
+                    badge="Menu"
+                />
+
+                <StatCard
+                    icon={<FaImages />}
+                    title="Trabalhos"
+                    value={activeGallery}
+                    description="Publicados no portfólio."
+                    badge="Galeria"
+                />
+
+                <StatCard
+                    icon={<FaCamera />}
+                    title="Fotos"
+                    value={totalGalleryImages}
+                    description="Imagens publicadas."
+                    badge="Mídia"
+                />
+
+                <StatCard
+                    icon={<FaStar />}
+                    title="Depoimentos"
+                    value={activeTestimonials}
+                    description="Exibidos na Home."
+                    badge="Social"
+                />
             </div>
 
             <div className="mt-10 grid gap-8 lg:grid-cols-2">
@@ -122,7 +186,10 @@ export function Dashboard() {
                                 key={item}
                                 className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-4 text-zinc-300"
                             >
-                                <span>{item}</span>
+                                <span className="flex items-center gap-3">
+                                    <FaCheckCircle className="text-emerald-400" />
+                                    {item}
+                                </span>
 
                                 <span className="text-amber-400">
                                     <FaArrowRight />

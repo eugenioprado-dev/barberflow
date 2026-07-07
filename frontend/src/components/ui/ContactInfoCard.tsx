@@ -28,7 +28,7 @@ export function ContactInfoCard({
                 {icon}
             </div>
 
-            <h3 className="text-lg font-semibold text-white">
+            <h3 className="whitespace-pre-line text-lg font-semibold text-white">
                 {title}
             </h3>
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
-
 import { FaPlus, FaStar } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 import { PageHeader } from "../components/PageHeader";
 import { PageActionButton } from "../components/PageActionButton";
@@ -13,7 +13,9 @@ import { TableActions } from "../components/table/TableActions";
 import { TableSearch } from "../components/table/TableSearch";
 
 import { TestimonialForm } from "../components/TestimonialForm";
-import { useTestimonials } from "../hooks/useTestimonials";
+
+import { useTestimonials } from "../../hooks/useTestimonials";
+import { storageService } from "../../services/storageService";
 
 import type { Testimonial } from "../../models/Testimonial";
 
@@ -41,6 +43,11 @@ export function Testimonials() {
     const activeTestimonials = testimonials.filter(
         (testimonial) => testimonial.active
     ).length;
+
+    function closeDrawer() {
+        setDrawerOpen(false);
+        setSelectedTestimonial(undefined);
+    }
 
     return (
         <>
@@ -112,11 +119,11 @@ export function Testimonials() {
                         </div>
 
                         <div className="flex items-center gap-1 text-amber-400 lg:col-span-2">
-                            {Array.from({ length: testimonial.rating }).map(
-                                (_, index) => (
-                                    <FaStar key={index} />
-                                )
-                            )}
+                            {Array.from({
+                                length: Math.min(testimonial.rating, 5),
+                            }).map((_, index) => (
+                                <FaStar key={index} />
+                            ))}
                         </div>
 
                         <div className="lg:col-span-1">
@@ -142,7 +149,7 @@ export function Testimonials() {
 
             <AdminDrawer
                 open={drawerOpen}
-                onClose={() => setDrawerOpen(false)}
+                onClose={closeDrawer}
                 title={
                     selectedTestimonial
                         ? "Editar Depoimento"
@@ -157,15 +164,55 @@ export function Testimonials() {
                 <TestimonialForm
                     key={selectedTestimonial?.id ?? "new"}
                     testimonial={selectedTestimonial}
-                    onCancel={() => setDrawerOpen(false)}
-                    onSave={(data) => {
-                        if (selectedTestimonial) {
-                            updateTestimonial(selectedTestimonial.id, data);
-                        } else {
-                            createTestimonial(data);
+                    onCancel={closeDrawer}
+                    onSave={async (data) => {
+                        let imageUrl = selectedTestimonial?.image ?? "";
+
+                        if (data.image) {
+                            imageUrl = await storageService.upload(
+                                data.image,
+                                "testimonials"
+                            );
                         }
 
-                        setDrawerOpen(false);
+                        const payload = {
+                            name: data.name,
+                            role: data.role,
+                            image: imageUrl,
+                            content: data.content,
+                            rating: data.rating,
+                            active: data.active,
+                        };
+
+                        try {
+                            if (selectedTestimonial) {
+                                await updateTestimonial(
+                                    selectedTestimonial.id,
+                                    payload
+                                );
+
+                                toast.success(
+                                    "Depoimento atualizado com sucesso."
+                                );
+                            } else {
+                                await createTestimonial(payload);
+
+                                toast.success(
+                                    "Depoimento cadastrado com sucesso."
+                                );
+                            }
+
+                            closeDrawer();
+                        } catch (error) {
+                            console.error(
+                                "Erro ao salvar depoimento:",
+                                error
+                            );
+
+                            toast.error(
+                                "Erro ao salvar depoimento."
+                            );
+                        }
                     }}
                 />
             </AdminDrawer>
@@ -177,9 +224,10 @@ export function Testimonials() {
                 confirmLabel="Excluir"
                 cancelLabel="Cancelar"
                 onCancel={() => setTestimonialToDelete(null)}
-                onConfirm={() => {
+                onConfirm={async () => {
                     if (testimonialToDelete !== null) {
-                        deleteTestimonial(testimonialToDelete);
+                        await deleteTestimonial(testimonialToDelete);
+                        toast.success("Depoimento excluído com sucesso.");
                     }
 
                     setTestimonialToDelete(null);
