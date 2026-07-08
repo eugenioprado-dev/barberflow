@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
 import { CategoryForm } from "../components/CategoryForm";
 import { AdminDrawer } from "../components/AdminDrawer";
@@ -6,6 +7,7 @@ import { ConfirmDialog } from "../components/ConfirmDialog";
 
 import { PageHeader } from "../components/PageHeader";
 import { PageActionButton } from "../components/PageActionButton";
+import { AdminLoading } from "../components/AdminLoading";
 
 import { DataTable } from "../components/table/DataTable";
 import { StatusBadge } from "../components/table/StatusBadge";
@@ -16,8 +18,6 @@ import { IconBadge } from "../../components/ui/IconBadge";
 import { useCategories } from "../../hooks/useCategories";
 
 import type { Category } from "../../models/Category";
-
-import { FaPlus } from "react-icons/fa";
 
 export function Categories() {
     const [search, setSearch] = useState("");
@@ -38,9 +38,7 @@ export function Categories() {
     } = useCategories();
 
     const filteredCategories = categories.filter((category) =>
-        category.name
-            .toLowerCase()
-            .includes(search.toLowerCase())
+        category.name.toLowerCase().includes(search.toLowerCase())
     );
 
     const activeCategories = categories.filter(
@@ -74,58 +72,71 @@ export function Categories() {
                 onChange={setSearch}
             />
 
-            <DataTable
-                isEmpty={!loading && filteredCategories.length === 0}
-                emptyMessage="Nenhuma categoria encontrada."
-                headers={
-                    <>
-                        <div className="col-span-3">Categoria</div>
-                        <div className="col-span-2">Ícone</div>
-                        <div className="col-span-5">Descrição</div>
-                        <div className="col-span-1">Status</div>
-                        <div className="col-span-1 text-right">Ações</div>
-                    </>
-                }
-            >
-                {filteredCategories.map((category) => (
-                    <div
-                        key={category.id}
-                        className="grid gap-5 border-b border-white/10 px-6 py-5 last:border-b-0 lg:grid-cols-12 lg:items-center"
-                    >
-                        <div className="lg:col-span-3">
-                            <p className="font-semibold text-white">
-                                {category.name}
-                            </p>
-                        </div>
+            {loading ? (
+                <AdminLoading
+                    title="Carregando categorias..."
+                    description="Aguarde enquanto buscamos as categorias cadastradas."
+                />
+            ) : (
+                <DataTable
+                    isEmpty={filteredCategories.length === 0}
+                    emptyMessage="Nenhuma categoria encontrada."
+                    headers={
+                        <>
+                            <div className="col-span-3">
+                                Categoria
+                            </div>
+                            <div className="col-span-2">Ícone</div>
+                            <div className="col-span-5">
+                                Descrição
+                            </div>
+                            <div className="col-span-1">Status</div>
+                            <div className="col-span-1 text-right">
+                                Ações
+                            </div>
+                        </>
+                    }
+                >
+                    {filteredCategories.map((category) => (
+                        <div
+                            key={category.id}
+                            className="grid gap-5 border-b border-white/10 px-6 py-5 last:border-b-0 lg:grid-cols-12 lg:items-center"
+                        >
+                            <div className="lg:col-span-3">
+                                <p className="font-semibold text-white">
+                                    {category.name}
+                                </p>
+                            </div>
 
-                        <div className="lg:col-span-2">
-                            <IconBadge icon={category.icon} />
-                        </div>
+                            <div className="lg:col-span-2">
+                                <IconBadge icon={category.icon} />
+                            </div>
 
-                        <div className="text-zinc-300 lg:col-span-5">
-                            {category.description}
-                        </div>
+                            <div className="text-zinc-300 lg:col-span-5">
+                                {category.description}
+                            </div>
 
-                        <div className="lg:col-span-1">
-                            <StatusBadge active={category.active} />
-                        </div>
+                            <div className="lg:col-span-1">
+                                <StatusBadge active={category.active} />
+                            </div>
 
-                        <div className="lg:col-span-1">
-                            <TableActions
-                                editLabel={`Editar ${category.name}`}
-                                deleteLabel={`Excluir ${category.name}`}
-                                onEdit={() => {
-                                    setSelectedCategory(category);
-                                    setDrawerOpen(true);
-                                }}
-                                onDelete={() =>
-                                    setCategoryToDelete(category.id)
-                                }
-                            />
+                            <div className="lg:col-span-1">
+                                <TableActions
+                                    editLabel={`Editar ${category.name}`}
+                                    deleteLabel={`Excluir ${category.name}`}
+                                    onEdit={() => {
+                                        setSelectedCategory(category);
+                                        setDrawerOpen(true);
+                                    }}
+                                    onDelete={() =>
+                                        setCategoryToDelete(category.id)
+                                    }
+                                />
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </DataTable>
+                    ))}
+                </DataTable>
+            )}
 
             <AdminDrawer
                 open={drawerOpen}

@@ -1,21 +1,22 @@
 import { useState } from "react";
+import { FaPlus, FaWhatsapp, FaUser } from "react-icons/fa";
 
 import { AdminDrawer } from "../components/AdminDrawer";
 import { ProfessionalForm } from "../components/ProfessionalForm";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { PageHeader } from "../components/PageHeader";
+import { PageActionButton } from "../components/PageActionButton";
+import { AdminLoading } from "../components/AdminLoading";
+
 import { DataTable } from "../components/table/DataTable";
 import { StatusBadge } from "../components/table/StatusBadge";
 import { TableActions } from "../components/table/TableActions";
 import { TableSearch } from "../components/table/TableSearch";
-import { PageActionButton } from "../components/PageActionButton";
 
 import { useProfessionals } from "../../hooks/useProfessionals";
 import { storageService } from "../../services/storageService";
 
 import type { Professional } from "../../models/Professional";
-
-import { FaPlus, FaWhatsapp, FaUser } from "react-icons/fa";
 
 export function Professionals() {
     const [search, setSearch] = useState("");
@@ -29,6 +30,7 @@ export function Professionals() {
 
     const {
         professionals,
+        loading,
         createProfessional,
         updateProfessional,
         deleteProfessional,
@@ -46,7 +48,11 @@ export function Professionals() {
         <div>
             <PageHeader
                 title="Profissionais"
-                description={`${activeProfessionals} profissionais ativos no site.`}
+                description={
+                    loading
+                        ? "Carregando profissionais..."
+                        : `${activeProfessionals} profissionais ativos no site.`
+                }
                 action={
                     <PageActionButton
                         icon={<FaPlus />}
@@ -65,72 +71,91 @@ export function Professionals() {
                 onChange={setSearch}
             />
 
-            <DataTable
-                isEmpty={filteredProfessionals.length === 0}
-                emptyMessage="Nenhum profissional encontrado."
-                headers={
-                    <>
-                        <div className="col-span-5">Profissional</div>
-                        <div className="col-span-3">Especialidade</div>
-                        <div className="col-span-2">Status</div>
-                        <div className="col-span-2 text-right">Ações</div>
-                    </>
-                }
-            >
-                {filteredProfessionals.map((professional) => (
-                    <div
-                        key={professional.id}
-                        className="grid gap-5 border-b border-white/10 px-6 py-5 last:border-b-0 lg:grid-cols-12 lg:items-center"
-                    >
-                        <div className="flex items-center gap-4 lg:col-span-5">
-                            {professional.image ? (
-                                <img
-                                    src={professional.image}
-                                    alt={professional.name}
-                                    className="h-14 w-14 rounded-2xl object-cover"
-                                />
-                            ) : (
-                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-800 text-zinc-400">
-                                    <FaUser />
+            {loading ? (
+                <AdminLoading
+                    title="Carregando profissionais..."
+                    description="Aguarde enquanto buscamos os profissionais cadastrados."
+                />
+            ) : (
+                <DataTable
+                    isEmpty={filteredProfessionals.length === 0}
+                    emptyMessage="Nenhum profissional encontrado."
+                    headers={
+                        <>
+                            <div className="col-span-5">
+                                Profissional
+                            </div>
+                            <div className="col-span-3">
+                                Especialidade
+                            </div>
+                            <div className="col-span-2">Status</div>
+                            <div className="col-span-2 text-right">
+                                Ações
+                            </div>
+                        </>
+                    }
+                >
+                    {filteredProfessionals.map((professional) => (
+                        <div
+                            key={professional.id}
+                            className="grid gap-5 border-b border-white/10 px-6 py-5 last:border-b-0 lg:grid-cols-12 lg:items-center"
+                        >
+                            <div className="flex items-center gap-4 lg:col-span-5">
+                                {professional.image ? (
+                                    <img
+                                        src={professional.image}
+                                        alt={professional.name}
+                                        className="h-14 w-14 rounded-2xl object-cover"
+                                    />
+                                ) : (
+                                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-800 text-zinc-400">
+                                        <FaUser />
+                                    </div>
+                                )}
+
+                                <div>
+                                    <p className="font-semibold text-white">
+                                        {professional.name}
+                                    </p>
+
+                                    <p className="mt-1 flex items-center gap-2 text-sm text-zinc-500">
+                                        <FaWhatsapp />
+                                        {professional.whatsapp}
+                                    </p>
                                 </div>
-                            )}
+                            </div>
 
-                            <div>
-                                <p className="font-semibold text-white">
-                                    {professional.name}
-                                </p>
+                            <div className="text-zinc-300 lg:col-span-3">
+                                {professional.role}
+                            </div>
 
-                                <p className="mt-1 flex items-center gap-2 text-sm text-zinc-500">
-                                    <FaWhatsapp />
-                                    {professional.whatsapp}
-                                </p>
+                            <div className="lg:col-span-2">
+                                <StatusBadge
+                                    active={professional.active}
+                                />
+                            </div>
+
+                            <div className="lg:col-span-2">
+                                <TableActions
+                                    editLabel={`Editar ${professional.name}`}
+                                    deleteLabel={`Excluir ${professional.name}`}
+                                    onEdit={() => {
+                                        setSelectedProfessional(
+                                            professional
+                                        );
+                                        setDrawerOpen(true);
+                                    }}
+                                    onDelete={() =>
+                                        setProfessionalToDelete(
+                                            professional.id
+                                        )
+                                    }
+                                />
                             </div>
                         </div>
-
-                        <div className="text-zinc-300 lg:col-span-3">
-                            {professional.role}
-                        </div>
-
-                        <div className="lg:col-span-2">
-                            <StatusBadge active={professional.active} />
-                        </div>
-
-                        <div className="lg:col-span-2">
-                            <TableActions
-                                editLabel={`Editar ${professional.name}`}
-                                deleteLabel={`Excluir ${professional.name}`}
-                                onEdit={() => {
-                                    setSelectedProfessional(professional);
-                                    setDrawerOpen(true);
-                                }}
-                                onDelete={() =>
-                                    setProfessionalToDelete(professional.id)
-                                }
-                            />
-                        </div>
-                    </div>
-                ))}
-            </DataTable>
+                    ))}
+                </DataTable>
+            )}
 
             <AdminDrawer
                 open={drawerOpen}
@@ -151,7 +176,8 @@ export function Professionals() {
                     professional={selectedProfessional}
                     onCancel={() => setDrawerOpen(false)}
                     onSave={async (data) => {
-                        let imageUrl = selectedProfessional?.image ?? "";
+                        let imageUrl =
+                            selectedProfessional?.image ?? "";
 
                         if (data.image) {
                             imageUrl = await storageService.upload(

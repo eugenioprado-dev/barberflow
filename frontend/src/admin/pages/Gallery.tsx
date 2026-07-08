@@ -8,6 +8,7 @@ import { ConfirmDialog } from "../components/ConfirmDialog";
 import { AdminGalleryCard } from "../components/gallery/AdminGalleryCard";
 import { AdminGalleryMobileModal } from "../components/gallery/AdminGalleryMobileModal";
 import { GalleryForm } from "../components/GalleryForm";
+import { AdminLoading } from "../components/AdminLoading";
 
 import { GalleryModal } from "../../components/modals/GalleryModal";
 
@@ -34,12 +35,16 @@ export function Gallery() {
 
     const {
         gallery,
+        loading: galleryLoading,
         createGallery,
         updateGallery,
         deleteGallery,
     } = useGallery();
 
-    const { professionals } = useProfessionals();
+    const { professionals, loading: professionalsLoading } =
+        useProfessionals();
+
+    const loading = galleryLoading || professionalsLoading;
 
     const filteredGallery = gallery.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
@@ -56,7 +61,11 @@ export function Gallery() {
         <>
             <PageHeader
                 title="Galeria"
-                description={`${activeImages} trabalhos ativos.`}
+                description={
+                    loading
+                        ? "Carregando galeria..."
+                        : `${activeImages} trabalhos ativos.`
+                }
                 action={
                     <button
                         type="button"
@@ -78,44 +87,58 @@ export function Gallery() {
                 onChange={setSearch}
             />
 
-            <div className="mt-6 md:hidden">
-                <button
-                    type="button"
-                    onClick={() => setMobileModalOpen(true)}
-                    className="w-full rounded-2xl border border-white/10 bg-zinc-900 px-5 py-4 font-semibold text-white transition hover:border-amber-500"
-                >
-                    Abrir portfólio do painel
-                </button>
-            </div>
+            {loading ? (
+                <AdminLoading
+                    title="Carregando galeria..."
+                    description="Aguarde enquanto buscamos trabalhos e profissionais."
+                />
+            ) : (
+                <>
+                    <div className="mt-6 md:hidden">
+                        <button
+                            type="button"
+                            onClick={() => setMobileModalOpen(true)}
+                            className="w-full rounded-2xl border border-white/10 bg-zinc-900 px-5 py-4 font-semibold text-white transition hover:border-amber-500"
+                        >
+                            Abrir portfólio do painel
+                        </button>
+                    </div>
 
-            <div className="mt-8 hidden gap-8 md:grid md:grid-cols-2 2xl:grid-cols-3">
-                {filteredGallery.map((item) => {
-                    const professional = professionals.find(
-                        (p) => p.id === item.professionalId
-                    );
+                    <div className="mt-8 hidden gap-8 md:grid md:grid-cols-2 2xl:grid-cols-3">
+                        {filteredGallery.map((item) => {
+                            const professional = professionals.find(
+                                (p) => p.id === item.professionalId
+                            );
 
-                    return (
-                        <AdminGalleryCard
-                            key={item.id}
-                            title={item.title}
-                            description={item.description}
-                            image={item.image}
-                            imagesCount={item.images.length}
-                            active={item.active}
-                            professionalName={
-                                professional?.name ?? "Profissional"
-                            }
-                            onEdit={() => {
-                                setSelectedGallery(item);
-                                setDrawerOpen(true);
-                            }}
-                            onDelete={() =>
-                                setGalleryToDelete(item.id)
-                            }
-                        />
-                    );
-                })}
-            </div>
+                            return (
+                                <AdminGalleryCard
+                                    key={item.id}
+                                    title={item.title}
+                                    description={item.description}
+                                    image={item.image}
+                                    imagesCount={
+                                        item.image
+                                            ? item.images.length + 1
+                                            : item.images.length
+                                    }
+                                    active={item.active}
+                                    professionalName={
+                                        professional?.name ??
+                                        "Profissional"
+                                    }
+                                    onEdit={() => {
+                                        setSelectedGallery(item);
+                                        setDrawerOpen(true);
+                                    }}
+                                    onDelete={() =>
+                                        setGalleryToDelete(item.id)
+                                    }
+                                />
+                            );
+                        })}
+                    </div>
+                </>
+            )}
 
             <AdminDrawer
                 open={drawerOpen}

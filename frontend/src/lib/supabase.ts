@@ -4,12 +4,12 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error("As variáveis de ambiente do Supabase não foram configuradas.");
+    throw new Error(
+        "As variáveis de ambiente do Supabase não foram configuradas."
+    );
 }
 
 export const supabase = createClient(
     supabaseUrl,
     supabaseAnonKey
 );
-
-console.log("Supabase conectado:", supabase);

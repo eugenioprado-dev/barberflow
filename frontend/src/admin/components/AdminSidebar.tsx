@@ -7,7 +7,13 @@ import {
     FaCog,
     FaTimes,
     FaTags,
+    FaSignOutAlt,
 } from "react-icons/fa";
+
+import { NavLink, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+import { useAuth } from "../../hooks/useAuth";
 
 const menuItems = [
     {
@@ -56,6 +62,21 @@ export function AdminSidebar({
     open,
     onClose,
 }: AdminSidebarProps) {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    async function handleLogout() {
+        try {
+            await logout();
+
+            toast.success("Sessão encerrada.");
+            navigate("/admin/login", { replace: true });
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+            toast.error("Erro ao sair do painel.");
+        }
+    }
+
     return (
         <>
             {open && (
@@ -73,8 +94,10 @@ export function AdminSidebar({
                     left-0
                     top-0
                     z-50
+                    flex
                     h-screen
                     w-72
+                    flex-col
                     border-r
                     border-white/10
                     bg-black/90
@@ -110,19 +133,43 @@ export function AdminSidebar({
                     </button>
                 </div>
 
-                <nav className="mt-10 space-y-2">
+                <nav className="mt-10 flex-1 space-y-2">
                     {menuItems.map((item) => (
-                        <a
+                        <NavLink
                             key={item.label}
-                            href={item.href}
+                            to={item.href}
                             onClick={onClose}
-                            className="flex items-center gap-3 rounded-xl px-4 py-3 text-zinc-400 transition hover:bg-amber-500/10 hover:text-amber-400"
+                            className={({ isActive }) =>
+                                `
+                                    flex
+                                    items-center
+                                    gap-3
+                                    rounded-xl
+                                    px-4
+                                    py-3
+                                    transition
+                                    ${
+                                        isActive
+                                            ? "bg-amber-500/10 text-amber-400"
+                                            : "text-zinc-400 hover:bg-amber-500/10 hover:text-amber-400"
+                                    }
+                                `
+                            }
                         >
                             <span>{item.icon}</span>
                             <span>{item.label}</span>
-                        </a>
+                        </NavLink>
                     ))}
                 </nav>
+
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="mt-6 flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3 text-zinc-400 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
+                >
+                    <FaSignOutAlt />
+                    Sair
+                </button>
             </aside>
         </>
     );
