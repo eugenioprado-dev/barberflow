@@ -8,14 +8,12 @@ import {
     FaTimes,
     FaTags,
     FaSignOutAlt,
-    FaHome,
 } from "react-icons/fa";
 
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { useAuth } from "../../hooks/useAuth";
-import { useSite } from "../../hooks/useSite";
 
 const menuItems = [
     {
@@ -64,18 +62,14 @@ export function AdminSidebar({
     open,
     onClose,
 }: AdminSidebarProps) {
-    const { logout, user } = useAuth();
-    const { site } = useSite();
+    const { logout } = useAuth();
     const navigate = useNavigate();
-
-    const businessName = site?.business.name ?? "André Dias Studio";
 
     async function handleLogout() {
         try {
             await logout();
 
             toast.success("Sessão encerrada.");
-            onClose();
             navigate("/admin/login", { replace: true });
         } catch (error) {
             console.error("Erro ao sair:", error);
@@ -101,26 +95,24 @@ export function AdminSidebar({
                     top-0
                     z-50
                     flex
-                    h-dvh
-                    w-[86vw]
-                    max-w-80
+                    h-screen
+                    w-72
                     flex-col
                     border-r
                     border-white/10
-                    bg-black/95
-                    p-5
+                    bg-black/90
+                    p-6
                     backdrop-blur-xl
                     transition-transform
                     duration-300
-                    sm:w-72
                     lg:translate-x-0
                     ${open ? "translate-x-0" : "-translate-x-full"}
                 `}
             >
                 <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                        <h1 className="truncate text-2xl font-bold">
-                            {businessName.split(" ")[0]}{" "}
+                    <div>
+                        <h1 className="text-2xl font-bold">
+                            André Dias{" "}
                             <span className="text-amber-500">
                                 Studio
                             </span>
@@ -135,22 +127,13 @@ export function AdminSidebar({
                         type="button"
                         aria-label="Fechar menu"
                         onClick={onClose}
-                        className="shrink-0 rounded-xl border border-white/10 p-3 text-zinc-400 transition hover:border-amber-500/40 hover:text-amber-400 lg:hidden"
+                        className="rounded-xl border border-white/10 p-3 text-zinc-400 transition hover:border-amber-500/40 hover:text-amber-400 lg:hidden"
                     >
                         <FaTimes />
                     </button>
                 </div>
 
-                <Link
-                    to="/"
-                    onClick={onClose}
-                    className="mt-6 flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-zinc-400 transition hover:border-amber-500/40 hover:text-amber-400"
-                >
-                    <FaHome />
-                    Ver site
-                </Link>
-
-                <nav className="mt-6 flex-1 space-y-2 overflow-y-auto pr-1">
+                <nav className="mt-10 flex-1 space-y-2">
                     {menuItems.map((item) => (
                         <NavLink
                             key={item.label}
@@ -164,8 +147,6 @@ export function AdminSidebar({
                                     rounded-xl
                                     px-4
                                     py-3
-                                    text-sm
-                                    font-medium
                                     transition
                                     ${
                                         isActive
@@ -175,35 +156,20 @@ export function AdminSidebar({
                                 `
                             }
                         >
-                            <span className="text-base">
-                                {item.icon}
-                            </span>
-
+                            <span>{item.icon}</span>
                             <span>{item.label}</span>
                         </NavLink>
                     ))}
                 </nav>
 
-                <div className="mt-6 space-y-3 border-t border-white/10 pt-5">
-                    <div className="rounded-2xl bg-white/5 p-4">
-                        <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
-                            Logado como
-                        </p>
-
-                        <p className="mt-2 truncate text-sm text-zinc-300">
-                            {user?.email ?? "Administrador"}
-                        </p>
-                    </div>
-
-                    <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="flex w-full items-center gap-3 rounded-xl border border-white/10 px-4 py-3 text-zinc-400 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
-                    >
-                        <FaSignOutAlt />
-                        Sair
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="mt-6 flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3 text-zinc-400 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
+                >
+                    <FaSignOutAlt />
+                    Sair
+                </button>
             </aside>
         </>
     );

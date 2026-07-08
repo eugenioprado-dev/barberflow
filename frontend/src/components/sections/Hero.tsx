@@ -8,7 +8,18 @@ import { floating } from "../../animations/float";
 import { Button } from "../ui/Button";
 import { Container } from "../layout/container";
 
+import { useProfessionals } from "../../hooks/useProfessionals";
+
 export function Hero() {
+    const { professionals, loading } = useProfessionals();
+
+    const activeProfessionals = professionals.filter(
+        (professional) => professional.active
+    ).length;
+
+    const professionalsLabel =
+        activeProfessionals === 1 ? "Profissional" : "Profissionais";
+
     function scrollToSection(id: string) {
         document.getElementById(id)?.scrollIntoView({
             behavior: "smooth",
@@ -25,7 +36,6 @@ export function Hero() {
             <div className="absolute -right-20 bottom-20 h-64 w-64 rounded-full bg-yellow-400/10 blur-[90px] lg:-right-32 lg:h-96 lg:w-96 lg:blur-[140px]" />
 
             <Container className="relative z-10 grid items-center gap-16 lg:grid-cols-2">
-                
                 <motion.div
                     variants={staggerContainer}
                     initial="hidden"
@@ -126,7 +136,7 @@ export function Hero() {
                     <motion.div
                         variants={floating}
                         animate="animate"
-                        className="relative h-[560px] w-full max-w-md overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black backdrop-blur-xl shadow-[0_25px_90px_rgba(245,158,11,0.22)]"
+                        className="relative h-[560px] w-full max-w-md overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black shadow-[0_25px_90px_rgba(245,158,11,0.22)] backdrop-blur-xl"
                     >
                         <div className="absolute inset-0 z-10 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
 
@@ -158,20 +168,27 @@ export function Hero() {
                     <h3 className="text-4xl font-bold text-amber-500">
                         +500
                     </h3>
-                    <p className="mt-2 text-zinc-400">Clientes atendidos</p>
+
+                    <p className="mt-2 text-zinc-400">
+                        Clientes atendidos
+                    </p>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="text-center">
                     <h3 className="text-4xl font-bold text-amber-500">
-                        3
+                        {loading ? "..." : activeProfessionals}
                     </h3>
-                    <p className="mt-2 text-zinc-400">Profissionais</p>
+
+                    <p className="mt-2 text-zinc-400">
+                        {professionalsLabel}
+                    </p>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="text-center">
                     <h3 className="text-4xl font-bold text-amber-500">
                         100%
                     </h3>
+
                     <p className="mt-2 text-zinc-400">
                         Atendimento personalizado
                     </p>
@@ -181,6 +198,7 @@ export function Hero() {
                     <h3 className="text-4xl font-bold text-amber-500">
                         ⭐ 5.0
                     </h3>
+
                     <p className="mt-2 text-zinc-400">
                         Avaliação dos clientes
                     </p>

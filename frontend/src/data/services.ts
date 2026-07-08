@@ -4,7 +4,7 @@ export const services: Service[] = [
     {
         id: 3,
         professionalId: 2,
-        category: "Manicure & Pedicure",
+        categoryId: 2,
         name: "Manicure",
         description: "Cuidados completos para as unhas.",
         price: 40,
@@ -14,7 +14,7 @@ export const services: Service[] = [
     {
         id: 4,
         professionalId: 2,
-        category: "Manicure & Pedicure",
+        categoryId: 2,
         name: "Pedicure",
         description: "Cuidados completos para os pés.",
         price: 45,
@@ -24,7 +24,7 @@ export const services: Service[] = [
     {
         id: 5,
         professionalId: 3,
-        category: "Depilação & Massagem",
+        categoryId: 3,
         name: "Depilação Axilas",
         description: "Depilação com cera.",
         price: 35,
