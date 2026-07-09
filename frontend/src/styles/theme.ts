@@ -2,8 +2,10 @@ export const theme = {
     colors: {
         background: "#09090B",
         surface: "#18181B",
-        primary: "#D4AF37",
-        primaryHover: "#E5C158",
+
+        primary: "#F59E0B",
+        primaryHover: "#FBBF24",
+
         white: "#FAFAFA",
         gray: "#A1A1AA",
     },
