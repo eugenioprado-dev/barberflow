@@ -20,7 +20,7 @@ export function Team() {
     return (
         <section
             id="team"
-            className="relative overflow-hidden bg-zinc-950 py-20 sm:py-24"
+            className="relative overflow-hidden bg-zinc-950 pt-14 pb-20 sm:pt-16 sm:pb-24"
         >
             <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl sm:h-96 sm:w-96" />
             <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl sm:h-96 sm:w-96" />
@@ -33,7 +33,7 @@ export function Team() {
                         subtitle="Profissionais apaixonados pelo que fazem, oferecendo atendimento personalizado e excelência em cada detalhe."
                     />
 
-                    <div className="mt-12 sm:mt-16">
+                    <div className="mt-12 sm:mt-12">
                         <ResponsiveCarousel
                             desktopColumns={3}
                             mobileSlidesPerView={1}

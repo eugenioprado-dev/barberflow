@@ -42,7 +42,7 @@ export function Gallery() {
         <>
             <section
                 id="gallery"
-                className="relative overflow-hidden bg-zinc-950 py-24"
+                className="relative overflow-hidden bg-zinc-950 pt-14 pb-20 sm:pt-16 sm:pb-24"
             >
                 <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
                 <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />

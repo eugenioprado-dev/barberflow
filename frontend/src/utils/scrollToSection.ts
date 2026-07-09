@@ -5,7 +5,7 @@ export function scrollToSection(id: string) {
         return;
     }
 
-    const headerOffset = 110;
+    const headerOffset = 35;
     const sectionPosition = section.getBoundingClientRect().top;
     const offsetPosition =
         sectionPosition + window.scrollY - headerOffset;
