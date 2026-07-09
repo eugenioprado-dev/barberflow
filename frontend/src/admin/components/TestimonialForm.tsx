@@ -110,7 +110,6 @@ export function TestimonialForm({
             <ImageUpload
                 label="Foto do cliente"
                 initialPreview={testimonial?.image}
-                error={errors.image}
                 onChange={(file) => updateField("image", file)}
             />
 

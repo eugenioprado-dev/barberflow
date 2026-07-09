@@ -12,7 +12,7 @@ export const serviceService = {
         const newService: Service = {
             id: Date.now(),
             professionalId: data.professionalId,
-            category: data.category,
+            categoryId: data.categoryId,
             name: data.name,
             description: data.description,
             price: data.price,
@@ -33,7 +33,7 @@ export const serviceService = {
         }
 
         service.professionalId = data.professionalId;
-        service.category = data.category;
+        service.categoryId = data.categoryId;
         service.name = data.name;
         service.description = data.description;
         service.price = data.price;
