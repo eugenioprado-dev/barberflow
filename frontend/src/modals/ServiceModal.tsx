@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
     FaClock,
     FaSearch,
@@ -62,11 +63,13 @@ export function ServiceModal({
         (item) => item.name === category
     );
 
-    const categoryServices = services.filter(
-        (service) =>
-            service.active &&
-            service.categoryId === selectedCategory?.id
-    );
+    const categoryServices = useMemo(() => {
+        return services.filter(
+            (service) =>
+                service.active &&
+                service.categoryId === selectedCategory?.id
+        );
+    }, [services, selectedCategory?.id]);
 
     const filteredServices = useMemo(() => {
         const normalizedSearch = search.trim().toLowerCase();
@@ -135,8 +138,8 @@ export function ServiceModal({
         return null;
     }
 
-    return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 px-4 py-6 backdrop-blur-sm">
+    return createPortal(
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/85 px-4 py-6 backdrop-blur-sm">
             <button
                 type="button"
                 aria-label="Fechar modal"
@@ -253,6 +256,7 @@ export function ServiceModal({
                     )}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

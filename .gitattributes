@@ -1,2 +1,11 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.env
+frontend/.env
+.vite/
+node_modules/.vite/
