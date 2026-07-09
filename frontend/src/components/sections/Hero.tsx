@@ -8,18 +8,7 @@ import { floating } from "../../animations/float";
 import { Button } from "../ui/Button";
 import { Container } from "../layout/container";
 
-import { useProfessionals } from "../../hooks/useProfessionals";
-
 export function Hero() {
-    const { professionals, loading } = useProfessionals();
-
-    const activeProfessionals = professionals.filter(
-        (professional) => professional.active
-    ).length;
-
-    const professionalsLabel =
-        activeProfessionals === 1 ? "Profissional" : "Profissionais";
-
     function scrollToSection(id: string) {
         document.getElementById(id)?.scrollIntoView({
             behavior: "smooth",
@@ -29,7 +18,7 @@ export function Hero() {
     return (
         <section
             id="home"
-            className="relative overflow-hidden bg-zinc-950 pb-20 pt-36 sm:pb-24 sm:pt-44"
+            className="relative overflow-hidden bg-zinc-950 pb-16 pt-36 sm:pb-20 sm:pt-44"
         >
             <div className="absolute left-1/2 top-0 h-[360px] w-[360px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[100px] lg:h-[700px] lg:w-[700px] lg:blur-[180px]" />
             <div className="absolute -left-20 top-40 h-64 w-64 rounded-full bg-amber-500/10 blur-[90px] lg:-left-32 lg:h-96 lg:w-96 lg:blur-[140px]" />
@@ -157,54 +146,6 @@ export function Hero() {
                     </motion.div>
                 </motion.div>
             </Container>
-
-            <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="mx-auto mt-16 grid max-w-7xl grid-cols-2 gap-8 px-6 sm:mt-24 lg:grid-cols-4"
-            >
-                <motion.div variants={fadeUp} className="text-center">
-                    <h3 className="text-3xl font-bold text-amber-500 sm:text-4xl">
-                        +500
-                    </h3>
-
-                    <p className="mt-2 text-sm text-zinc-400 sm:text-base">
-                        Clientes atendidos
-                    </p>
-                </motion.div>
-
-                <motion.div variants={fadeUp} className="text-center">
-                    <h3 className="text-3xl font-bold text-amber-500 sm:text-4xl">
-                        {loading ? "..." : activeProfessionals}
-                    </h3>
-
-                    <p className="mt-2 text-sm text-zinc-400 sm:text-base">
-                        {professionalsLabel}
-                    </p>
-                </motion.div>
-
-                <motion.div variants={fadeUp} className="text-center">
-                    <h3 className="text-3xl font-bold text-amber-500 sm:text-4xl">
-                        100%
-                    </h3>
-
-                    <p className="mt-2 text-sm text-zinc-400 sm:text-base">
-                        Atendimento personalizado
-                    </p>
-                </motion.div>
-
-                <motion.div variants={fadeUp} className="text-center">
-                    <h3 className="text-3xl font-bold text-amber-500 sm:text-4xl">
-                        ⭐ 5.0
-                    </h3>
-
-                    <p className="mt-2 text-sm text-zinc-400 sm:text-base">
-                        Avaliação dos clientes
-                    </p>
-                </motion.div>
-            </motion.div>
         </section>
     );
 }
