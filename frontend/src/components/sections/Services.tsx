@@ -30,17 +30,17 @@ export function Services() {
         (category) => category.active
     );
 
-    if (loading) {
+    if (loading || activeCategories.length === 0) {
         return null;
     }
 
     return (
         <section
             id="services"
-            className="relative bg-zinc-950 py-24"
+            className="relative overflow-hidden bg-zinc-950 py-20 sm:py-24"
         >
-            <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
-            <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
+            <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl sm:h-96 sm:w-96" />
+            <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl sm:h-96 sm:w-96" />
 
             <Container>
                 <div className="relative z-10">
@@ -50,28 +50,33 @@ export function Services() {
                         subtitle="Oferecemos serviços completos para cuidar da sua aparência, autoestima e bem-estar, sempre com atendimento personalizado e profissionais qualificados."
                     />
 
-                    <ResponsiveCarousel
-                        desktopColumns={3}
-                        mobileSlidesPerView={1}
-                        tabletSlidesPerView={2}
-                    >
-                        {activeCategories.map((category, index) => (
-                            <FadeIn
-                                key={category.id}
-                                delay={index * 0.1}
-                            >
-                                <ServiceCard
-                                    icon={
-                                        categoryIcons[category.icon] ??
-                                        <FaStar />
-                                    }
-                                    title={category.name}
-                                    description={category.description}
-                                    category={category.name}
-                                />
-                            </FadeIn>
-                        ))}
-                    </ResponsiveCarousel>
+                    <div className="mt-12 sm:mt-16">
+                        <ResponsiveCarousel
+                            desktopColumns={3}
+                            mobileSlidesPerView={1}
+                            tabletSlidesPerView={2}
+                        >
+                            {activeCategories.map((category, index) => (
+                                <FadeIn
+                                    key={category.id}
+                                    delay={index * 0.1}
+                                >
+                                    <ServiceCard
+                                        icon={
+                                            categoryIcons[
+                                                category.icon
+                                            ] ?? <FaStar />
+                                        }
+                                        title={category.name}
+                                        description={
+                                            category.description
+                                        }
+                                        category={category.name}
+                                    />
+                                </FadeIn>
+                            ))}
+                        </ResponsiveCarousel>
+                    </div>
                 </div>
             </Container>
         </section>

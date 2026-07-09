@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { FaBars } from "react-icons/fa";
 
 import { Container } from "./container";
@@ -23,7 +22,7 @@ export function Navbar() {
     const [activeSection, setActiveSection] = useState("home");
 
     useEffect(() => {
-        const handleScroll = () => {
+        function handleScroll() {
             const currentSection = [...navItems]
                 .reverse()
                 .find((item) => {
@@ -39,7 +38,7 @@ export function Navbar() {
             if (currentSection) {
                 setActiveSection(currentSection.id);
             }
-        };
+        }
 
         handleScroll();
 
@@ -52,13 +51,16 @@ export function Navbar() {
 
     function handleNavigate(id: string) {
         scrollToSection(id);
+        setIsOpen(false);
     }
 
     return (
         <>
-            <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-md">
-                <Container className="flex h-24 items-center justify-between">
-                    <Logo />
+            <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl">
+                <Container className="flex h-20 items-center justify-between gap-4 sm:h-24">
+                    <div className="min-w-0 shrink">
+                        <Logo />
+                    </div>
 
                     <nav className="hidden items-center gap-10 text-sm font-medium text-zinc-300 lg:flex">
                         {navItems.map((item) => (
@@ -81,7 +83,7 @@ export function Navbar() {
                         ))}
                     </nav>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex shrink-0 items-center gap-4">
                         <div className="hidden lg:block">
                             <Button
                                 type="button"
@@ -91,13 +93,14 @@ export function Navbar() {
                             </Button>
                         </div>
 
-                        <Button
+                        <button
                             type="button"
                             onClick={() => setIsOpen(true)}
-                            className="rounded-lg border border-zinc-700 p-3 text-white transition hover:border-amber-500 hover:text-amber-400 lg:hidden"
+                            aria-label="Abrir menu"
+                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:border-amber-500/40 hover:text-amber-400 lg:hidden"
                         >
-                            <FaBars size={22} />
-                        </Button>
+                            <FaBars size={20} />
+                        </button>
                     </div>
                 </Container>
             </header>

@@ -16,7 +16,7 @@ export const stats = [
     },
     {
         key: "experience",
-        value: "+5",
+        value: "+18",
         label: "Anos de experiência",
     },
 ];

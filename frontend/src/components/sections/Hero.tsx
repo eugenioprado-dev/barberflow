@@ -29,17 +29,18 @@ export function Hero() {
     return (
         <section
             id="home"
-            className="relative overflow-hidden bg-zinc-950 pt-44 pb-24"
+            className="relative overflow-hidden bg-zinc-950 pb-20 pt-36 sm:pb-24 sm:pt-44"
         >
-            <div className="absolute left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[120px] lg:h-[700px] lg:w-[700px] lg:blur-[180px]" />
+            <div className="absolute left-1/2 top-0 h-[360px] w-[360px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[100px] lg:h-[700px] lg:w-[700px] lg:blur-[180px]" />
             <div className="absolute -left-20 top-40 h-64 w-64 rounded-full bg-amber-500/10 blur-[90px] lg:-left-32 lg:h-96 lg:w-96 lg:blur-[140px]" />
             <div className="absolute -right-20 bottom-20 h-64 w-64 rounded-full bg-yellow-400/10 blur-[90px] lg:-right-32 lg:h-96 lg:w-96 lg:blur-[140px]" />
 
-            <Container className="relative z-10 grid items-center gap-16 lg:grid-cols-2">
+            <Container className="relative z-10 grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
                 <motion.div
                     variants={staggerContainer}
                     initial="hidden"
                     animate="visible"
+                    className="text-center lg:text-left"
                 >
                     <motion.span
                         variants={fadeUp}
@@ -50,7 +51,7 @@ export function Hero() {
 
                     <motion.h1
                         variants={fadeUp}
-                        className="mt-8 text-5xl font-bold leading-tight lg:text-7xl"
+                        className="mt-7 text-4xl font-bold leading-tight sm:text-5xl lg:text-7xl"
                         style={{ fontFamily: "Playfair Display" }}
                     >
                         Muito mais que
@@ -67,7 +68,7 @@ export function Hero() {
 
                     <motion.p
                         variants={fadeUp}
-                        className="mt-8 max-w-xl text-lg leading-8 text-zinc-400"
+                        className="mx-auto mt-6 max-w-xl text-base leading-8 text-zinc-400 sm:text-lg lg:mx-0 lg:mt-8"
                     >
                         Cuidamos da sua imagem com serviços de barbearia,
                         manicure, pedicure e depilação, oferecendo atendimento
@@ -77,7 +78,7 @@ export function Hero() {
 
                     <motion.div
                         variants={fadeUp}
-                        className="mt-10 flex flex-wrap gap-4"
+                        className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start"
                     >
                         <Button
                             type="button"
@@ -97,12 +98,12 @@ export function Hero() {
 
                     <motion.div
                         variants={fadeUp}
-                        className="mt-10 flex flex-wrap gap-3"
+                        className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start"
                     >
                         <button
                             type="button"
                             onClick={() => scrollToSection("services")}
-                            className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500"
+                            className="rounded-full border border-zinc-700 px-4 py-2 text-sm transition hover:border-amber-500 sm:px-5 sm:text-base"
                         >
                             💈 Barbearia
                         </button>
@@ -110,7 +111,7 @@ export function Hero() {
                         <button
                             type="button"
                             onClick={() => scrollToSection("services")}
-                            className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500"
+                            className="rounded-full border border-zinc-700 px-4 py-2 text-sm transition hover:border-amber-500 sm:px-5 sm:text-base"
                         >
                             💅 Manicure
                         </button>
@@ -118,7 +119,7 @@ export function Hero() {
                         <button
                             type="button"
                             onClick={() => scrollToSection("services")}
-                            className="rounded-full border border-zinc-700 px-5 py-2 transition hover:border-amber-500"
+                            className="rounded-full border border-zinc-700 px-4 py-2 text-sm transition hover:border-amber-500 sm:px-5 sm:text-base"
                         >
                             ✨ Depilação & Massagem
                         </button>
@@ -131,12 +132,12 @@ export function Hero() {
                     animate="visible"
                     className="relative flex justify-center"
                 >
-                    <div className="absolute h-[320px] w-[320px] rounded-full bg-gradient-to-r from-amber-500/30 via-yellow-400/20 to-amber-500/30 blur-[100px] lg:h-[450px] lg:w-[450px] lg:blur-[140px]" />
+                    <div className="absolute h-[280px] w-[280px] rounded-full bg-gradient-to-r from-amber-500/30 via-yellow-400/20 to-amber-500/30 blur-[90px] sm:h-[360px] sm:w-[360px] lg:h-[450px] lg:w-[450px] lg:blur-[140px]" />
 
                     <motion.div
                         variants={floating}
                         animate="animate"
-                        className="relative h-[560px] w-full max-w-md overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black shadow-[0_25px_90px_rgba(245,158,11,0.22)] backdrop-blur-xl"
+                        className="relative h-[420px] w-full max-w-[340px] overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black shadow-[0_25px_90px_rgba(245,158,11,0.18)] backdrop-blur-xl sm:h-[520px] sm:max-w-md lg:h-[560px]"
                     >
                         <div className="absolute inset-0 z-10 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
 
@@ -148,8 +149,8 @@ export function Hero() {
 
                         <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-                        <div className="absolute bottom-6 left-6 z-20 rounded-full border border-white/10 bg-black/60 px-5 py-2 backdrop-blur-md">
-                            <p className="text-sm font-medium text-white">
+                        <div className="absolute bottom-5 left-1/2 z-20 w-[calc(100%-2rem)] -translate-x-1/2 rounded-full border border-white/10 bg-black/60 px-4 py-2 text-center backdrop-blur-md sm:left-6 sm:w-auto sm:translate-x-0 sm:px-5">
+                            <p className="text-xs font-medium text-white sm:text-sm">
                                 ✂️ Especialista em Cortes Unissex
                             </p>
                         </div>
@@ -162,44 +163,44 @@ export function Hero() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="mx-auto mt-24 grid max-w-7xl grid-cols-2 gap-8 px-6 lg:grid-cols-4"
+                className="mx-auto mt-16 grid max-w-7xl grid-cols-2 gap-8 px-6 sm:mt-24 lg:grid-cols-4"
             >
                 <motion.div variants={fadeUp} className="text-center">
-                    <h3 className="text-4xl font-bold text-amber-500">
+                    <h3 className="text-3xl font-bold text-amber-500 sm:text-4xl">
                         +500
                     </h3>
 
-                    <p className="mt-2 text-zinc-400">
+                    <p className="mt-2 text-sm text-zinc-400 sm:text-base">
                         Clientes atendidos
                     </p>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="text-center">
-                    <h3 className="text-4xl font-bold text-amber-500">
+                    <h3 className="text-3xl font-bold text-amber-500 sm:text-4xl">
                         {loading ? "..." : activeProfessionals}
                     </h3>
 
-                    <p className="mt-2 text-zinc-400">
+                    <p className="mt-2 text-sm text-zinc-400 sm:text-base">
                         {professionalsLabel}
                     </p>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="text-center">
-                    <h3 className="text-4xl font-bold text-amber-500">
+                    <h3 className="text-3xl font-bold text-amber-500 sm:text-4xl">
                         100%
                     </h3>
 
-                    <p className="mt-2 text-zinc-400">
+                    <p className="mt-2 text-sm text-zinc-400 sm:text-base">
                         Atendimento personalizado
                     </p>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="text-center">
-                    <h3 className="text-4xl font-bold text-amber-500">
+                    <h3 className="text-3xl font-bold text-amber-500 sm:text-4xl">
                         ⭐ 5.0
                     </h3>
 
-                    <p className="mt-2 text-zinc-400">
+                    <p className="mt-2 text-sm text-zinc-400 sm:text-base">
                         Avaliação dos clientes
                     </p>
                 </motion.div>

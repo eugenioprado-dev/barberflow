@@ -2,6 +2,7 @@ import { Container } from "../layout/container";
 import { TeamCard } from "../ui/TeamCard";
 import { SectionTitle } from "../ui/SectionTitle";
 import { ResponsiveCarousel } from "../ui/ResponsiveCarousel";
+
 import { useProfessionals } from "../../hooks/useProfessionals";
 import { FadeIn } from "../../animations/FadeIn";
 
@@ -12,17 +13,17 @@ export function Team() {
         (professional) => professional.active
     );
 
-    if (loading) {
+    if (loading || activeProfessionals.length === 0) {
         return null;
     }
 
     return (
         <section
             id="team"
-            className="relative overflow-hidden bg-zinc-950 py-24"
+            className="relative overflow-hidden bg-zinc-950 py-20 sm:py-24"
         >
-            <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
-            <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
+            <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl sm:h-96 sm:w-96" />
+            <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl sm:h-96 sm:w-96" />
 
             <Container>
                 <div className="relative z-10">
@@ -32,8 +33,14 @@ export function Team() {
                         subtitle="Profissionais apaixonados pelo que fazem, oferecendo atendimento personalizado e excelência em cada detalhe."
                     />
 
-                    <div className="mt-16">
-                        <ResponsiveCarousel>
+                    <div className="mt-12 sm:mt-16">
+                        <ResponsiveCarousel
+                            desktopColumns={3}
+                            mobileSlidesPerView={1}
+                            tabletSlidesPerView={2}
+                            autoplay
+                            delay={4500}
+                        >
                             {activeProfessionals.map((member, index) => (
                                 <FadeIn
                                     key={member.id}

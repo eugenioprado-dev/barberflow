@@ -77,14 +77,16 @@ export function Gallery() {
                                                 <GalleryCard
                                                     title={item.title}
                                                     image={item.image}
-                                                    imagesCount={item.images.length}
+                                                    imagesCount={
+                                                        item.image
+                                                            ? item.images.length + 1
+                                                            : item.images.length
+                                                    }
                                                     professionalName={getProfessionalName(
                                                         item.professionalId
                                                     )}
                                                     description={item.description}
-                                                    onClick={() =>
-                                                        setSelectedItem(item)
-                                                    }
+                                                    onClick={() => setSelectedItem(item)}
                                                 />
                                             </FadeIn>
                                         ))}
@@ -97,7 +99,7 @@ export function Gallery() {
                                             key={item.id}
                                             title={item.title}
                                             image={item.image}
-                                            imagesCount={item.images.length}
+                                            imagesCount={item.image ? item.images.length + 1 : item.images.length}
                                             professionalName={getProfessionalName(
                                                 item.professionalId
                                             )}

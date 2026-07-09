@@ -5,6 +5,8 @@ import {
     FaInstagram,
     FaWhatsapp,
     FaArrowUp,
+    FaMapMarkerAlt,
+    FaPhoneAlt,
 } from "react-icons/fa";
 
 import { useSite } from "../../hooks/useSite";
@@ -25,13 +27,17 @@ export function Footer() {
 
     const whatsappNumber = site.business.whatsapp.replace(/\D/g, "");
 
+    const instagramUrl = site.business.instagram.startsWith("http")
+        ? site.business.instagram
+        : `https://instagram.com/${site.business.instagram.replace("@", "")}`;
+
     return (
         <footer className="relative overflow-hidden border-t border-zinc-800 bg-gradient-to-b from-zinc-950 to-black">
             <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-amber-500/5 blur-3xl" />
-            <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-amber-500/5 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-500/5 blur-3xl" />
 
             <Container>
-                <div className="relative z-10 grid gap-12 py-20 md:grid-cols-3">
+                <div className="relative z-10 grid gap-12 py-16 sm:py-20 md:grid-cols-3">
                     <div>
                         <Logo />
 
@@ -46,7 +52,7 @@ export function Footer() {
                             Navegação
                         </h3>
 
-                        <ul className="space-y-4 text-zinc-400">
+                        <ul className="grid grid-cols-2 gap-4 text-zinc-400 sm:block sm:space-y-4">
                             {[
                                 { label: "Início", href: "#home" },
                                 { label: "Serviços", href: "#services" },
@@ -72,12 +78,19 @@ export function Footer() {
                         </h3>
 
                         <div className="space-y-4 text-zinc-400">
-                            <p>{site.business.phone}</p>
-                            <p>{site.business.address}</p>
+                            <p className="flex items-start gap-3">
+                                <FaPhoneAlt className="mt-1 text-amber-500" />
+                                {site.business.phone}
+                            </p>
+
+                            <p className="flex items-start gap-3">
+                                <FaMapMarkerAlt className="mt-1 text-amber-500" />
+                                {site.business.address}
+                            </p>
 
                             <div className="flex gap-4 pt-4">
                                 <a
-                                    href={site.business.instagram}
+                                    href={instagramUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="rounded-full border border-zinc-700 p-3 transition hover:border-amber-500 hover:bg-amber-500 hover:text-black"
@@ -100,7 +113,7 @@ export function Footer() {
                     </div>
                 </div>
 
-                <div className="relative z-10 flex flex-col items-center justify-between gap-6 border-t border-zinc-800 py-8 md:flex-row">
+                <div className="relative z-10 flex flex-col items-center justify-between gap-6 border-t border-zinc-800 py-8 text-center md:flex-row md:text-left">
                     <p className="text-sm text-zinc-500">
                         © {new Date().getFullYear()} {site.business.name}.
                         Todos os direitos reservados.
