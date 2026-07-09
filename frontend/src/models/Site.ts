@@ -10,6 +10,7 @@ export interface SiteConfig {
         email: string;
         address: string;
         openingHours: string;
+        googleMapsUrl: string;
     };
 
     menu: string[];

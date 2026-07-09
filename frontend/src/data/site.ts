@@ -21,7 +21,10 @@ export const site: SiteConfig = {
 
         address: "Taboão da Serra - SP",
 
-        openingHours: "Segunda a Sexta • 09:00 às 20:00\nSábado • 09:00 às 18:00\nDomingo • Fechado",
+        openingHours:
+            "Segunda a Sexta • 09:00 às 20:00\nSábado • 09:00 às 18:00\nDomingo • Fechado",
+
+        googleMapsUrl: "",
     },
 
     menu: [

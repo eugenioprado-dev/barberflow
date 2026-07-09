@@ -7,6 +7,7 @@ import {
     FaPhoneAlt,
     FaInstagram,
     FaClock,
+    FaRoute,
 } from "react-icons/fa";
 
 import { useSite } from "../../hooks/useSite";
@@ -19,6 +20,19 @@ export function Contact() {
     }
 
     const whatsappNumber = site.business.whatsapp.replace(/\D/g, "");
+
+    const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        site.business.address
+    )}`;
+
+    const googleMapsUrl =
+        site.business.googleMapsUrl.trim() || mapsSearchUrl;
+
+    const googleMapsEmbedUrl = site.business.googleMapsUrl.includes("/embed")
+        ? site.business.googleMapsUrl
+        : `https://www.google.com/maps?q=${encodeURIComponent(
+              site.business.address
+          )}&output=embed`;
 
     return (
         <section
@@ -60,6 +74,50 @@ export function Contact() {
                             title="Horário"
                             value={site.business.openingHours}
                         />
+                    </div>
+
+                    <div className="mt-10 overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-900/70 shadow-2xl">
+                        <div className="grid gap-0 lg:grid-cols-[1fr_380px]">
+                            <div className="h-[320px] overflow-hidden lg:h-[420px]">
+                                <iframe
+                                    title={`Localização ${site.business.name}`}
+                                    src={googleMapsEmbedUrl}
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    className="h-full w-full border-0 grayscale invert-[0.9] contrast-[0.9]"
+                                    allowFullScreen
+                                />
+                            </div>
+
+                            <div className="flex flex-col justify-center p-8">
+                                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
+                                    Localização
+                                </p>
+
+                                <h3 className="mt-4 text-3xl font-bold text-white">
+                                    Venha nos visitar
+                                </h3>
+
+                                <p className="mt-4 leading-7 text-zinc-400">
+                                    Estamos localizados em{" "}
+                                    <span className="text-zinc-200">
+                                        {site.business.address}
+                                    </span>
+                                    . Clique abaixo para abrir a rota no Google
+                                    Maps.
+                                </p>
+
+                                <a
+                                    href={googleMapsUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="mt-8 inline-flex items-center justify-center gap-3 rounded-full border border-amber-500 px-6 py-3 font-semibold text-amber-400 transition hover:bg-amber-500 hover:text-black"
+                                >
+                                    <FaRoute />
+                                    Ver rota no Google Maps
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="mt-16 flex justify-center">

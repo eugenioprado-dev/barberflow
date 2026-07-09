@@ -15,6 +15,7 @@ interface SiteConfigRow {
     email: string | null;
     address: string | null;
     opening_hours: string | null;
+    google_maps_url: string | null;
 }
 
 function mapRowToSiteConfig(row: SiteConfigRow): SiteConfig {
@@ -30,6 +31,7 @@ function mapRowToSiteConfig(row: SiteConfigRow): SiteConfig {
             email: row.email ?? "",
             address: row.address ?? "",
             openingHours: row.opening_hours ?? "",
+            googleMapsUrl: row.google_maps_url ?? "",
         },
         menu: site.menu,
         services: site.services,
@@ -69,6 +71,7 @@ export const siteService = {
                 email: data.business.email,
                 address: data.business.address,
                 opening_hours: data.business.openingHours,
+                google_maps_url: data.business.googleMapsUrl,
             })
             .eq("id", 1);
 

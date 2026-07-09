@@ -9,4 +9,5 @@ export interface SettingsFormData {
     email: string;
     address: string;
     openingHours: string;
+    googleMapsUrl: string;
 }

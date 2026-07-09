@@ -23,6 +23,7 @@ const emptyForm: SettingsFormData = {
     email: "",
     address: "",
     openingHours: "",
+    googleMapsUrl: "",
 };
 
 export function Settings() {
@@ -43,6 +44,7 @@ export function Settings() {
             email: site.business.email,
             address: site.business.address,
             openingHours: site.business.openingHours,
+            googleMapsUrl: site.business.googleMapsUrl,
         });
     }, [site]);
 
@@ -73,6 +75,7 @@ export function Settings() {
                 email: form.email,
                 address: form.address,
                 openingHours: form.openingHours,
+                googleMapsUrl: form.googleMapsUrl,
             },
         };
 
@@ -101,6 +104,7 @@ export function Settings() {
             email: site.business.email,
             address: site.business.address,
             openingHours: site.business.openingHours,
+            googleMapsUrl: site.business.googleMapsUrl,
         });
     }
 
@@ -128,10 +132,7 @@ export function Settings() {
                                 label="Nome da empresa"
                                 value={form.name}
                                 onChange={(event) =>
-                                    updateField(
-                                        "name",
-                                        event.target.value
-                                    )
+                                    updateField("name", event.target.value)
                                 }
                             />
 
@@ -139,10 +140,7 @@ export function Settings() {
                                 label="Subtítulo"
                                 value={form.subtitle}
                                 onChange={(event) =>
-                                    updateField(
-                                        "subtitle",
-                                        event.target.value
-                                    )
+                                    updateField("subtitle", event.target.value)
                                 }
                             />
 
@@ -150,10 +148,7 @@ export function Settings() {
                                 label="Slogan"
                                 value={form.slogan}
                                 onChange={(event) =>
-                                    updateField(
-                                        "slogan",
-                                        event.target.value
-                                    )
+                                    updateField("slogan", event.target.value)
                                 }
                             />
 
@@ -161,10 +156,7 @@ export function Settings() {
                                 label="Descrição"
                                 value={form.description}
                                 onChange={(event) =>
-                                    updateField(
-                                        "description",
-                                        event.target.value
-                                    )
+                                    updateField("description", event.target.value)
                                 }
                             />
                         </div>
@@ -180,10 +172,7 @@ export function Settings() {
                                 label="Telefone"
                                 value={form.phone}
                                 onChange={(event) =>
-                                    updateField(
-                                        "phone",
-                                        event.target.value
-                                    )
+                                    updateField("phone", event.target.value)
                                 }
                             />
 
@@ -191,10 +180,7 @@ export function Settings() {
                                 label="WhatsApp"
                                 value={form.whatsapp}
                                 onChange={(event) =>
-                                    updateField(
-                                        "whatsapp",
-                                        event.target.value
-                                    )
+                                    updateField("whatsapp", event.target.value)
                                 }
                             />
 
@@ -202,10 +188,7 @@ export function Settings() {
                                 label="Instagram"
                                 value={form.instagram}
                                 onChange={(event) =>
-                                    updateField(
-                                        "instagram",
-                                        event.target.value
-                                    )
+                                    updateField("instagram", event.target.value)
                                 }
                             />
 
@@ -213,10 +196,7 @@ export function Settings() {
                                 label="Email"
                                 value={form.email}
                                 onChange={(event) =>
-                                    updateField(
-                                        "email",
-                                        event.target.value
-                                    )
+                                    updateField("email", event.target.value)
                                 }
                             />
 
@@ -225,8 +205,19 @@ export function Settings() {
                                     label="Endereço"
                                     value={form.address}
                                     onChange={(event) =>
+                                        updateField("address", event.target.value)
+                                    }
+                                />
+                            </div>
+
+                            <div className="md:col-span-2">
+                                <TextField
+                                    label="Link do Google Maps"
+                                    value={form.googleMapsUrl}
+                                    placeholder="Cole aqui o link do Google Maps"
+                                    onChange={(event) =>
                                         updateField(
-                                            "address",
+                                            "googleMapsUrl",
                                             event.target.value
                                         )
                                     }
