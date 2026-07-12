@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 
 import { useSite } from "../../hooks/useSite";
+import { createWhatsappUrl } from "../../utils/whatsapp";
 
 export function Footer() {
     const { site, loading } = useSite();
@@ -25,7 +26,10 @@ export function Footer() {
         return null;
     }
 
-    const whatsappNumber = site.business.whatsapp.replace(/\D/g, "");
+    const whatsappUrl = createWhatsappUrl(
+        site.business.whatsapp,
+        "Olá! Gostaria de agendar um horário."
+    );
 
     const instagramUrl = site.business.instagram.startsWith("http")
         ? site.business.instagram
@@ -100,7 +104,7 @@ export function Footer() {
                                 </a>
 
                                 <a
-                                    href={`https://wa.me/${whatsappNumber}`}
+                                    href={whatsappUrl || "#"}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="rounded-full border border-zinc-700 p-3 transition hover:border-green-500 hover:bg-green-500 hover:text-black"

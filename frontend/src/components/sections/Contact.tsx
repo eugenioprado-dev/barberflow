@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 
 import { useSite } from "../../hooks/useSite";
+import { createWhatsappUrl } from "../../utils/whatsapp";
 
 export function Contact() {
     const { site, loading } = useSite();
@@ -19,7 +20,10 @@ export function Contact() {
         return null;
     }
 
-    const whatsappNumber = site.business.whatsapp.replace(/\D/g, "");
+    const whatsappUrl = createWhatsappUrl(
+        site.business.whatsapp,
+        "Olá! Gostaria de agendar um horário."
+    );
 
     const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         site.business.address
@@ -31,8 +35,8 @@ export function Contact() {
     const googleMapsEmbedUrl = site.business.googleMapsUrl.includes("/embed")
         ? site.business.googleMapsUrl
         : `https://www.google.com/maps?q=${encodeURIComponent(
-                site.business.address
-            )}&output=embed`;
+              site.business.address
+          )}&output=embed`;
 
     return (
         <section
@@ -122,7 +126,7 @@ export function Contact() {
 
                     <div className="mt-12 flex justify-center sm:mt-16">
                         <a
-                            href={`https://wa.me/${whatsappNumber}`}
+                            href={whatsappUrl || "#"}
                             target="_blank"
                             rel="noreferrer"
                             className="w-full rounded-full bg-amber-500 px-8 py-4 text-center font-semibold text-black transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-amber-500/30 sm:w-auto sm:px-10"

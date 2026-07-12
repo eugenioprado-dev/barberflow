@@ -13,6 +13,8 @@ import { useCategories } from "../hooks/useCategories";
 import { useProfessionals } from "../hooks/useProfessionals";
 import { useSite } from "../hooks/useSite";
 
+import { openWhatsapp } from "../utils/whatsapp";
+
 interface ServiceModalProps {
     open: boolean;
     onClose: () => void;
@@ -117,21 +119,14 @@ export function ServiceModal({
         const whatsapp =
             professional?.whatsapp || site?.business.whatsapp || "";
 
-        const whatsappNumber = whatsapp.replace(/\D/g, "");
-
-        if (!whatsappNumber) {
-            toast.error("WhatsApp não cadastrado para agendamento.");
-            return;
-        }
-
-        const message = encodeURIComponent(
+        const opened = openWhatsapp(
+            whatsapp,
             `Olá! Gostaria de agendar o serviço: ${serviceName}.`
         );
 
-        window.open(
-            `https://wa.me/${whatsappNumber}?text=${message}`,
-            "_blank"
-        );
+        if (!opened) {
+            toast.error("WhatsApp não cadastrado para agendamento.");
+        }
     }
 
     if (!open) {

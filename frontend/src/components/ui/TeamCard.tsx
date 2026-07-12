@@ -1,5 +1,8 @@
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { FiCalendar } from "react-icons/fi";
+import toast from "react-hot-toast";
+
+import { openWhatsapp } from "../../utils/whatsapp";
 
 interface TeamCardProps {
     name: string;
@@ -17,22 +20,19 @@ export function TeamCard({
     whatsapp,
 }: TeamCardProps) {
     function handleSchedule() {
-        const whatsappNumber = whatsapp.replace(/\D/g, "");
-
-        if (!whatsappNumber) {
-            alert("WhatsApp do profissional não cadastrado.");
-            return;
-        }
-
-        const message = encodeURIComponent(
+        const opened = openWhatsapp(
+            whatsapp,
             `Olá, ${name}! Gostaria de agendar um horário.`
         );
 
-        window.open(
-            `https://wa.me/${whatsappNumber}?text=${message}`,
-            "_blank"
-        );
+        if (!opened) {
+            toast.error("WhatsApp do profissional não cadastrado.");
+        }
     }
+
+    const instagramUrl = instagram.startsWith("http")
+        ? instagram
+        : `https://instagram.com/${instagram.replace("@", "")}`;
 
     return (
         <div className="group h-full w-full overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl transition-all duration-500 hover:border-amber-500 lg:hover:-translate-y-3">
@@ -64,7 +64,7 @@ export function TeamCard({
 
             <div className="flex gap-4 p-6">
                 <a
-                    href={instagram || "#"}
+                    href={instagramUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="flex-1 rounded-xl border border-zinc-700 py-3 text-center font-semibold text-white transition hover:border-amber-500 hover:bg-amber-500 hover:text-black"
