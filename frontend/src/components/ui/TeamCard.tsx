@@ -1,8 +1,7 @@
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { FiCalendar } from "react-icons/fi";
-import toast from "react-hot-toast";
 
-import { openWhatsapp } from "../../utils/whatsapp";
+import { createWhatsappUrl } from "../../utils/whatsapp";
 
 interface TeamCardProps {
     name: string;
@@ -19,16 +18,10 @@ export function TeamCard({
     instagram,
     whatsapp,
 }: TeamCardProps) {
-    function handleSchedule() {
-        const opened = openWhatsapp(
-            whatsapp,
-            `Olá, ${name}! Gostaria de agendar um horário.`
-        );
-
-        if (!opened) {
-            toast.error("WhatsApp do profissional não cadastrado.");
-        }
-    }
+    const whatsappUrl = createWhatsappUrl(
+        whatsapp,
+        `Olá, ${name}! Gostaria de agendar um horário.`
+    );
 
     const instagramUrl = instagram.startsWith("http")
         ? instagram
@@ -75,17 +68,18 @@ export function TeamCard({
                     </span>
                 </a>
 
-                <button
-                    type="button"
-                    onClick={handleSchedule}
-                    className="flex-1 rounded-xl bg-amber-500 py-3 font-semibold text-black transition hover:bg-amber-400"
+                <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 rounded-xl bg-amber-500 py-3 text-center font-semibold text-black transition hover:bg-amber-400"
                 >
                     <span className="flex items-center justify-center gap-2">
                         <FiCalendar />
                         <FaWhatsapp />
                         Agendar
                     </span>
-                </button>
+                </a>
             </div>
         </div>
     );

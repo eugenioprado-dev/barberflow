@@ -6,14 +6,13 @@ import {
     FaTimes,
     FaWhatsapp,
 } from "react-icons/fa";
-import toast from "react-hot-toast";
 
 import { useServices } from "../hooks/useServices";
 import { useCategories } from "../hooks/useCategories";
 import { useProfessionals } from "../hooks/useProfessionals";
 import { useSite } from "../hooks/useSite";
 
-import { openWhatsapp } from "../utils/whatsapp";
+import { createWhatsappUrl } from "../utils/whatsapp";
 
 interface ServiceModalProps {
     open: boolean;
@@ -111,7 +110,7 @@ export function ServiceModal({
         );
     }
 
-    function handleSchedule(serviceName: string, professionalId: number) {
+    function getWhatsappUrl(serviceName: string, professionalId: number) {
         const professional = professionals.find(
             (item) => item.id === professionalId
         );
@@ -119,14 +118,10 @@ export function ServiceModal({
         const whatsapp =
             professional?.whatsapp || site?.business.whatsapp || "";
 
-        const opened = openWhatsapp(
+        return createWhatsappUrl(
             whatsapp,
             `Olá! Gostaria de agendar o serviço: ${serviceName}.`
         );
-
-        if (!opened) {
-            toast.error("WhatsApp não cadastrado para agendamento.");
-        }
     }
 
     if (!open) {
@@ -231,19 +226,18 @@ export function ServiceModal({
                                             {service.duration} min
                                         </span>
 
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                handleSchedule(
-                                                    service.name,
-                                                    service.professionalId
-                                                )
-                                            }
+                                        <a
+                                            href={getWhatsappUrl(
+                                                service.name,
+                                                service.professionalId
+                                            )}
+                                            target="_blank"
+                                            rel="noreferrer"
                                             className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-black transition hover:bg-amber-400"
                                         >
                                             <FaWhatsapp />
                                             Agendar
-                                        </button>
+                                        </a>
                                     </div>
                                 </article>
                             ))}
