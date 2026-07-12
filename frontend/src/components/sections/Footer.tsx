@@ -104,9 +104,7 @@ export function Footer() {
                                 </a>
 
                                 <a
-                                    href={whatsappUrl || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    href={whatsappUrl}
                                     className="rounded-full border border-zinc-700 p-3 transition hover:border-green-500 hover:bg-green-500 hover:text-black"
                                     aria-label="WhatsApp"
                                 >

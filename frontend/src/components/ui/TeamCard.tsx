@@ -70,8 +70,6 @@ export function TeamCard({
 
                 <a
                     href={whatsappUrl}
-                    target="_blank"
-                    rel="noreferrer"
                     className="flex-1 rounded-xl bg-amber-500 py-3 text-center font-semibold text-black transition hover:bg-amber-400"
                 >
                     <span className="flex items-center justify-center gap-2">

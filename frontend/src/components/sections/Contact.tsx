@@ -126,9 +126,7 @@ export function Contact() {
 
                     <div className="mt-12 flex justify-center sm:mt-16">
                         <a
-                            href={whatsappUrl || "#"}
-                            target="_blank"
-                            rel="noreferrer"
+                            href={whatsappUrl}
                             className="w-full rounded-full bg-amber-500 px-8 py-4 text-center font-semibold text-black transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-amber-500/30 sm:w-auto sm:px-10"
                         >
                             Agendar pelo WhatsApp

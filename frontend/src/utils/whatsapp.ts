@@ -19,7 +19,7 @@ export function createWhatsappUrl(phone: string, message: string) {
         return "#";
     }
 
-    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-        message
-    )}`;
+    const encodedMessage = encodeURIComponent(message);
+
+    return `https://api.whatsapp.com/send/?phone=${whatsappNumber}&text=${encodedMessage}&type=phone_number&app_absent=0`;
 }
